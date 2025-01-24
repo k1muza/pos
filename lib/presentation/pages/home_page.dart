@@ -1,0 +1,52 @@
+import 'package:flutter/material.dart';
+import 'sale_page.dart';
+import '../widgets/primary_button.dart';
+import 'purchase_page.dart';
+import 'sync_page.dart';
+
+class HomePage extends StatelessWidget {
+  const HomePage({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('iPOS')),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            PrimaryButton(
+              text: 'Sell Items',
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const SalePage()),
+                );
+              },
+            ),
+            const SizedBox(height: 16),
+            PrimaryButton(
+              text: 'Record Purchase',
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const PurchasePage()),
+                );
+              },
+            ),
+            const SizedBox(height: 16),
+            PrimaryButton(
+              text: 'Sync Sales',
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const SyncPage()),
+                );
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
