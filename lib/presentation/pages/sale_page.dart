@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:pos_meat_shop/domain/models/product.dart';
+import 'package:pos_meat_shop/data/database/app_database.dart';
 import 'package:pos_meat_shop/domain/providers/cart_provider.dart';
 import 'package:pos_meat_shop/domain/providers/product_provider.dart';
 import 'package:pos_meat_shop/presentation/pages/cart_page.dart';
@@ -11,7 +11,7 @@ class SalePage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final productListAsyncValue = ref.watch(productListProvider);
+    final productState = ref.watch(productNotifierProvider);
     final cartItems = ref.watch(cartProvider); // We'll pass this to our card.
 
     return Scaffold(
@@ -19,32 +19,46 @@ class SalePage extends ConsumerWidget {
         title: const Text('Sell Items'),
         actions: const [CartIcon()],
       ),
-      body: productListAsyncValue.when(
-        data: (products) {
-          return GridView.builder(
-            padding: const EdgeInsets.all(16.0),
-            itemCount: products.length,
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              mainAxisSpacing: 12,
-              crossAxisSpacing: 12,
-              childAspectRatio: 1.3,
-            ),
-            itemBuilder: (context, index) {
-              final product = products[index];
-              final isInCart = cartItems.any((item) => item.product == product);
-              final cartItem = cartItems.firstWhere(
-                (item) => item.product == product,
-                orElse: () => CartItem(product: product, quantity: 0),
-              );
-              return _ProductCard(
-                  product: product, isInCart: isInCart, cartItem: cartItem);
-            },
-          );
-        },
+      body: productState.when(
+        data: (products) => _SaleGrid(products: products, cartItems: cartItems),
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (err, stack) => Center(child: Text('Error: $err')),
+        error: (err, stack) => Center(child: Text('Error: $err'),)
+      )
+    );
+  }
+}
+
+class _SaleGrid extends StatelessWidget {
+  const _SaleGrid({
+    super.key,
+    required this.products,
+    required this.cartItems,
+  });
+
+  final List<Product> products;
+  final List<CartItem> cartItems;
+
+  @override
+  Widget build(BuildContext context) {
+    return GridView.builder(
+      padding: const EdgeInsets.all(16.0),
+      itemCount: products.length,
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        mainAxisSpacing: 12,
+        crossAxisSpacing: 12,
+        childAspectRatio: 1.3,
       ),
+      itemBuilder: (context, index) {
+        final product = products[index];
+        final isInCart = cartItems.any((item) => item.product == product);
+        final cartItem = cartItems.firstWhere(
+          (item) => item.product == product,
+          orElse: () => CartItem(product: product, quantity: 0),
+        );
+        return _ProductCard(
+            product: product, isInCart: isInCart, cartItem: cartItem);
+      },
     );
   }
 }
@@ -107,11 +121,15 @@ class _ProductCard extends ConsumerWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(product.name, style: TextStyle(color: textColor, fontSize: 18)),
-            Text('Price: \$${product.unitPrice.toStringAsFixed(2)}', style: TextStyle(color: textColor)),
+            Text(product.name,
+                style: TextStyle(color: textColor, fontSize: 18)),
+            Text('Price: \$${product.unitPrice.toStringAsFixed(2)}',
+                style: TextStyle(color: textColor)),
 
             // Show the quantity if the product is in the cart
-            if (isInCart!) Text('In Cart: ${cartItem!.quantity}', style: TextStyle(color: textColor)),
+            if (isInCart!)
+              Text('In Cart: ${cartItem!.quantity}',
+                  style: TextStyle(color: textColor)),
           ],
         ),
       ),

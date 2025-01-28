@@ -1,5 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:pos_meat_shop/domain/models/product.dart';
+import 'package:pos_meat_shop/data/database/app_database.dart';
 
 class CartItem {
   final Product product;
@@ -44,11 +44,6 @@ class CartNotifier extends StateNotifier<List<CartItem>> {
       total += item.quantity * item.product.unitPrice;
     }
     return total;
-  }
-
-  // Returns the CartItem if found, or null if not in the cart.
-  CartItem? getCartItemByProductId(String productId) {
-    return state.firstWhere((c) => c.product.id == productId, orElse: () => CartItem(product: Product.empty(), quantity: 0));
   }
 }
 

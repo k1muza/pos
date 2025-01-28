@@ -1,9 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:pos_meat_shop/data/database/app_database.dart';
+import 'package:pos_meat_shop/domain/providers/product_provider.dart';
 import 'presentation/pages/home_page.dart';
 
 void main() {
-  runApp(const ProviderScope(child: MyPosApp()));
+  WidgetsFlutterBinding.ensureInitialized();
+  final appDatabase = AppDatabase();
+
+  runApp(ProviderScope(overrides: [
+    // Override the appDatabaseProvider with the initialized instance
+    appDatabaseProvider.overrideWithValue(appDatabase),
+  ], child: const MyPosApp()));
 }
 
 class MyPosApp extends StatelessWidget {
