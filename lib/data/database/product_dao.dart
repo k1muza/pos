@@ -16,7 +16,7 @@ class ProductDao extends DatabaseAccessor<AppDatabase> with _$ProductDaoMixin {
   Stream<List<Product>> watchAllProducts() => select(products).watch();
 
   // Insert a product
-  Future<void> insertProduct(Insertable<Product> product) {
+  Future<void> insertProduct(ProductsCompanion product) {
     return into(products).insert(product, mode: InsertMode.insertOrReplace);
   }
 
@@ -26,11 +26,11 @@ class ProductDao extends DatabaseAccessor<AppDatabase> with _$ProductDaoMixin {
   }
 
   // Delete a product
-  Future<int> deleteProduct(String id) {
+  Future<int> deleteProduct(int id) {
       return (delete(products)..where((tbl) => tbl.id.equals(id))).go();
   }
 
-  Future<Product?> getProductById(String id) {
+  Future<Product?> getProductById(int id) {
     return (select(products)..where((tbl) => tbl.id.equals(id))).getSingleOrNull();
   }
 }

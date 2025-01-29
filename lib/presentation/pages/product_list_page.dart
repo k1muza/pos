@@ -66,7 +66,7 @@ class _ProductListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Dismissible(
-      key: Key(product.id),
+      key: Key(product.id.toString()),
       background: Container(
         color: Colors.red,
         child: const Icon(Icons.delete, color: Colors.white),

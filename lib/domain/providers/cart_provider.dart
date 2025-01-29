@@ -30,6 +30,17 @@ class CartNotifier extends StateNotifier<List<CartItem>> {
     state = state.where((c) => c.product.id != item.product.id).toList();
   }
 
+  void updateItemQuantity(CartItem item, double quantity) {
+    final existingIndex = state.indexWhere((c) => c == item);
+    final updated = [...state];
+    final existing = updated[existingIndex];
+    updated[existingIndex] = CartItem(
+      product: existing.product,
+      quantity: quantity,
+    );
+    state = updated;
+  }
+
   void clearCart() {
     state = [];
   }

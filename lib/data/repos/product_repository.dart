@@ -17,11 +17,11 @@ class ProductRepository implements IProductRepository {
   Future<Product?> getProductById(productId) => _productDao.getProductById(productId);
 
   @override
-  Future<void> addProduct(Product product) => _productDao.insertProduct(product);
+  Future<void> addProduct(ProductsCompanion product) => _productDao.insertProduct(product);
 
   @override
-  Future<bool> updateProduct(Product product ) => _productDao.updateProductData(product);
+  Future<bool> updateProduct(ProductsCompanion product ) => _productDao.updateProductData(product);
 
   @override
-  Future<int> deleteProduct(String id) => _productDao.deleteProduct(id);
+  Future<int> deleteProduct(int id) => _productDao.deleteProduct(id);
 }

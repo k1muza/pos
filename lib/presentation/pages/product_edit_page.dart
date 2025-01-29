@@ -1,9 +1,9 @@
+import 'package:drift/drift.dart' show Value;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pos_meat_shop/data/database/app_database.dart';
 import 'package:pos_meat_shop/domain/providers/product_provider.dart';
-import 'package:uuid/uuid.dart';
 
 enum FormStatus { initial, submitting, success, failure }
 
@@ -11,16 +11,22 @@ enum FormStatus { initial, submitting, success, failure }
 class FormState {
   final String name;
   final double unitPrice;
+  final String unit;
+  final bool isActive;
   final String? nameError;
   final String? unitPriceError;
+  final String? unitError;
   final FormStatus status;
   final String? submissionError;
 
   const FormState({
     this.name = '',
     this.unitPrice = 0.0,
+    this.unit = '',
+    this.isActive = true,
     this.nameError,
     this.unitPriceError,
+    this.unitError,
     this.status = FormStatus.initial,
     this.submissionError,
   });
@@ -28,16 +34,22 @@ class FormState {
   FormState copyWith({
     String? name,
     double? unitPrice,
+    String? unit,
+    bool? isActive,
     String? nameError,
     String? unitPriceError,
+    String? unitError,
     FormStatus? status,
     String? submissionError,
   }) {
     return FormState(
       name: name ?? this.name,
       unitPrice: unitPrice ?? this.unitPrice,
+      unit: unit ?? this.unit,
+      isActive: isActive ?? this.isActive,
       nameError: nameError,
       unitPriceError: unitPriceError,
+      unitError: unitError,
       status: status ?? this.status,
       submissionError: submissionError,
     );
@@ -46,13 +58,23 @@ class FormState {
 
 class FormNotifier extends StateNotifier<FormState> {
   final Product? initialProduct;
-  final Uuid _uuid = Uuid();
 
   FormNotifier({this.initialProduct})
       : super(FormState(
           name: initialProduct?.name ?? '',
           unitPrice: initialProduct?.unitPrice ?? 0.0,
+          unit: initialProduct?.unit ?? '',
+          isActive: initialProduct?.isActive ?? true,
         ));
+
+  // Resets the form to its initial state
+  void reset() {
+    state = FormState(
+      name: initialProduct?.name ?? '',
+      unitPrice: initialProduct?.unitPrice ?? 0.0,
+      isActive: initialProduct?.isActive ?? true,
+    );
+  }
 
   // Update email
   void setName(String name) {
@@ -68,6 +90,14 @@ class FormNotifier extends StateNotifier<FormState> {
       convertedValue = null; // Handle invalid input
     }
     state = state.copyWith(unitPrice: convertedValue, unitPriceError: null);
+  }
+
+  void setUnit(String unit) {
+    state = state.copyWith(unit: unit, unitError: null);
+  }
+
+  void setIsActive(bool isActive) {
+    state = state.copyWith(isActive: isActive);
   }
 
   // Validate form fields
@@ -104,20 +134,22 @@ class FormNotifier extends StateNotifier<FormState> {
     try {
       if (initialProduct == null) {
         // Create a new product
-        final newProduct = Product(
-          id: _uuid.v4(),
-          name: state.name,
-          unitPrice: state.unitPrice,
-          isWeightBased: false,
-        );
+        final newProduct = ProductsCompanion(
+            name: Value(state.name),
+            unitPrice: Value(state.unitPrice),
+            unit: Value(state.unit),
+            isActive: Value(state.isActive),
+            createdAt: Value(DateTime.now().toUtc()));
         await ref.read(productNotifierProvider.notifier).addProduct(newProduct);
       } else {
         // Update an existing product
-        final updatedProduct = Product(
-          id: initialProduct!.id,
-          name: state.name,
-          unitPrice: state.unitPrice,
-          isWeightBased: false,
+        final updatedProduct = ProductsCompanion(
+          id: Value(initialProduct!.id),
+          name: Value(state.name),
+          unitPrice: Value(state.unitPrice),
+          unit: Value(state.unit),
+          isActive: Value(state.isActive),
+          createdAt: Value(initialProduct!.createdAt),
         );
         await ref
             .read(productNotifierProvider.notifier)
@@ -125,6 +157,11 @@ class FormNotifier extends StateNotifier<FormState> {
       }
 
       state = state.copyWith(status: FormStatus.success);
+
+      if (initialProduct == null) {
+        // Reset the form if adding a new product
+        reset();
+      }
     } catch (e) {
       state = state.copyWith(
         status: FormStatus.failure,
@@ -177,7 +214,8 @@ class ProductEditPage extends ConsumerWidget {
     final formState = ref.watch(formProvider(product));
 
     return Scaffold(
-      appBar: AppBar(title: product != null ? Text('Edit Product') : Text('Add Product')),
+      appBar: AppBar(
+          title: product != null ? Text('Edit Product') : Text('Add Product')),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -212,6 +250,33 @@ class ProductEditPage extends ConsumerWidget {
                 errorText: formState.unitPriceError,
               ),
             ),
+            const SizedBox(height: 16),
+            DropdownButtonFormField(
+              value: formState.unit.toString(),
+              items: [
+                DropdownMenuItem(child: Text('kilogram'), value: 'kg'),
+                DropdownMenuItem(child: Text('litre'), value: 'L'),
+                DropdownMenuItem(child: Text('none'), value: ''),
+              ],
+              onChanged: (String? value) {
+                formNotifier.setUnit(value!);
+              },
+              decoration: InputDecoration(
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                labelText: 'Unit',
+                errorText: formState.unitError,
+              ),
+            ),
+            const SizedBox(height: 16),
+            CheckboxListTile(
+                tristate: false,
+                title: Text('Sell this product'),
+                value: formState.isActive,
+                onChanged: (value) {
+                    formNotifier.setIsActive(value!);
+                }),
             const SizedBox(height: 32),
             // Submit Button
             formState.status == FormStatus.submitting
