@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pos_meat_shop/presentation/pages/product_list_page.dart';
+import 'package:pos_meat_shop/presentation/pages/sale_list_page.dart';
 import 'sale_page.dart';
 import '../widgets/primary_button.dart';
 import 'purchase_page.dart';
@@ -22,6 +23,16 @@ class HomePage extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => const SalePage()),
+                );
+              },
+            ),
+            const SizedBox(height: 16),
+            PrimaryButton(
+              text: 'Sale List',
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const SaleListPage()),
                 );
               },
             ),

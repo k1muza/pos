@@ -17,17 +17,18 @@ class SalePage extends ConsumerWidget {
     final cartItems = ref.watch(cartProvider); // We'll pass this to our card.
 
     return Scaffold(
-        appBar: AppBar(
-          title: const Text('Sell Items'),
-          actions: const [CartIcon()],
+      appBar: AppBar(
+        title: const Text('Sell Items'),
+        actions: const [CartIcon()],
+      ),
+      body: productState.when(
+        data: (products) => _SaleGrid(products: products, cartItems: cartItems),
+        loading: () => const Center(child: CircularProgressIndicator()),
+        error: (err, stack) => Center(
+          child: Text('Error: $err'),
         ),
-        body: productState.when(
-            data: (products) =>
-                _SaleGrid(products: products, cartItems: cartItems),
-            loading: () => const Center(child: CircularProgressIndicator()),
-            error: (err, stack) => Center(
-                  child: Text('Error: $err'),
-                )));
+      ),
+    );
   }
 }
 
@@ -60,7 +61,10 @@ class _SaleGrid extends StatelessWidget {
           orElse: () => CartItem(product: product, quantity: 0),
         );
         return _ProductCard(
-            product: product, isInCart: isInCart, cartItem: cartItem);
+          product: product,
+          isInCart: isInCart,
+          cartItem: cartItem,
+        );
       },
     );
   }
@@ -107,20 +111,24 @@ class _ProductCard extends ConsumerWidget {
           if (quantity != null && quantity > 0) {
             cartNotifier.addItem(product, quantity.toDouble());
             Navigator.push(
-                context, MaterialPageRoute(builder: (_) => const CartPage()));
+              context,
+              MaterialPageRoute(builder: (_) => const CartPage()),
+            );
           }
         },
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(product.name,
-                style: TextStyle(color: textColor, fontSize: 18)),
+            Text(
+              product.name,
+              style: TextStyle(color: textColor, fontSize: 18),
+            ),
             Text(
               'Price: \$${product.unitPrice.toStringAsFixed(2)}',
               style: TextStyle(color: textColor),
             ),
 
-            // Show the quantity if the product is in the cart
+            // Show the quantity of the product is in the cart
             if (isInCart!)
               Text(
                 'In Cart: ${cartItem!.quantity}',

@@ -15,8 +15,15 @@ final productRepositoryProvider = Provider<ProductRepository>((ref) {
   return ProductRepository(ref.watch(productDaoProvider));
 });
 
+final productProvider =
+    FutureProvider.family<Product?, int>((ref, productId) async {
+  final productRepository = ref.watch(productRepositoryProvider);
+  return productRepository.getProductById(productId);
+});
+
 final productNotifierProvider =
-    StateNotifierProvider<ProductStateNotifier, AsyncValue<List<Product>>>((ref) {
+    StateNotifierProvider<ProductStateNotifier, AsyncValue<List<Product>>>(
+        (ref) {
   final repository = ref.watch(productRepositoryProvider);
   return ProductStateNotifier(repository);
 });
@@ -25,8 +32,7 @@ class ProductStateNotifier extends StateNotifier<AsyncValue<List<Product>>> {
   final ProductRepository _repository;
   late final Stream<List<Product>> _productStream;
 
-  ProductStateNotifier(this._repository)
-      : super(const AsyncValue.loading()) {
+  ProductStateNotifier(this._repository) : super(const AsyncValue.loading()) {
     _productStream = _repository.watchAllProducts();
     _productStream.listen((products) {
       state = AsyncValue.data(products);

@@ -13,6 +13,9 @@ class ProductDao extends DatabaseAccessor<AppDatabase> with _$ProductDaoMixin {
   Future<List<Product>> getAllProducts() => select(products).get();
 
   // Stream of all products (for reactive UI)
+  Stream<List<Product>> watchActiveProducts() => (select(products)..where((tbl) => tbl.isActive,)).watch();
+
+  // Stream of all products (for reactive UI)
   Stream<List<Product>> watchAllProducts() => select(products).watch();
 
   // Insert a product
