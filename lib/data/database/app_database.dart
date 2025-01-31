@@ -25,46 +25,60 @@ class Products extends Table with TableMixin {
   late final unit = text()();
   late final isWeightBased = boolean().generatedAs(unit.equals('kg'))();
   late final isActive = boolean().withDefault(Constant(true))();
-  late final supplier = integer().references(Suppliers, #id).nullable()();
+  late final supplierId = integer().references(Suppliers, #id).nullable()();
 }
 
 class Sales extends Table with TableMixin {
-  late final publishedAt = dateTime().nullable()();
+  late final notes = text().nullable()();
 }
 
 class SaleLineItems extends Table with TableMixin {
-  late final product = integer().references(Products, #id)();
-  late final sale = integer().references(Sales, #id)();
+  late final productId = integer().references(Products, #id)();
+  late final saleId = integer().references(Sales, #id)();
   late final Column<double> quantity =
       real().check(quantity.isBiggerThanValue(0))();
-  late final unitPrice = real()(); // Store the unit price at sale time
+  late final totalPrice = real()();
+  late final unitPrice = real().generatedAs(totalPrice/quantity)();
 }
 
 class Purchases extends Table with TableMixin{
-  late final publishedAt = dateTime().nullable()();
+  late final notes = text().nullable()();
 }
 
 class PurchaseLineItems extends Table with TableMixin {
-  late final product = integer().references(Products, #id)();
-  late final purchase = integer().references(Purchases, #id)();
+  late final productId = integer().references(Products, #id)();
+  late final purchaseId = integer().references(Purchases, #id)();
   late final Column<double> quantity =
       real().check(quantity.isBiggerThanValue(0))();
-  late final unitCost = real()(); // Store the unit price at sale time
+  late final totalCost = real()();
+  late final unitCost = real().generatedAs(totalCost/quantity)();
 }
 
 class StockConversions extends Table with TableMixin {
-  late final fromProduct = integer().references(Products, #id)();
-  late final toProduct = integer().references(Products, #id)();
-  late final unitCost = real().nullable()();
+  late final fromBatchId = integer().references(Batches, #id)();
+  late final toBatchId = integer().references(Batches, #id)();
   late final Column<double> quantity =
       real().check(quantity.isBiggerThanValue(0))();
 }
 
 class StockAdjustments extends Table with TableMixin {
-  late final product = integer().references(Products, #id)();
-  late final unitCost = real().nullable()();
-  late final Column<double> quantity =
-      real().check(quantity.isBiggerThanValue(0))();
+  late final batchId = integer().references(Batches, #id)();
+  late final quantity = real()();
+}
+
+class Batches extends Table with TableMixin {
+  late final productId = integer().references(Products, #id)();
+  late final totalCost = real().nullable()();
+  late final referenceType = text()();
+  late final referenceId = integer()();
+}
+
+class BatchMovements extends Table with TableMixin {
+  late final batchId = integer().references(Batches, #id)();
+  late final unitPrice = real().nullable()();
+  late final quantity = real()(); // neg or positive
+  late final referenceType = text()();
+  late final referenceId = integer()();
 }
 
 // Define the AppDatabase
@@ -77,6 +91,8 @@ class StockAdjustments extends Table with TableMixin {
   PurchaseLineItems,
   StockConversions,
   StockAdjustments,
+  Batches,
+  BatchMovements,
 ])
 class AppDatabase extends _$AppDatabase {
   // Specify the location of the database file

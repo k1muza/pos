@@ -40,6 +40,6 @@ class SaleLineItemDao extends DatabaseAccessor<AppDatabase>
   }
 
   Future<List<SaleLineItem>> getSaleLineItemBySaleId(int id) {
-    return (select(saleLineItems)..where((tbl) => tbl.sale.equals(id))).get();
+    return (select(saleLineItems)..where((tbl) => tbl.saleId.equals(id))).get();
   }
 }

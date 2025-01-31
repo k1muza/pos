@@ -46,17 +46,15 @@ class SaleNotifier extends StateNotifier<SaleState> {
 
     try {
       final saleId = await saleRepository.addSale(
-        SalesCompanion.insert(
-          publishedAt: Value(DateTime.now()),
-        ),
+        SalesCompanion.insert(),
       );
       for (final cartItem in cartItems) {
         saleLineItemRepository.addSaleLineItem(
           SaleLineItemsCompanion(
-            sale: Value(saleId),
-            product: Value(cartItem.product.id),
+            saleId: Value(saleId),
+            productId: Value(cartItem.product.id),
             quantity: Value(cartItem.quantity),
-            unitPrice: Value(cartItem.product.unitPrice),
+            totalPrice: Value(cartItem.product.unitPrice * cartItem.quantity),
           ),
         );
       }

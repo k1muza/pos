@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:jiffy/jiffy.dart';
 import 'package:pos_meat_shop/data/database/app_database.dart';
 import 'package:pos_meat_shop/domain/providers/product_provider.dart';
 import 'package:pos_meat_shop/domain/providers/sale_line_item_provider.dart';
@@ -34,7 +34,7 @@ class SaleListView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final saleState = ref.read(saleNotifierProvider);
+    final saleState = ref.watch(saleNotifierProvider);
 
     return saleState.when(
       data: (sales) => _SaleList(sales: sales),
@@ -73,7 +73,7 @@ class SaleTile extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final saleLineItemsAsyncValue = ref.read(saleLineItemsProvider(sale.id));
+    final saleLineItemsAsyncValue = ref.watch(saleLineItemsProvider(sale.id));
     return saleLineItemsAsyncValue.when(
       data: (saleLineItems) {
         // You can compute a total from these items or display them in a list
@@ -84,7 +84,9 @@ class SaleTile extends ConsumerWidget {
         return ExpansionTile(
           title: Text('Sale #${sale.id}'),
           trailing: Text('\$$total'),
-          subtitle: Text(sale.createdAt.toString()),
+          subtitle: Text(
+            Jiffy.parseFromDateTime(sale.createdAt).fromNow(),
+          ),
           children: saleLineItems.map((lineItem) {
             return LineItemTile(
               lineItem: lineItem,
@@ -108,7 +110,7 @@ class LineItemTile extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final productAsync = ref.watch(productProvider(lineItem.product));
+    final productAsync = ref.watch(productProvider(lineItem.productId));
     return productAsync.when(
       data: (product) {
         // If `product` can be null, handle that case

@@ -18,7 +18,7 @@ class SalePage extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Sell Items'),
+        title: const Text('Point of Sale'),
         actions: const [CartIcon()],
       ),
       body: productState.when(

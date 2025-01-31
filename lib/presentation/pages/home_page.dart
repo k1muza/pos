@@ -3,7 +3,7 @@ import 'package:pos_meat_shop/presentation/pages/product_list_page.dart';
 import 'package:pos_meat_shop/presentation/pages/sale_list_page.dart';
 import 'sale_page.dart';
 import '../widgets/primary_button.dart';
-import 'purchase_page.dart';
+import 'purchase_list_page.dart';
 import 'sync_page.dart';
 
 class HomePage extends StatelessWidget {
@@ -18,7 +18,7 @@ class HomePage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             PrimaryButton(
-              text: 'Sell Items',
+              text: 'Point of Sale',
               onPressed: () {
                 Navigator.push(
                   context,
@@ -28,7 +28,7 @@ class HomePage extends StatelessWidget {
             ),
             const SizedBox(height: 16),
             PrimaryButton(
-              text: 'Sale List',
+              text: 'Sales',
               onPressed: () {
                 Navigator.push(
                   context,
@@ -38,11 +38,11 @@ class HomePage extends StatelessWidget {
             ),
             const SizedBox(height: 16),
             PrimaryButton(
-              text: 'Record Purchase',
+              text: 'Purchases',
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const PurchasePage()),
+                  MaterialPageRoute(builder: (context) => const PurchaseListPage()),
                 );
               },
             ),
