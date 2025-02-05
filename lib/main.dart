@@ -6,7 +6,7 @@ import 'presentation/pages/home_page.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  final appDatabase = AppDatabase();
+  final appDatabase = AppDatabase.getInstance();
 
   runApp(ProviderScope(overrides: [
     // Override the appDatabaseProvider with the initialized instance

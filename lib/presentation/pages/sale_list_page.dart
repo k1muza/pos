@@ -37,7 +37,9 @@ class SaleListView extends ConsumerWidget {
     final saleState = ref.watch(saleNotifierProvider);
 
     return saleState.when(
-      data: (sales) => _SaleList(sales: sales),
+      data: (sales) => sales.isNotEmpty
+          ? _SaleList(sales: sales)
+          : Center(child: Text('No sales yet')),
       loading: () => const Center(child: CircularProgressIndicator()),
       error: (err, stack) => Center(
         child: Text('Error: $err'),

@@ -1,6 +1,7 @@
 import 'package:drift/drift.dart';
 import 'package:drift_flutter/drift_flutter.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:pos_meat_shop/domain/models/purchase.dart';
 
 // Include generated file
 part 'app_database.g.dart';
@@ -19,6 +20,7 @@ mixin TableMixin on Table {
 class Suppliers extends Table with TableMixin {
   late final name = text().withLength(min: 1, max: 250)();
 }
+
 class Products extends Table with TableMixin {
   late final name = text().withLength(min: 1, max: 250)();
   late final unitPrice = real()();
@@ -41,6 +43,7 @@ class SaleLineItems extends Table with TableMixin {
   late final unitPrice = real().generatedAs(totalPrice/quantity)();
 }
 
+@UseRowClass(Purchase)
 class Purchases extends Table with TableMixin{
   late final notes = text().nullable()();
 }
@@ -97,6 +100,14 @@ class BatchMovements extends Table with TableMixin {
 class AppDatabase extends _$AppDatabase {
   // Specify the location of the database file
   AppDatabase() : super(_openConnection());
+
+  // Create Singleton instance
+  static AppDatabase? _instance;
+  
+  factory AppDatabase.getInstance() {
+    _instance ??= AppDatabase();
+    return _instance!;
+  }
 
   // Bump this number when changing tables and columns
   @override

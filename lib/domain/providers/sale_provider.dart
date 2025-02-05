@@ -4,7 +4,7 @@ import 'package:pos_meat_shop/data/database/sale_dao.dart';
 import 'package:pos_meat_shop/data/repos/sale_repository.dart';
 
 final appDatabaseProvider = Provider<AppDatabase>((ref) {
-  return AppDatabase();
+  return AppDatabase.getInstance();
 });
 
 final saleDaoProvider = Provider<SaleDao>((ref) {

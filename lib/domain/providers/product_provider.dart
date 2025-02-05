@@ -4,7 +4,7 @@ import 'package:pos_meat_shop/data/database/product_dao.dart';
 import 'package:pos_meat_shop/data/repos/product_repository.dart';
 
 final appDatabaseProvider = Provider<AppDatabase>((ref) {
-  return AppDatabase();
+  return AppDatabase.getInstance();
 });
 
 final productDaoProvider = Provider<ProductDao>((ref) {

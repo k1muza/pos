@@ -35,7 +35,7 @@ class ProductListView extends ConsumerWidget {
     final productState = ref.watch(productNotifierProvider);
 
     return productState.when(
-      data: (products) => _ProductList(products: products),
+      data: (products) => products.isNotEmpty ? _ProductList(products: products) : Center(child: Text('No products yet'),),
       loading: () => const Center(child: CircularProgressIndicator()),
       error: (err, stack) => Center(child: Text('Error: $err'),)
     );
@@ -45,7 +45,7 @@ class ProductListView extends ConsumerWidget {
 class _ProductList extends StatelessWidget {
   final List<Product> products;
 
-  const _ProductList({Key? key, required this.products}) : super(key: key);
+  const _ProductList({super.key, required this.products});
 
   @override
   Widget build(BuildContext context) {
@@ -61,7 +61,7 @@ class _ProductList extends StatelessWidget {
 class _ProductListItem extends StatelessWidget {
   final Product product;
 
-  const _ProductListItem({Key? key, required this.product}) : super(key: key);
+  const _ProductListItem({super.key, required this.product});
 
   @override
   Widget build(BuildContext context) {

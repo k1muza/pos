@@ -1,136 +1,169 @@
+import 'package:drift/drift.dart' show Value;
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pos_meat_shop/data/database/app_database.dart';
-import 'package:pos_meat_shop/presentation/widgets/product_dropdown.dart';
+import 'package:pos_meat_shop/domain/models/purchase.dart';
+import 'package:pos_meat_shop/domain/providers/purchase_line_item_provider.dart';
+import 'package:pos_meat_shop/domain/providers/purchase_provider.dart';
 import 'package:pos_meat_shop/presentation/widgets/product_text.dart';
+import 'package:pos_meat_shop/presentation/widgets/purchase_item_dialog.dart';
 
-class PurchaseAddPage extends StatefulWidget {
+final purchaseLineItemsNotifierProvider =
+    StateNotifierProvider<PurchaseLineItemsNotifier, List<PurchaseLineItem>>(
+        (ref) {
+  return PurchaseLineItemsNotifier();
+});
+
+class PurchaseLineItemsNotifier extends StateNotifier<List<PurchaseLineItem>> {
+  PurchaseLineItemsNotifier() : super([]);
+
+  void add(PurchaseLineItem item) {
+    state = [...state, item];
+  }
+
+  void remove(int index) {
+    state = List.from(state)..removeAt(index);
+  }
+
+  void clear() {
+    state = [];
+  }
+}
+
+class PurchaseAddPage extends ConsumerWidget {
   const PurchaseAddPage({super.key});
 
   @override
-  State<PurchaseAddPage> createState() => _PurchaseAddPageState();
-}
-
-class _PurchaseAddPageState extends State<PurchaseAddPage> {
-  // Keep a local list of added items
-  final List<PurchaseLineItem> _addedItems = [];
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final purchaseLineItems = ref.watch(purchaseLineItemsNotifierProvider);
     return Scaffold(
       appBar: AppBar(
         title: const Text('New Purchase'),
-        actions: [
-          AddPurchaseItemButton(
-            onAddItem: (PurchaseLineItem item) {
-              setState(() {
-                _addedItems.add(item);
-              });
-            },
-          ),
+      ),
+      body: PurchaseList(purchaseLineItems: purchaseLineItems),
+      floatingActionButton: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          FloatingActionAddButton(),
+          const SizedBox(height: 16),
+          FloatingActionDoneButton(),
         ],
       ),
-      body: PurchaseList(
-        items: _addedItems,
-        onRemoveItem: (int index) {
-          setState(() {
-            _addedItems.removeAt(index);
-          });
-        },
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _savePurchase,
-        child: const Icon(Icons.check),
-      ),
-    );
-  }
-
-  void _savePurchase() {
-    // In a real app, you might:
-    // 1) Insert these line items into the DB,
-    // 2) Create a Purchase entry,
-    // 3) Navigate away, etc.
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('TODO: Save Purchase')),
     );
   }
 }
 
-
-class AddPurchaseItemButton extends StatelessWidget {
-  final Function(PurchaseLineItem) onAddItem;
-
-  const AddPurchaseItemButton({
-    Key? key,
-    required this.onAddItem,
-  }) : super(key: key);
+class FloatingActionAddButton extends ConsumerWidget {
+  const FloatingActionAddButton({
+    super.key,
+  });
 
   @override
-  Widget build(BuildContext context) {
-    return IconButton(
-      icon: const Icon(Icons.add),
+  Widget build(BuildContext context, WidgetRef ref) {
+    return FloatingActionButton(
+      heroTag: 'add',
       onPressed: () async {
         final result = await showDialog<PurchaseLineItem>(
           context: context,
-          builder: (BuildContext context) {
-            return PurchaseItemDialog(onAddItem: onAddItem);
-          },
+          builder: (context) => PurchaseItemDialog(),
         );
 
-        // If user actually submitted an item, add it to the list
         if (result != null) {
-          onAddItem(result);
+          ref.read(purchaseLineItemsNotifierProvider.notifier).add(result);
         }
       },
+      child: const Icon(Icons.add),
+    );
+  }
+}
+
+class FloatingActionDoneButton extends ConsumerWidget {
+  const FloatingActionDoneButton({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final purchaseDao = ref.watch(purchaseDaoProvider);
+    final purchaseLineItemDao = ref.watch(purchaseLineItemDaoProvider);
+    final db = AppDatabase.getInstance();
+
+    return FloatingActionButton(
+      heroTag: 'done',
+      onPressed: () async {
+        // await db.transaction(() async {
+        final newPurchaseId = await purchaseDao.insertPurchase(
+          PurchasesCompanion(),
+        );
+
+        final purchaseLineItems = ref.watch(purchaseLineItemsNotifierProvider);
+
+        for (final purchaseLineItem in purchaseLineItems) {
+          await purchaseLineItemDao.insertPurchaseLineItem(
+            PurchaseLineItemsCompanion(
+              purchaseId: Value(newPurchaseId),
+              productId: Value(purchaseLineItem.productId),
+              quantity: Value(purchaseLineItem.quantity),
+              totalCost: Value(purchaseLineItem.totalCost),
+            ),
+          );
+        }
+        ref.watch(purchaseLineItemsNotifierProvider.notifier).clear();
+        Navigator.pop(context);
+        // });
+      },
+      child: const Icon(Icons.check),
     );
   }
 }
 
 class PurchaseList extends StatelessWidget {
-  final List<PurchaseLineItem> items;
-  final Function(int) onRemoveItem;
+  final List<PurchaseLineItem> purchaseLineItems;
 
   const PurchaseList({
-    Key? key,
-    required this.items,
-    required this.onRemoveItem,
-  }) : super(key: key);
+    super.key,
+    required this.purchaseLineItems,
+  });
 
   @override
+
+  /// If the list of items is empty, shows a message saying so.
+  /// Otherwise, returns a ListView of all the items.
+  ///
+  /// The ListView is built using [itemBuilder], which is called for each item.
+  /// The key for each item is its id as a string, and onDismissed, the item is
+  /// removed from the list at the given index.
   Widget build(BuildContext context) {
-    if (items.isEmpty) {
+    if (purchaseLineItems.isEmpty) {
       return const Center(child: Text('No items added yet.'));
     }
     return ListView.builder(
-      itemCount: items.length,
+      itemCount: purchaseLineItems.length,
       itemBuilder: (context, index) {
-        final item = items[index];
+        final item = purchaseLineItems[index];
         return PurchaseListItem(
           item: item,
-          onDismissed: () => onRemoveItem(index),
+          index: index,
         );
       },
     );
   }
 }
 
-
-class PurchaseListItem extends StatelessWidget {
+class PurchaseListItem extends ConsumerWidget {
   final PurchaseLineItem item;
-  final VoidCallback onDismissed;
+  final int index;
 
   const PurchaseListItem({
-    Key? key,
+    super.key,
     required this.item,
-    required this.onDismissed,
-  }) : super(key: key);
+    required this.index,
+  });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Dismissible(
       key: Key(item.id.toString()),
       onDismissed: (direction) {
-        onDismissed();
+        ref.read(purchaseLineItemsNotifierProvider.notifier).remove(index);
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('${item.productId} dismissed')),
         );
@@ -150,141 +183,3 @@ class PurchaseListItem extends StatelessWidget {
     );
   }
 }
-
-
-class PurchaseItemDialog extends StatefulWidget {
-  final Function(PurchaseLineItem) onAddItem;
-
-  const PurchaseItemDialog({
-    Key? key,
-    required this.onAddItem,
-  }) : super(key: key);
-
-  @override
-  State<PurchaseItemDialog> createState() => _PurchaseItemDialogState();
-}
-
-class _PurchaseItemDialogState extends State<PurchaseItemDialog> {
-  final _formKey = GlobalKey<FormState>();
-
-  final ProductController _productController = ProductController();
-  final TextEditingController _quantityController = TextEditingController();
-  final TextEditingController _unitCostController = TextEditingController();
-
-  @override
-  void dispose() {
-    _productController.dispose();
-    _quantityController.dispose();
-    _unitCostController.dispose();
-    super.dispose();
-  }
-
-  void _submit() {
-    if (_formKey.currentState?.validate() ?? false) {
-      final product = _productController.value;
-      if (product == null) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Please select a product.')),
-        );
-        return;
-      }
-
-      final quantity = double.parse(_quantityController.text);
-      final cost = double.parse(_unitCostController.text);
-      final unitCost = cost / quantity;
-
-      // Create a new PurchaseLineItem
-      final newItem = PurchaseLineItem(
-        id: 0, // or null if autoIncrement
-        purchaseId: 0, // Might be assigned after creating a Purchase
-        productId: product.id,
-        quantity: quantity,
-        unitCost: unitCost,
-        totalCost: cost,
-        createdAt: DateTime.now(),
-        remoteId: null,
-      );
-
-      widget.onAddItem(newItem);
-      Navigator.pop(context, newItem);
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return AlertDialog(
-      title: const Text('Add Purchase Item'),
-      content: SingleChildScrollView(
-        child: Form(
-          key: _formKey,
-          child: Column(
-            children: [
-              ProductDropdownWidget(
-                controller: _productController,
-              ),
-              const SizedBox(height: 10.0),
-              TextFormField(
-                controller: _quantityController,
-                keyboardType:
-                    const TextInputType.numberWithOptions(decimal: true),
-                inputFormatters: [
-                  FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d*')),
-                ],
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Enter quantity';
-                  }
-                  if (double.tryParse(value) == null || double.parse(value) <= 0) {
-                    return 'Enter a valid quantity';
-                  }
-                  return null;
-                },
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  labelText: 'Quantity',
-                ),
-              ),
-              const SizedBox(height: 10.0),
-              TextFormField(
-                controller: _unitCostController,
-                keyboardType:
-                    const TextInputType.numberWithOptions(decimal: true),
-                inputFormatters: [
-                  FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d*')),
-                ],
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Enter cost';
-                  }
-                  if (double.tryParse(value) == null || double.parse(value) <= 0) {
-                    return 'Enter a valid cost';
-                  }
-                  return null;
-                },
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  labelText: 'Cost',
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-      actions: [
-        TextButton(
-          onPressed: () => Navigator.pop(context),
-          child: const Text('Cancel'),
-        ),
-        ElevatedButton(
-          onPressed: _submit,
-          child: const Text('Add'),
-        ),
-      ],
-    );
-  }
-}
-
