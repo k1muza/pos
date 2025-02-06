@@ -33,9 +33,19 @@ class CartPage extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Cart'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.clear),
+      ),
+      floatingActionButton: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          FloatingActionButton(
+            heroTag: 'add',
+            child: const Icon(Icons.add),
+            onPressed: () => Navigator.pop(context),
+          ),
+          const SizedBox(height: 16),
+          FloatingActionButton(
+            heroTag: 'clear',
+            child: const Icon(Icons.clear),
             onPressed: () {
               cartNotifier.clearCart();
               ScaffoldMessenger.of(context).showSnackBar(
@@ -44,12 +54,7 @@ class CartPage extends ConsumerWidget {
               Navigator.pop(context);
             },
           ),
-          IconButton(
-            icon: Icon(Icons.add),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          )
+          const SizedBox(height: 124),
         ],
       ),
       body: Padding(

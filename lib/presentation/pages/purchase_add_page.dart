@@ -2,7 +2,6 @@ import 'package:drift/drift.dart' show Value;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pos_meat_shop/data/database/app_database.dart';
-import 'package:pos_meat_shop/domain/models/purchase.dart';
 import 'package:pos_meat_shop/domain/providers/purchase_line_item_provider.dart';
 import 'package:pos_meat_shop/domain/providers/purchase_provider.dart';
 import 'package:pos_meat_shop/presentation/widgets/product_text.dart';

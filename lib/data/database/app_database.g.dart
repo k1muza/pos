@@ -1928,397 +1928,6 @@ class PurchaseLineItemsCompanion extends UpdateCompanion<PurchaseLineItem> {
   }
 }
 
-class $BatchesTable extends Batches with TableInfo<$BatchesTable, Batche> {
-  @override
-  final GeneratedDatabase attachedDatabase;
-  final String? _alias;
-  $BatchesTable(this.attachedDatabase, [this._alias]);
-  static const VerificationMeta _idMeta = const VerificationMeta('id');
-  @override
-  late final GeneratedColumn<int> id = GeneratedColumn<int>(
-      'id', aliasedName, false,
-      hasAutoIncrement: true,
-      type: DriftSqlType.int,
-      requiredDuringInsert: false,
-      defaultConstraints:
-          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
-  static const VerificationMeta _createdAtMeta =
-      const VerificationMeta('createdAt');
-  @override
-  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
-      'created_at', aliasedName, false,
-      type: DriftSqlType.dateTime,
-      requiredDuringInsert: false,
-      defaultValue: currentDateAndTime);
-  static const VerificationMeta _remoteIdMeta =
-      const VerificationMeta('remoteId');
-  @override
-  late final GeneratedColumn<String> remoteId = GeneratedColumn<String>(
-      'remote_id', aliasedName, true,
-      type: DriftSqlType.string, requiredDuringInsert: false);
-  static const VerificationMeta _productIdMeta =
-      const VerificationMeta('productId');
-  @override
-  late final GeneratedColumn<int> productId = GeneratedColumn<int>(
-      'product_id', aliasedName, false,
-      type: DriftSqlType.int,
-      requiredDuringInsert: true,
-      defaultConstraints:
-          GeneratedColumn.constraintIsAlways('REFERENCES products (id)'));
-  static const VerificationMeta _totalCostMeta =
-      const VerificationMeta('totalCost');
-  @override
-  late final GeneratedColumn<double> totalCost = GeneratedColumn<double>(
-      'total_cost', aliasedName, true,
-      type: DriftSqlType.double, requiredDuringInsert: false);
-  static const VerificationMeta _referenceTypeMeta =
-      const VerificationMeta('referenceType');
-  @override
-  late final GeneratedColumn<String> referenceType = GeneratedColumn<String>(
-      'reference_type', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _referenceIdMeta =
-      const VerificationMeta('referenceId');
-  @override
-  late final GeneratedColumn<int> referenceId = GeneratedColumn<int>(
-      'reference_id', aliasedName, false,
-      type: DriftSqlType.int, requiredDuringInsert: true);
-  @override
-  List<GeneratedColumn> get $columns => [
-        id,
-        createdAt,
-        remoteId,
-        productId,
-        totalCost,
-        referenceType,
-        referenceId
-      ];
-  @override
-  String get aliasedName => _alias ?? actualTableName;
-  @override
-  String get actualTableName => $name;
-  static const String $name = 'batches';
-  @override
-  VerificationContext validateIntegrity(Insertable<Batche> instance,
-      {bool isInserting = false}) {
-    final context = VerificationContext();
-    final data = instance.toColumns(true);
-    if (data.containsKey('id')) {
-      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
-    }
-    if (data.containsKey('created_at')) {
-      context.handle(_createdAtMeta,
-          createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta));
-    }
-    if (data.containsKey('remote_id')) {
-      context.handle(_remoteIdMeta,
-          remoteId.isAcceptableOrUnknown(data['remote_id']!, _remoteIdMeta));
-    }
-    if (data.containsKey('product_id')) {
-      context.handle(_productIdMeta,
-          productId.isAcceptableOrUnknown(data['product_id']!, _productIdMeta));
-    } else if (isInserting) {
-      context.missing(_productIdMeta);
-    }
-    if (data.containsKey('total_cost')) {
-      context.handle(_totalCostMeta,
-          totalCost.isAcceptableOrUnknown(data['total_cost']!, _totalCostMeta));
-    }
-    if (data.containsKey('reference_type')) {
-      context.handle(
-          _referenceTypeMeta,
-          referenceType.isAcceptableOrUnknown(
-              data['reference_type']!, _referenceTypeMeta));
-    } else if (isInserting) {
-      context.missing(_referenceTypeMeta);
-    }
-    if (data.containsKey('reference_id')) {
-      context.handle(
-          _referenceIdMeta,
-          referenceId.isAcceptableOrUnknown(
-              data['reference_id']!, _referenceIdMeta));
-    } else if (isInserting) {
-      context.missing(_referenceIdMeta);
-    }
-    return context;
-  }
-
-  @override
-  Set<GeneratedColumn> get $primaryKey => {id};
-  @override
-  Batche map(Map<String, dynamic> data, {String? tablePrefix}) {
-    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return Batche(
-      id: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
-      createdAt: attachedDatabase.typeMapping
-          .read(DriftSqlType.dateTime, data['${effectivePrefix}created_at'])!,
-      remoteId: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}remote_id']),
-      productId: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}product_id'])!,
-      totalCost: attachedDatabase.typeMapping
-          .read(DriftSqlType.double, data['${effectivePrefix}total_cost']),
-      referenceType: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}reference_type'])!,
-      referenceId: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}reference_id'])!,
-    );
-  }
-
-  @override
-  $BatchesTable createAlias(String alias) {
-    return $BatchesTable(attachedDatabase, alias);
-  }
-}
-
-class Batche extends DataClass implements Insertable<Batche> {
-  final int id;
-  final DateTime createdAt;
-  final String? remoteId;
-  final int productId;
-  final double? totalCost;
-  final String referenceType;
-  final int referenceId;
-  const Batche(
-      {required this.id,
-      required this.createdAt,
-      this.remoteId,
-      required this.productId,
-      this.totalCost,
-      required this.referenceType,
-      required this.referenceId});
-  @override
-  Map<String, Expression> toColumns(bool nullToAbsent) {
-    final map = <String, Expression>{};
-    map['id'] = Variable<int>(id);
-    map['created_at'] = Variable<DateTime>(createdAt);
-    if (!nullToAbsent || remoteId != null) {
-      map['remote_id'] = Variable<String>(remoteId);
-    }
-    map['product_id'] = Variable<int>(productId);
-    if (!nullToAbsent || totalCost != null) {
-      map['total_cost'] = Variable<double>(totalCost);
-    }
-    map['reference_type'] = Variable<String>(referenceType);
-    map['reference_id'] = Variable<int>(referenceId);
-    return map;
-  }
-
-  BatchesCompanion toCompanion(bool nullToAbsent) {
-    return BatchesCompanion(
-      id: Value(id),
-      createdAt: Value(createdAt),
-      remoteId: remoteId == null && nullToAbsent
-          ? const Value.absent()
-          : Value(remoteId),
-      productId: Value(productId),
-      totalCost: totalCost == null && nullToAbsent
-          ? const Value.absent()
-          : Value(totalCost),
-      referenceType: Value(referenceType),
-      referenceId: Value(referenceId),
-    );
-  }
-
-  factory Batche.fromJson(Map<String, dynamic> json,
-      {ValueSerializer? serializer}) {
-    serializer ??= driftRuntimeOptions.defaultSerializer;
-    return Batche(
-      id: serializer.fromJson<int>(json['id']),
-      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
-      remoteId: serializer.fromJson<String?>(json['remoteId']),
-      productId: serializer.fromJson<int>(json['productId']),
-      totalCost: serializer.fromJson<double?>(json['totalCost']),
-      referenceType: serializer.fromJson<String>(json['referenceType']),
-      referenceId: serializer.fromJson<int>(json['referenceId']),
-    );
-  }
-  @override
-  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
-    serializer ??= driftRuntimeOptions.defaultSerializer;
-    return <String, dynamic>{
-      'id': serializer.toJson<int>(id),
-      'createdAt': serializer.toJson<DateTime>(createdAt),
-      'remoteId': serializer.toJson<String?>(remoteId),
-      'productId': serializer.toJson<int>(productId),
-      'totalCost': serializer.toJson<double?>(totalCost),
-      'referenceType': serializer.toJson<String>(referenceType),
-      'referenceId': serializer.toJson<int>(referenceId),
-    };
-  }
-
-  Batche copyWith(
-          {int? id,
-          DateTime? createdAt,
-          Value<String?> remoteId = const Value.absent(),
-          int? productId,
-          Value<double?> totalCost = const Value.absent(),
-          String? referenceType,
-          int? referenceId}) =>
-      Batche(
-        id: id ?? this.id,
-        createdAt: createdAt ?? this.createdAt,
-        remoteId: remoteId.present ? remoteId.value : this.remoteId,
-        productId: productId ?? this.productId,
-        totalCost: totalCost.present ? totalCost.value : this.totalCost,
-        referenceType: referenceType ?? this.referenceType,
-        referenceId: referenceId ?? this.referenceId,
-      );
-  Batche copyWithCompanion(BatchesCompanion data) {
-    return Batche(
-      id: data.id.present ? data.id.value : this.id,
-      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
-      remoteId: data.remoteId.present ? data.remoteId.value : this.remoteId,
-      productId: data.productId.present ? data.productId.value : this.productId,
-      totalCost: data.totalCost.present ? data.totalCost.value : this.totalCost,
-      referenceType: data.referenceType.present
-          ? data.referenceType.value
-          : this.referenceType,
-      referenceId:
-          data.referenceId.present ? data.referenceId.value : this.referenceId,
-    );
-  }
-
-  @override
-  String toString() {
-    return (StringBuffer('Batche(')
-          ..write('id: $id, ')
-          ..write('createdAt: $createdAt, ')
-          ..write('remoteId: $remoteId, ')
-          ..write('productId: $productId, ')
-          ..write('totalCost: $totalCost, ')
-          ..write('referenceType: $referenceType, ')
-          ..write('referenceId: $referenceId')
-          ..write(')'))
-        .toString();
-  }
-
-  @override
-  int get hashCode => Object.hash(id, createdAt, remoteId, productId, totalCost,
-      referenceType, referenceId);
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      (other is Batche &&
-          other.id == this.id &&
-          other.createdAt == this.createdAt &&
-          other.remoteId == this.remoteId &&
-          other.productId == this.productId &&
-          other.totalCost == this.totalCost &&
-          other.referenceType == this.referenceType &&
-          other.referenceId == this.referenceId);
-}
-
-class BatchesCompanion extends UpdateCompanion<Batche> {
-  final Value<int> id;
-  final Value<DateTime> createdAt;
-  final Value<String?> remoteId;
-  final Value<int> productId;
-  final Value<double?> totalCost;
-  final Value<String> referenceType;
-  final Value<int> referenceId;
-  const BatchesCompanion({
-    this.id = const Value.absent(),
-    this.createdAt = const Value.absent(),
-    this.remoteId = const Value.absent(),
-    this.productId = const Value.absent(),
-    this.totalCost = const Value.absent(),
-    this.referenceType = const Value.absent(),
-    this.referenceId = const Value.absent(),
-  });
-  BatchesCompanion.insert({
-    this.id = const Value.absent(),
-    this.createdAt = const Value.absent(),
-    this.remoteId = const Value.absent(),
-    required int productId,
-    this.totalCost = const Value.absent(),
-    required String referenceType,
-    required int referenceId,
-  })  : productId = Value(productId),
-        referenceType = Value(referenceType),
-        referenceId = Value(referenceId);
-  static Insertable<Batche> custom({
-    Expression<int>? id,
-    Expression<DateTime>? createdAt,
-    Expression<String>? remoteId,
-    Expression<int>? productId,
-    Expression<double>? totalCost,
-    Expression<String>? referenceType,
-    Expression<int>? referenceId,
-  }) {
-    return RawValuesInsertable({
-      if (id != null) 'id': id,
-      if (createdAt != null) 'created_at': createdAt,
-      if (remoteId != null) 'remote_id': remoteId,
-      if (productId != null) 'product_id': productId,
-      if (totalCost != null) 'total_cost': totalCost,
-      if (referenceType != null) 'reference_type': referenceType,
-      if (referenceId != null) 'reference_id': referenceId,
-    });
-  }
-
-  BatchesCompanion copyWith(
-      {Value<int>? id,
-      Value<DateTime>? createdAt,
-      Value<String?>? remoteId,
-      Value<int>? productId,
-      Value<double?>? totalCost,
-      Value<String>? referenceType,
-      Value<int>? referenceId}) {
-    return BatchesCompanion(
-      id: id ?? this.id,
-      createdAt: createdAt ?? this.createdAt,
-      remoteId: remoteId ?? this.remoteId,
-      productId: productId ?? this.productId,
-      totalCost: totalCost ?? this.totalCost,
-      referenceType: referenceType ?? this.referenceType,
-      referenceId: referenceId ?? this.referenceId,
-    );
-  }
-
-  @override
-  Map<String, Expression> toColumns(bool nullToAbsent) {
-    final map = <String, Expression>{};
-    if (id.present) {
-      map['id'] = Variable<int>(id.value);
-    }
-    if (createdAt.present) {
-      map['created_at'] = Variable<DateTime>(createdAt.value);
-    }
-    if (remoteId.present) {
-      map['remote_id'] = Variable<String>(remoteId.value);
-    }
-    if (productId.present) {
-      map['product_id'] = Variable<int>(productId.value);
-    }
-    if (totalCost.present) {
-      map['total_cost'] = Variable<double>(totalCost.value);
-    }
-    if (referenceType.present) {
-      map['reference_type'] = Variable<String>(referenceType.value);
-    }
-    if (referenceId.present) {
-      map['reference_id'] = Variable<int>(referenceId.value);
-    }
-    return map;
-  }
-
-  @override
-  String toString() {
-    return (StringBuffer('BatchesCompanion(')
-          ..write('id: $id, ')
-          ..write('createdAt: $createdAt, ')
-          ..write('remoteId: $remoteId, ')
-          ..write('productId: $productId, ')
-          ..write('totalCost: $totalCost, ')
-          ..write('referenceType: $referenceType, ')
-          ..write('referenceId: $referenceId')
-          ..write(')'))
-        .toString();
-  }
-}
-
 class $StockConversionsTable extends StockConversions
     with TableInfo<$StockConversionsTable, StockConversion> {
   @override
@@ -2348,24 +1957,24 @@ class $StockConversionsTable extends StockConversions
   late final GeneratedColumn<String> remoteId = GeneratedColumn<String>(
       'remote_id', aliasedName, true,
       type: DriftSqlType.string, requiredDuringInsert: false);
-  static const VerificationMeta _fromBatchIdMeta =
-      const VerificationMeta('fromBatchId');
+  static const VerificationMeta _fromProductIdMeta =
+      const VerificationMeta('fromProductId');
   @override
-  late final GeneratedColumn<int> fromBatchId = GeneratedColumn<int>(
-      'from_batch_id', aliasedName, false,
+  late final GeneratedColumn<int> fromProductId = GeneratedColumn<int>(
+      'from_product_id', aliasedName, false,
       type: DriftSqlType.int,
       requiredDuringInsert: true,
       defaultConstraints:
-          GeneratedColumn.constraintIsAlways('REFERENCES batches (id)'));
-  static const VerificationMeta _toBatchIdMeta =
-      const VerificationMeta('toBatchId');
+          GeneratedColumn.constraintIsAlways('REFERENCES products (id)'));
+  static const VerificationMeta _toProductIdMeta =
+      const VerificationMeta('toProductId');
   @override
-  late final GeneratedColumn<int> toBatchId = GeneratedColumn<int>(
-      'to_batch_id', aliasedName, false,
+  late final GeneratedColumn<int> toProductId = GeneratedColumn<int>(
+      'to_product_id', aliasedName, false,
       type: DriftSqlType.int,
       requiredDuringInsert: true,
       defaultConstraints:
-          GeneratedColumn.constraintIsAlways('REFERENCES batches (id)'));
+          GeneratedColumn.constraintIsAlways('REFERENCES products (id)'));
   static const VerificationMeta _quantityMeta =
       const VerificationMeta('quantity');
   @override
@@ -2376,7 +1985,7 @@ class $StockConversionsTable extends StockConversions
       requiredDuringInsert: true);
   @override
   List<GeneratedColumn> get $columns =>
-      [id, createdAt, remoteId, fromBatchId, toBatchId, quantity];
+      [id, createdAt, remoteId, fromProductId, toProductId, quantity];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -2398,21 +2007,21 @@ class $StockConversionsTable extends StockConversions
       context.handle(_remoteIdMeta,
           remoteId.isAcceptableOrUnknown(data['remote_id']!, _remoteIdMeta));
     }
-    if (data.containsKey('from_batch_id')) {
+    if (data.containsKey('from_product_id')) {
       context.handle(
-          _fromBatchIdMeta,
-          fromBatchId.isAcceptableOrUnknown(
-              data['from_batch_id']!, _fromBatchIdMeta));
+          _fromProductIdMeta,
+          fromProductId.isAcceptableOrUnknown(
+              data['from_product_id']!, _fromProductIdMeta));
     } else if (isInserting) {
-      context.missing(_fromBatchIdMeta);
+      context.missing(_fromProductIdMeta);
     }
-    if (data.containsKey('to_batch_id')) {
+    if (data.containsKey('to_product_id')) {
       context.handle(
-          _toBatchIdMeta,
-          toBatchId.isAcceptableOrUnknown(
-              data['to_batch_id']!, _toBatchIdMeta));
+          _toProductIdMeta,
+          toProductId.isAcceptableOrUnknown(
+              data['to_product_id']!, _toProductIdMeta));
     } else if (isInserting) {
-      context.missing(_toBatchIdMeta);
+      context.missing(_toProductIdMeta);
     }
     if (data.containsKey('quantity')) {
       context.handle(_quantityMeta,
@@ -2435,10 +2044,10 @@ class $StockConversionsTable extends StockConversions
           .read(DriftSqlType.dateTime, data['${effectivePrefix}created_at'])!,
       remoteId: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}remote_id']),
-      fromBatchId: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}from_batch_id'])!,
-      toBatchId: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}to_batch_id'])!,
+      fromProductId: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}from_product_id'])!,
+      toProductId: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}to_product_id'])!,
       quantity: attachedDatabase.typeMapping
           .read(DriftSqlType.double, data['${effectivePrefix}quantity'])!,
     );
@@ -2454,15 +2063,15 @@ class StockConversion extends DataClass implements Insertable<StockConversion> {
   final int id;
   final DateTime createdAt;
   final String? remoteId;
-  final int fromBatchId;
-  final int toBatchId;
+  final int fromProductId;
+  final int toProductId;
   final double quantity;
   const StockConversion(
       {required this.id,
       required this.createdAt,
       this.remoteId,
-      required this.fromBatchId,
-      required this.toBatchId,
+      required this.fromProductId,
+      required this.toProductId,
       required this.quantity});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -2472,8 +2081,8 @@ class StockConversion extends DataClass implements Insertable<StockConversion> {
     if (!nullToAbsent || remoteId != null) {
       map['remote_id'] = Variable<String>(remoteId);
     }
-    map['from_batch_id'] = Variable<int>(fromBatchId);
-    map['to_batch_id'] = Variable<int>(toBatchId);
+    map['from_product_id'] = Variable<int>(fromProductId);
+    map['to_product_id'] = Variable<int>(toProductId);
     map['quantity'] = Variable<double>(quantity);
     return map;
   }
@@ -2485,8 +2094,8 @@ class StockConversion extends DataClass implements Insertable<StockConversion> {
       remoteId: remoteId == null && nullToAbsent
           ? const Value.absent()
           : Value(remoteId),
-      fromBatchId: Value(fromBatchId),
-      toBatchId: Value(toBatchId),
+      fromProductId: Value(fromProductId),
+      toProductId: Value(toProductId),
       quantity: Value(quantity),
     );
   }
@@ -2498,8 +2107,8 @@ class StockConversion extends DataClass implements Insertable<StockConversion> {
       id: serializer.fromJson<int>(json['id']),
       createdAt: serializer.fromJson<DateTime>(json['createdAt']),
       remoteId: serializer.fromJson<String?>(json['remoteId']),
-      fromBatchId: serializer.fromJson<int>(json['fromBatchId']),
-      toBatchId: serializer.fromJson<int>(json['toBatchId']),
+      fromProductId: serializer.fromJson<int>(json['fromProductId']),
+      toProductId: serializer.fromJson<int>(json['toProductId']),
       quantity: serializer.fromJson<double>(json['quantity']),
     );
   }
@@ -2510,8 +2119,8 @@ class StockConversion extends DataClass implements Insertable<StockConversion> {
       'id': serializer.toJson<int>(id),
       'createdAt': serializer.toJson<DateTime>(createdAt),
       'remoteId': serializer.toJson<String?>(remoteId),
-      'fromBatchId': serializer.toJson<int>(fromBatchId),
-      'toBatchId': serializer.toJson<int>(toBatchId),
+      'fromProductId': serializer.toJson<int>(fromProductId),
+      'toProductId': serializer.toJson<int>(toProductId),
       'quantity': serializer.toJson<double>(quantity),
     };
   }
@@ -2520,15 +2129,15 @@ class StockConversion extends DataClass implements Insertable<StockConversion> {
           {int? id,
           DateTime? createdAt,
           Value<String?> remoteId = const Value.absent(),
-          int? fromBatchId,
-          int? toBatchId,
+          int? fromProductId,
+          int? toProductId,
           double? quantity}) =>
       StockConversion(
         id: id ?? this.id,
         createdAt: createdAt ?? this.createdAt,
         remoteId: remoteId.present ? remoteId.value : this.remoteId,
-        fromBatchId: fromBatchId ?? this.fromBatchId,
-        toBatchId: toBatchId ?? this.toBatchId,
+        fromProductId: fromProductId ?? this.fromProductId,
+        toProductId: toProductId ?? this.toProductId,
         quantity: quantity ?? this.quantity,
       );
   StockConversion copyWithCompanion(StockConversionsCompanion data) {
@@ -2536,9 +2145,11 @@ class StockConversion extends DataClass implements Insertable<StockConversion> {
       id: data.id.present ? data.id.value : this.id,
       createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
       remoteId: data.remoteId.present ? data.remoteId.value : this.remoteId,
-      fromBatchId:
-          data.fromBatchId.present ? data.fromBatchId.value : this.fromBatchId,
-      toBatchId: data.toBatchId.present ? data.toBatchId.value : this.toBatchId,
+      fromProductId: data.fromProductId.present
+          ? data.fromProductId.value
+          : this.fromProductId,
+      toProductId:
+          data.toProductId.present ? data.toProductId.value : this.toProductId,
       quantity: data.quantity.present ? data.quantity.value : this.quantity,
     );
   }
@@ -2549,16 +2160,16 @@ class StockConversion extends DataClass implements Insertable<StockConversion> {
           ..write('id: $id, ')
           ..write('createdAt: $createdAt, ')
           ..write('remoteId: $remoteId, ')
-          ..write('fromBatchId: $fromBatchId, ')
-          ..write('toBatchId: $toBatchId, ')
+          ..write('fromProductId: $fromProductId, ')
+          ..write('toProductId: $toProductId, ')
           ..write('quantity: $quantity')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode =>
-      Object.hash(id, createdAt, remoteId, fromBatchId, toBatchId, quantity);
+  int get hashCode => Object.hash(
+      id, createdAt, remoteId, fromProductId, toProductId, quantity);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -2566,8 +2177,8 @@ class StockConversion extends DataClass implements Insertable<StockConversion> {
           other.id == this.id &&
           other.createdAt == this.createdAt &&
           other.remoteId == this.remoteId &&
-          other.fromBatchId == this.fromBatchId &&
-          other.toBatchId == this.toBatchId &&
+          other.fromProductId == this.fromProductId &&
+          other.toProductId == this.toProductId &&
           other.quantity == this.quantity);
 }
 
@@ -2575,41 +2186,41 @@ class StockConversionsCompanion extends UpdateCompanion<StockConversion> {
   final Value<int> id;
   final Value<DateTime> createdAt;
   final Value<String?> remoteId;
-  final Value<int> fromBatchId;
-  final Value<int> toBatchId;
+  final Value<int> fromProductId;
+  final Value<int> toProductId;
   final Value<double> quantity;
   const StockConversionsCompanion({
     this.id = const Value.absent(),
     this.createdAt = const Value.absent(),
     this.remoteId = const Value.absent(),
-    this.fromBatchId = const Value.absent(),
-    this.toBatchId = const Value.absent(),
+    this.fromProductId = const Value.absent(),
+    this.toProductId = const Value.absent(),
     this.quantity = const Value.absent(),
   });
   StockConversionsCompanion.insert({
     this.id = const Value.absent(),
     this.createdAt = const Value.absent(),
     this.remoteId = const Value.absent(),
-    required int fromBatchId,
-    required int toBatchId,
+    required int fromProductId,
+    required int toProductId,
     required double quantity,
-  })  : fromBatchId = Value(fromBatchId),
-        toBatchId = Value(toBatchId),
+  })  : fromProductId = Value(fromProductId),
+        toProductId = Value(toProductId),
         quantity = Value(quantity);
   static Insertable<StockConversion> custom({
     Expression<int>? id,
     Expression<DateTime>? createdAt,
     Expression<String>? remoteId,
-    Expression<int>? fromBatchId,
-    Expression<int>? toBatchId,
+    Expression<int>? fromProductId,
+    Expression<int>? toProductId,
     Expression<double>? quantity,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
       if (createdAt != null) 'created_at': createdAt,
       if (remoteId != null) 'remote_id': remoteId,
-      if (fromBatchId != null) 'from_batch_id': fromBatchId,
-      if (toBatchId != null) 'to_batch_id': toBatchId,
+      if (fromProductId != null) 'from_product_id': fromProductId,
+      if (toProductId != null) 'to_product_id': toProductId,
       if (quantity != null) 'quantity': quantity,
     });
   }
@@ -2618,15 +2229,15 @@ class StockConversionsCompanion extends UpdateCompanion<StockConversion> {
       {Value<int>? id,
       Value<DateTime>? createdAt,
       Value<String?>? remoteId,
-      Value<int>? fromBatchId,
-      Value<int>? toBatchId,
+      Value<int>? fromProductId,
+      Value<int>? toProductId,
       Value<double>? quantity}) {
     return StockConversionsCompanion(
       id: id ?? this.id,
       createdAt: createdAt ?? this.createdAt,
       remoteId: remoteId ?? this.remoteId,
-      fromBatchId: fromBatchId ?? this.fromBatchId,
-      toBatchId: toBatchId ?? this.toBatchId,
+      fromProductId: fromProductId ?? this.fromProductId,
+      toProductId: toProductId ?? this.toProductId,
       quantity: quantity ?? this.quantity,
     );
   }
@@ -2643,11 +2254,11 @@ class StockConversionsCompanion extends UpdateCompanion<StockConversion> {
     if (remoteId.present) {
       map['remote_id'] = Variable<String>(remoteId.value);
     }
-    if (fromBatchId.present) {
-      map['from_batch_id'] = Variable<int>(fromBatchId.value);
+    if (fromProductId.present) {
+      map['from_product_id'] = Variable<int>(fromProductId.value);
     }
-    if (toBatchId.present) {
-      map['to_batch_id'] = Variable<int>(toBatchId.value);
+    if (toProductId.present) {
+      map['to_product_id'] = Variable<int>(toProductId.value);
     }
     if (quantity.present) {
       map['quantity'] = Variable<double>(quantity.value);
@@ -2661,8 +2272,8 @@ class StockConversionsCompanion extends UpdateCompanion<StockConversion> {
           ..write('id: $id, ')
           ..write('createdAt: $createdAt, ')
           ..write('remoteId: $remoteId, ')
-          ..write('fromBatchId: $fromBatchId, ')
-          ..write('toBatchId: $toBatchId, ')
+          ..write('fromProductId: $fromProductId, ')
+          ..write('toProductId: $toProductId, ')
           ..write('quantity: $quantity')
           ..write(')'))
         .toString();
@@ -2698,15 +2309,15 @@ class $StockAdjustmentsTable extends StockAdjustments
   late final GeneratedColumn<String> remoteId = GeneratedColumn<String>(
       'remote_id', aliasedName, true,
       type: DriftSqlType.string, requiredDuringInsert: false);
-  static const VerificationMeta _batchIdMeta =
-      const VerificationMeta('batchId');
+  static const VerificationMeta _productIdMeta =
+      const VerificationMeta('productId');
   @override
-  late final GeneratedColumn<int> batchId = GeneratedColumn<int>(
-      'batch_id', aliasedName, false,
+  late final GeneratedColumn<int> productId = GeneratedColumn<int>(
+      'product_id', aliasedName, false,
       type: DriftSqlType.int,
       requiredDuringInsert: true,
       defaultConstraints:
-          GeneratedColumn.constraintIsAlways('REFERENCES batches (id)'));
+          GeneratedColumn.constraintIsAlways('REFERENCES products (id)'));
   static const VerificationMeta _quantityMeta =
       const VerificationMeta('quantity');
   @override
@@ -2715,7 +2326,7 @@ class $StockAdjustmentsTable extends StockAdjustments
       type: DriftSqlType.double, requiredDuringInsert: true);
   @override
   List<GeneratedColumn> get $columns =>
-      [id, createdAt, remoteId, batchId, quantity];
+      [id, createdAt, remoteId, productId, quantity];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -2737,11 +2348,11 @@ class $StockAdjustmentsTable extends StockAdjustments
       context.handle(_remoteIdMeta,
           remoteId.isAcceptableOrUnknown(data['remote_id']!, _remoteIdMeta));
     }
-    if (data.containsKey('batch_id')) {
-      context.handle(_batchIdMeta,
-          batchId.isAcceptableOrUnknown(data['batch_id']!, _batchIdMeta));
+    if (data.containsKey('product_id')) {
+      context.handle(_productIdMeta,
+          productId.isAcceptableOrUnknown(data['product_id']!, _productIdMeta));
     } else if (isInserting) {
-      context.missing(_batchIdMeta);
+      context.missing(_productIdMeta);
     }
     if (data.containsKey('quantity')) {
       context.handle(_quantityMeta,
@@ -2764,8 +2375,8 @@ class $StockAdjustmentsTable extends StockAdjustments
           .read(DriftSqlType.dateTime, data['${effectivePrefix}created_at'])!,
       remoteId: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}remote_id']),
-      batchId: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}batch_id'])!,
+      productId: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}product_id'])!,
       quantity: attachedDatabase.typeMapping
           .read(DriftSqlType.double, data['${effectivePrefix}quantity'])!,
     );
@@ -2781,13 +2392,13 @@ class StockAdjustment extends DataClass implements Insertable<StockAdjustment> {
   final int id;
   final DateTime createdAt;
   final String? remoteId;
-  final int batchId;
+  final int productId;
   final double quantity;
   const StockAdjustment(
       {required this.id,
       required this.createdAt,
       this.remoteId,
-      required this.batchId,
+      required this.productId,
       required this.quantity});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -2797,7 +2408,7 @@ class StockAdjustment extends DataClass implements Insertable<StockAdjustment> {
     if (!nullToAbsent || remoteId != null) {
       map['remote_id'] = Variable<String>(remoteId);
     }
-    map['batch_id'] = Variable<int>(batchId);
+    map['product_id'] = Variable<int>(productId);
     map['quantity'] = Variable<double>(quantity);
     return map;
   }
@@ -2809,7 +2420,7 @@ class StockAdjustment extends DataClass implements Insertable<StockAdjustment> {
       remoteId: remoteId == null && nullToAbsent
           ? const Value.absent()
           : Value(remoteId),
-      batchId: Value(batchId),
+      productId: Value(productId),
       quantity: Value(quantity),
     );
   }
@@ -2821,7 +2432,7 @@ class StockAdjustment extends DataClass implements Insertable<StockAdjustment> {
       id: serializer.fromJson<int>(json['id']),
       createdAt: serializer.fromJson<DateTime>(json['createdAt']),
       remoteId: serializer.fromJson<String?>(json['remoteId']),
-      batchId: serializer.fromJson<int>(json['batchId']),
+      productId: serializer.fromJson<int>(json['productId']),
       quantity: serializer.fromJson<double>(json['quantity']),
     );
   }
@@ -2832,7 +2443,7 @@ class StockAdjustment extends DataClass implements Insertable<StockAdjustment> {
       'id': serializer.toJson<int>(id),
       'createdAt': serializer.toJson<DateTime>(createdAt),
       'remoteId': serializer.toJson<String?>(remoteId),
-      'batchId': serializer.toJson<int>(batchId),
+      'productId': serializer.toJson<int>(productId),
       'quantity': serializer.toJson<double>(quantity),
     };
   }
@@ -2841,13 +2452,13 @@ class StockAdjustment extends DataClass implements Insertable<StockAdjustment> {
           {int? id,
           DateTime? createdAt,
           Value<String?> remoteId = const Value.absent(),
-          int? batchId,
+          int? productId,
           double? quantity}) =>
       StockAdjustment(
         id: id ?? this.id,
         createdAt: createdAt ?? this.createdAt,
         remoteId: remoteId.present ? remoteId.value : this.remoteId,
-        batchId: batchId ?? this.batchId,
+        productId: productId ?? this.productId,
         quantity: quantity ?? this.quantity,
       );
   StockAdjustment copyWithCompanion(StockAdjustmentsCompanion data) {
@@ -2855,7 +2466,7 @@ class StockAdjustment extends DataClass implements Insertable<StockAdjustment> {
       id: data.id.present ? data.id.value : this.id,
       createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
       remoteId: data.remoteId.present ? data.remoteId.value : this.remoteId,
-      batchId: data.batchId.present ? data.batchId.value : this.batchId,
+      productId: data.productId.present ? data.productId.value : this.productId,
       quantity: data.quantity.present ? data.quantity.value : this.quantity,
     );
   }
@@ -2866,14 +2477,14 @@ class StockAdjustment extends DataClass implements Insertable<StockAdjustment> {
           ..write('id: $id, ')
           ..write('createdAt: $createdAt, ')
           ..write('remoteId: $remoteId, ')
-          ..write('batchId: $batchId, ')
+          ..write('productId: $productId, ')
           ..write('quantity: $quantity')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(id, createdAt, remoteId, batchId, quantity);
+  int get hashCode => Object.hash(id, createdAt, remoteId, productId, quantity);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -2881,7 +2492,7 @@ class StockAdjustment extends DataClass implements Insertable<StockAdjustment> {
           other.id == this.id &&
           other.createdAt == this.createdAt &&
           other.remoteId == this.remoteId &&
-          other.batchId == this.batchId &&
+          other.productId == this.productId &&
           other.quantity == this.quantity);
 }
 
@@ -2889,35 +2500,35 @@ class StockAdjustmentsCompanion extends UpdateCompanion<StockAdjustment> {
   final Value<int> id;
   final Value<DateTime> createdAt;
   final Value<String?> remoteId;
-  final Value<int> batchId;
+  final Value<int> productId;
   final Value<double> quantity;
   const StockAdjustmentsCompanion({
     this.id = const Value.absent(),
     this.createdAt = const Value.absent(),
     this.remoteId = const Value.absent(),
-    this.batchId = const Value.absent(),
+    this.productId = const Value.absent(),
     this.quantity = const Value.absent(),
   });
   StockAdjustmentsCompanion.insert({
     this.id = const Value.absent(),
     this.createdAt = const Value.absent(),
     this.remoteId = const Value.absent(),
-    required int batchId,
+    required int productId,
     required double quantity,
-  })  : batchId = Value(batchId),
+  })  : productId = Value(productId),
         quantity = Value(quantity);
   static Insertable<StockAdjustment> custom({
     Expression<int>? id,
     Expression<DateTime>? createdAt,
     Expression<String>? remoteId,
-    Expression<int>? batchId,
+    Expression<int>? productId,
     Expression<double>? quantity,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
       if (createdAt != null) 'created_at': createdAt,
       if (remoteId != null) 'remote_id': remoteId,
-      if (batchId != null) 'batch_id': batchId,
+      if (productId != null) 'product_id': productId,
       if (quantity != null) 'quantity': quantity,
     });
   }
@@ -2926,13 +2537,13 @@ class StockAdjustmentsCompanion extends UpdateCompanion<StockAdjustment> {
       {Value<int>? id,
       Value<DateTime>? createdAt,
       Value<String?>? remoteId,
-      Value<int>? batchId,
+      Value<int>? productId,
       Value<double>? quantity}) {
     return StockAdjustmentsCompanion(
       id: id ?? this.id,
       createdAt: createdAt ?? this.createdAt,
       remoteId: remoteId ?? this.remoteId,
-      batchId: batchId ?? this.batchId,
+      productId: productId ?? this.productId,
       quantity: quantity ?? this.quantity,
     );
   }
@@ -2949,8 +2560,8 @@ class StockAdjustmentsCompanion extends UpdateCompanion<StockAdjustment> {
     if (remoteId.present) {
       map['remote_id'] = Variable<String>(remoteId.value);
     }
-    if (batchId.present) {
-      map['batch_id'] = Variable<int>(batchId.value);
+    if (productId.present) {
+      map['product_id'] = Variable<int>(productId.value);
     }
     if (quantity.present) {
       map['quantity'] = Variable<double>(quantity.value);
@@ -2964,19 +2575,19 @@ class StockAdjustmentsCompanion extends UpdateCompanion<StockAdjustment> {
           ..write('id: $id, ')
           ..write('createdAt: $createdAt, ')
           ..write('remoteId: $remoteId, ')
-          ..write('batchId: $batchId, ')
+          ..write('productId: $productId, ')
           ..write('quantity: $quantity')
           ..write(')'))
         .toString();
   }
 }
 
-class $BatchMovementsTable extends BatchMovements
-    with TableInfo<$BatchMovementsTable, BatchMovement> {
+class $StockMovementsTable extends StockMovements
+    with TableInfo<$StockMovementsTable, StockMovement> {
   @override
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
-  $BatchMovementsTable(this.attachedDatabase, [this._alias]);
+  $StockMovementsTable(this.attachedDatabase, [this._alias]);
   static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
   late final GeneratedColumn<int> id = GeneratedColumn<int>(
@@ -3000,21 +2611,15 @@ class $BatchMovementsTable extends BatchMovements
   late final GeneratedColumn<String> remoteId = GeneratedColumn<String>(
       'remote_id', aliasedName, true,
       type: DriftSqlType.string, requiredDuringInsert: false);
-  static const VerificationMeta _batchIdMeta =
-      const VerificationMeta('batchId');
+  static const VerificationMeta _productIdMeta =
+      const VerificationMeta('productId');
   @override
-  late final GeneratedColumn<int> batchId = GeneratedColumn<int>(
-      'batch_id', aliasedName, false,
+  late final GeneratedColumn<int> productId = GeneratedColumn<int>(
+      'product_id', aliasedName, false,
       type: DriftSqlType.int,
       requiredDuringInsert: true,
       defaultConstraints:
-          GeneratedColumn.constraintIsAlways('REFERENCES batches (id)'));
-  static const VerificationMeta _unitPriceMeta =
-      const VerificationMeta('unitPrice');
-  @override
-  late final GeneratedColumn<double> unitPrice = GeneratedColumn<double>(
-      'unit_price', aliasedName, true,
-      type: DriftSqlType.double, requiredDuringInsert: false);
+          GeneratedColumn.constraintIsAlways('REFERENCES products (id)'));
   static const VerificationMeta _quantityMeta =
       const VerificationMeta('quantity');
   @override
@@ -3038,8 +2643,7 @@ class $BatchMovementsTable extends BatchMovements
         id,
         createdAt,
         remoteId,
-        batchId,
-        unitPrice,
+        productId,
         quantity,
         referenceType,
         referenceId
@@ -3048,9 +2652,9 @@ class $BatchMovementsTable extends BatchMovements
   String get aliasedName => _alias ?? actualTableName;
   @override
   String get actualTableName => $name;
-  static const String $name = 'batch_movements';
+  static const String $name = 'stock_movements';
   @override
-  VerificationContext validateIntegrity(Insertable<BatchMovement> instance,
+  VerificationContext validateIntegrity(Insertable<StockMovement> instance,
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
@@ -3065,15 +2669,11 @@ class $BatchMovementsTable extends BatchMovements
       context.handle(_remoteIdMeta,
           remoteId.isAcceptableOrUnknown(data['remote_id']!, _remoteIdMeta));
     }
-    if (data.containsKey('batch_id')) {
-      context.handle(_batchIdMeta,
-          batchId.isAcceptableOrUnknown(data['batch_id']!, _batchIdMeta));
+    if (data.containsKey('product_id')) {
+      context.handle(_productIdMeta,
+          productId.isAcceptableOrUnknown(data['product_id']!, _productIdMeta));
     } else if (isInserting) {
-      context.missing(_batchIdMeta);
-    }
-    if (data.containsKey('unit_price')) {
-      context.handle(_unitPriceMeta,
-          unitPrice.isAcceptableOrUnknown(data['unit_price']!, _unitPriceMeta));
+      context.missing(_productIdMeta);
     }
     if (data.containsKey('quantity')) {
       context.handle(_quantityMeta,
@@ -3103,19 +2703,17 @@ class $BatchMovementsTable extends BatchMovements
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
-  BatchMovement map(Map<String, dynamic> data, {String? tablePrefix}) {
+  StockMovement map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return BatchMovement(
+    return StockMovement(
       id: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
       createdAt: attachedDatabase.typeMapping
           .read(DriftSqlType.dateTime, data['${effectivePrefix}created_at'])!,
       remoteId: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}remote_id']),
-      batchId: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}batch_id'])!,
-      unitPrice: attachedDatabase.typeMapping
-          .read(DriftSqlType.double, data['${effectivePrefix}unit_price']),
+      productId: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}product_id'])!,
       quantity: attachedDatabase.typeMapping
           .read(DriftSqlType.double, data['${effectivePrefix}quantity'])!,
       referenceType: attachedDatabase.typeMapping
@@ -3126,26 +2724,24 @@ class $BatchMovementsTable extends BatchMovements
   }
 
   @override
-  $BatchMovementsTable createAlias(String alias) {
-    return $BatchMovementsTable(attachedDatabase, alias);
+  $StockMovementsTable createAlias(String alias) {
+    return $StockMovementsTable(attachedDatabase, alias);
   }
 }
 
-class BatchMovement extends DataClass implements Insertable<BatchMovement> {
+class StockMovement extends DataClass implements Insertable<StockMovement> {
   final int id;
   final DateTime createdAt;
   final String? remoteId;
-  final int batchId;
-  final double? unitPrice;
+  final int productId;
   final double quantity;
   final String referenceType;
   final int referenceId;
-  const BatchMovement(
+  const StockMovement(
       {required this.id,
       required this.createdAt,
       this.remoteId,
-      required this.batchId,
-      this.unitPrice,
+      required this.productId,
       required this.quantity,
       required this.referenceType,
       required this.referenceId});
@@ -3157,42 +2753,35 @@ class BatchMovement extends DataClass implements Insertable<BatchMovement> {
     if (!nullToAbsent || remoteId != null) {
       map['remote_id'] = Variable<String>(remoteId);
     }
-    map['batch_id'] = Variable<int>(batchId);
-    if (!nullToAbsent || unitPrice != null) {
-      map['unit_price'] = Variable<double>(unitPrice);
-    }
+    map['product_id'] = Variable<int>(productId);
     map['quantity'] = Variable<double>(quantity);
     map['reference_type'] = Variable<String>(referenceType);
     map['reference_id'] = Variable<int>(referenceId);
     return map;
   }
 
-  BatchMovementsCompanion toCompanion(bool nullToAbsent) {
-    return BatchMovementsCompanion(
+  StockMovementsCompanion toCompanion(bool nullToAbsent) {
+    return StockMovementsCompanion(
       id: Value(id),
       createdAt: Value(createdAt),
       remoteId: remoteId == null && nullToAbsent
           ? const Value.absent()
           : Value(remoteId),
-      batchId: Value(batchId),
-      unitPrice: unitPrice == null && nullToAbsent
-          ? const Value.absent()
-          : Value(unitPrice),
+      productId: Value(productId),
       quantity: Value(quantity),
       referenceType: Value(referenceType),
       referenceId: Value(referenceId),
     );
   }
 
-  factory BatchMovement.fromJson(Map<String, dynamic> json,
+  factory StockMovement.fromJson(Map<String, dynamic> json,
       {ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
-    return BatchMovement(
+    return StockMovement(
       id: serializer.fromJson<int>(json['id']),
       createdAt: serializer.fromJson<DateTime>(json['createdAt']),
       remoteId: serializer.fromJson<String?>(json['remoteId']),
-      batchId: serializer.fromJson<int>(json['batchId']),
-      unitPrice: serializer.fromJson<double?>(json['unitPrice']),
+      productId: serializer.fromJson<int>(json['productId']),
       quantity: serializer.fromJson<double>(json['quantity']),
       referenceType: serializer.fromJson<String>(json['referenceType']),
       referenceId: serializer.fromJson<int>(json['referenceId']),
@@ -3205,40 +2794,36 @@ class BatchMovement extends DataClass implements Insertable<BatchMovement> {
       'id': serializer.toJson<int>(id),
       'createdAt': serializer.toJson<DateTime>(createdAt),
       'remoteId': serializer.toJson<String?>(remoteId),
-      'batchId': serializer.toJson<int>(batchId),
-      'unitPrice': serializer.toJson<double?>(unitPrice),
+      'productId': serializer.toJson<int>(productId),
       'quantity': serializer.toJson<double>(quantity),
       'referenceType': serializer.toJson<String>(referenceType),
       'referenceId': serializer.toJson<int>(referenceId),
     };
   }
 
-  BatchMovement copyWith(
+  StockMovement copyWith(
           {int? id,
           DateTime? createdAt,
           Value<String?> remoteId = const Value.absent(),
-          int? batchId,
-          Value<double?> unitPrice = const Value.absent(),
+          int? productId,
           double? quantity,
           String? referenceType,
           int? referenceId}) =>
-      BatchMovement(
+      StockMovement(
         id: id ?? this.id,
         createdAt: createdAt ?? this.createdAt,
         remoteId: remoteId.present ? remoteId.value : this.remoteId,
-        batchId: batchId ?? this.batchId,
-        unitPrice: unitPrice.present ? unitPrice.value : this.unitPrice,
+        productId: productId ?? this.productId,
         quantity: quantity ?? this.quantity,
         referenceType: referenceType ?? this.referenceType,
         referenceId: referenceId ?? this.referenceId,
       );
-  BatchMovement copyWithCompanion(BatchMovementsCompanion data) {
-    return BatchMovement(
+  StockMovement copyWithCompanion(StockMovementsCompanion data) {
+    return StockMovement(
       id: data.id.present ? data.id.value : this.id,
       createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
       remoteId: data.remoteId.present ? data.remoteId.value : this.remoteId,
-      batchId: data.batchId.present ? data.batchId.value : this.batchId,
-      unitPrice: data.unitPrice.present ? data.unitPrice.value : this.unitPrice,
+      productId: data.productId.present ? data.productId.value : this.productId,
       quantity: data.quantity.present ? data.quantity.value : this.quantity,
       referenceType: data.referenceType.present
           ? data.referenceType.value
@@ -3250,12 +2835,11 @@ class BatchMovement extends DataClass implements Insertable<BatchMovement> {
 
   @override
   String toString() {
-    return (StringBuffer('BatchMovement(')
+    return (StringBuffer('StockMovement(')
           ..write('id: $id, ')
           ..write('createdAt: $createdAt, ')
           ..write('remoteId: $remoteId, ')
-          ..write('batchId: $batchId, ')
-          ..write('unitPrice: $unitPrice, ')
+          ..write('productId: $productId, ')
           ..write('quantity: $quantity, ')
           ..write('referenceType: $referenceType, ')
           ..write('referenceId: $referenceId')
@@ -3264,60 +2848,55 @@ class BatchMovement extends DataClass implements Insertable<BatchMovement> {
   }
 
   @override
-  int get hashCode => Object.hash(id, createdAt, remoteId, batchId, unitPrice,
-      quantity, referenceType, referenceId);
+  int get hashCode => Object.hash(
+      id, createdAt, remoteId, productId, quantity, referenceType, referenceId);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      (other is BatchMovement &&
+      (other is StockMovement &&
           other.id == this.id &&
           other.createdAt == this.createdAt &&
           other.remoteId == this.remoteId &&
-          other.batchId == this.batchId &&
-          other.unitPrice == this.unitPrice &&
+          other.productId == this.productId &&
           other.quantity == this.quantity &&
           other.referenceType == this.referenceType &&
           other.referenceId == this.referenceId);
 }
 
-class BatchMovementsCompanion extends UpdateCompanion<BatchMovement> {
+class StockMovementsCompanion extends UpdateCompanion<StockMovement> {
   final Value<int> id;
   final Value<DateTime> createdAt;
   final Value<String?> remoteId;
-  final Value<int> batchId;
-  final Value<double?> unitPrice;
+  final Value<int> productId;
   final Value<double> quantity;
   final Value<String> referenceType;
   final Value<int> referenceId;
-  const BatchMovementsCompanion({
+  const StockMovementsCompanion({
     this.id = const Value.absent(),
     this.createdAt = const Value.absent(),
     this.remoteId = const Value.absent(),
-    this.batchId = const Value.absent(),
-    this.unitPrice = const Value.absent(),
+    this.productId = const Value.absent(),
     this.quantity = const Value.absent(),
     this.referenceType = const Value.absent(),
     this.referenceId = const Value.absent(),
   });
-  BatchMovementsCompanion.insert({
+  StockMovementsCompanion.insert({
     this.id = const Value.absent(),
     this.createdAt = const Value.absent(),
     this.remoteId = const Value.absent(),
-    required int batchId,
-    this.unitPrice = const Value.absent(),
+    required int productId,
     required double quantity,
     required String referenceType,
     required int referenceId,
-  })  : batchId = Value(batchId),
+  })  : productId = Value(productId),
         quantity = Value(quantity),
         referenceType = Value(referenceType),
         referenceId = Value(referenceId);
-  static Insertable<BatchMovement> custom({
+  static Insertable<StockMovement> custom({
     Expression<int>? id,
     Expression<DateTime>? createdAt,
     Expression<String>? remoteId,
-    Expression<int>? batchId,
-    Expression<double>? unitPrice,
+    Expression<int>? productId,
     Expression<double>? quantity,
     Expression<String>? referenceType,
     Expression<int>? referenceId,
@@ -3326,29 +2905,26 @@ class BatchMovementsCompanion extends UpdateCompanion<BatchMovement> {
       if (id != null) 'id': id,
       if (createdAt != null) 'created_at': createdAt,
       if (remoteId != null) 'remote_id': remoteId,
-      if (batchId != null) 'batch_id': batchId,
-      if (unitPrice != null) 'unit_price': unitPrice,
+      if (productId != null) 'product_id': productId,
       if (quantity != null) 'quantity': quantity,
       if (referenceType != null) 'reference_type': referenceType,
       if (referenceId != null) 'reference_id': referenceId,
     });
   }
 
-  BatchMovementsCompanion copyWith(
+  StockMovementsCompanion copyWith(
       {Value<int>? id,
       Value<DateTime>? createdAt,
       Value<String?>? remoteId,
-      Value<int>? batchId,
-      Value<double?>? unitPrice,
+      Value<int>? productId,
       Value<double>? quantity,
       Value<String>? referenceType,
       Value<int>? referenceId}) {
-    return BatchMovementsCompanion(
+    return StockMovementsCompanion(
       id: id ?? this.id,
       createdAt: createdAt ?? this.createdAt,
       remoteId: remoteId ?? this.remoteId,
-      batchId: batchId ?? this.batchId,
-      unitPrice: unitPrice ?? this.unitPrice,
+      productId: productId ?? this.productId,
       quantity: quantity ?? this.quantity,
       referenceType: referenceType ?? this.referenceType,
       referenceId: referenceId ?? this.referenceId,
@@ -3367,11 +2943,8 @@ class BatchMovementsCompanion extends UpdateCompanion<BatchMovement> {
     if (remoteId.present) {
       map['remote_id'] = Variable<String>(remoteId.value);
     }
-    if (batchId.present) {
-      map['batch_id'] = Variable<int>(batchId.value);
-    }
-    if (unitPrice.present) {
-      map['unit_price'] = Variable<double>(unitPrice.value);
+    if (productId.present) {
+      map['product_id'] = Variable<int>(productId.value);
     }
     if (quantity.present) {
       map['quantity'] = Variable<double>(quantity.value);
@@ -3387,12 +2960,11 @@ class BatchMovementsCompanion extends UpdateCompanion<BatchMovement> {
 
   @override
   String toString() {
-    return (StringBuffer('BatchMovementsCompanion(')
+    return (StringBuffer('StockMovementsCompanion(')
           ..write('id: $id, ')
           ..write('createdAt: $createdAt, ')
           ..write('remoteId: $remoteId, ')
-          ..write('batchId: $batchId, ')
-          ..write('unitPrice: $unitPrice, ')
+          ..write('productId: $productId, ')
           ..write('quantity: $quantity, ')
           ..write('referenceType: $referenceType, ')
           ..write('referenceId: $referenceId')
@@ -3411,12 +2983,11 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $PurchasesTable purchases = $PurchasesTable(this);
   late final $PurchaseLineItemsTable purchaseLineItems =
       $PurchaseLineItemsTable(this);
-  late final $BatchesTable batches = $BatchesTable(this);
   late final $StockConversionsTable stockConversions =
       $StockConversionsTable(this);
   late final $StockAdjustmentsTable stockAdjustments =
       $StockAdjustmentsTable(this);
-  late final $BatchMovementsTable batchMovements = $BatchMovementsTable(this);
+  late final $StockMovementsTable stockMovements = $StockMovementsTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -3428,10 +2999,9 @@ abstract class _$AppDatabase extends GeneratedDatabase {
         saleLineItems,
         purchases,
         purchaseLineItems,
-        batches,
         stockConversions,
         stockAdjustments,
-        batchMovements
+        stockMovements
       ];
 }
 
@@ -3738,17 +3308,34 @@ final class $$ProductsTableReferences
         manager.$state.copyWith(prefetchedData: cache));
   }
 
-  static MultiTypedResultKey<$BatchesTable, List<Batche>> _batchesRefsTable(
-          _$AppDatabase db) =>
-      MultiTypedResultKey.fromTable(db.batches,
-          aliasName:
-              $_aliasNameGenerator(db.products.id, db.batches.productId));
+  static MultiTypedResultKey<$StockAdjustmentsTable, List<StockAdjustment>>
+      _stockAdjustmentsRefsTable(_$AppDatabase db) =>
+          MultiTypedResultKey.fromTable(db.stockAdjustments,
+              aliasName: $_aliasNameGenerator(
+                  db.products.id, db.stockAdjustments.productId));
 
-  $$BatchesTableProcessedTableManager get batchesRefs {
-    final manager = $$BatchesTableTableManager($_db, $_db.batches)
+  $$StockAdjustmentsTableProcessedTableManager get stockAdjustmentsRefs {
+    final manager =
+        $$StockAdjustmentsTableTableManager($_db, $_db.stockAdjustments)
+            .filter((f) => f.productId.id.sqlEquals($_itemColumn<int>('id')!));
+
+    final cache =
+        $_typedResult.readTableOrNull(_stockAdjustmentsRefsTable($_db));
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: cache));
+  }
+
+  static MultiTypedResultKey<$StockMovementsTable, List<StockMovement>>
+      _stockMovementsRefsTable(_$AppDatabase db) =>
+          MultiTypedResultKey.fromTable(db.stockMovements,
+              aliasName: $_aliasNameGenerator(
+                  db.products.id, db.stockMovements.productId));
+
+  $$StockMovementsTableProcessedTableManager get stockMovementsRefs {
+    final manager = $$StockMovementsTableTableManager($_db, $_db.stockMovements)
         .filter((f) => f.productId.id.sqlEquals($_itemColumn<int>('id')!));
 
-    final cache = $_typedResult.readTableOrNull(_batchesRefsTable($_db));
+    final cache = $_typedResult.readTableOrNull(_stockMovementsRefsTable($_db));
     return ProcessedTableManager(
         manager.$state.copyWith(prefetchedData: cache));
   }
@@ -3849,19 +3436,40 @@ class $$ProductsTableFilterComposer
     return f(composer);
   }
 
-  Expression<bool> batchesRefs(
-      Expression<bool> Function($$BatchesTableFilterComposer f) f) {
-    final $$BatchesTableFilterComposer composer = $composerBuilder(
+  Expression<bool> stockAdjustmentsRefs(
+      Expression<bool> Function($$StockAdjustmentsTableFilterComposer f) f) {
+    final $$StockAdjustmentsTableFilterComposer composer = $composerBuilder(
         composer: this,
         getCurrentColumn: (t) => t.id,
-        referencedTable: $db.batches,
+        referencedTable: $db.stockAdjustments,
         getReferencedColumn: (t) => t.productId,
         builder: (joinBuilder,
                 {$addJoinBuilderToRootComposer,
                 $removeJoinBuilderFromRootComposer}) =>
-            $$BatchesTableFilterComposer(
+            $$StockAdjustmentsTableFilterComposer(
               $db: $db,
-              $table: $db.batches,
+              $table: $db.stockAdjustments,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return f(composer);
+  }
+
+  Expression<bool> stockMovementsRefs(
+      Expression<bool> Function($$StockMovementsTableFilterComposer f) f) {
+    final $$StockMovementsTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $db.stockMovements,
+        getReferencedColumn: (t) => t.productId,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$StockMovementsTableFilterComposer(
+              $db: $db,
+              $table: $db.stockMovements,
               $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
               joinBuilder: joinBuilder,
               $removeJoinBuilderFromRootComposer:
@@ -4022,19 +3630,40 @@ class $$ProductsTableAnnotationComposer
     return f(composer);
   }
 
-  Expression<T> batchesRefs<T extends Object>(
-      Expression<T> Function($$BatchesTableAnnotationComposer a) f) {
-    final $$BatchesTableAnnotationComposer composer = $composerBuilder(
+  Expression<T> stockAdjustmentsRefs<T extends Object>(
+      Expression<T> Function($$StockAdjustmentsTableAnnotationComposer a) f) {
+    final $$StockAdjustmentsTableAnnotationComposer composer = $composerBuilder(
         composer: this,
         getCurrentColumn: (t) => t.id,
-        referencedTable: $db.batches,
+        referencedTable: $db.stockAdjustments,
         getReferencedColumn: (t) => t.productId,
         builder: (joinBuilder,
                 {$addJoinBuilderToRootComposer,
                 $removeJoinBuilderFromRootComposer}) =>
-            $$BatchesTableAnnotationComposer(
+            $$StockAdjustmentsTableAnnotationComposer(
               $db: $db,
-              $table: $db.batches,
+              $table: $db.stockAdjustments,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return f(composer);
+  }
+
+  Expression<T> stockMovementsRefs<T extends Object>(
+      Expression<T> Function($$StockMovementsTableAnnotationComposer a) f) {
+    final $$StockMovementsTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $db.stockMovements,
+        getReferencedColumn: (t) => t.productId,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$StockMovementsTableAnnotationComposer(
+              $db: $db,
+              $table: $db.stockMovements,
               $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
               joinBuilder: joinBuilder,
               $removeJoinBuilderFromRootComposer:
@@ -4059,7 +3688,8 @@ class $$ProductsTableTableManager extends RootTableManager<
         {bool supplierId,
         bool saleLineItemsRefs,
         bool purchaseLineItemsRefs,
-        bool batchesRefs})> {
+        bool stockAdjustmentsRefs,
+        bool stockMovementsRefs})> {
   $$ProductsTableTableManager(_$AppDatabase db, $ProductsTable table)
       : super(TableManagerState(
           db: db,
@@ -4118,13 +3748,15 @@ class $$ProductsTableTableManager extends RootTableManager<
               {supplierId = false,
               saleLineItemsRefs = false,
               purchaseLineItemsRefs = false,
-              batchesRefs = false}) {
+              stockAdjustmentsRefs = false,
+              stockMovementsRefs = false}) {
             return PrefetchHooks(
               db: db,
               explicitlyWatchedTables: [
                 if (saleLineItemsRefs) db.saleLineItems,
                 if (purchaseLineItemsRefs) db.purchaseLineItems,
-                if (batchesRefs) db.batches
+                if (stockAdjustmentsRefs) db.stockAdjustments,
+                if (stockMovementsRefs) db.stockMovements
               ],
               addJoins: <
                   T extends TableManagerState<
@@ -4178,14 +3810,26 @@ class $$ProductsTableTableManager extends RootTableManager<
                             (item, referencedItems) => referencedItems
                                 .where((e) => e.productId == item.id),
                         typedResults: items),
-                  if (batchesRefs)
+                  if (stockAdjustmentsRefs)
                     await $_getPrefetchedData(
                         currentTable: table,
-                        referencedTable:
-                            $$ProductsTableReferences._batchesRefsTable(db),
+                        referencedTable: $$ProductsTableReferences
+                            ._stockAdjustmentsRefsTable(db),
                         managerFromTypedResult: (p0) =>
                             $$ProductsTableReferences(db, table, p0)
-                                .batchesRefs,
+                                .stockAdjustmentsRefs,
+                        referencedItemsForCurrentItem:
+                            (item, referencedItems) => referencedItems
+                                .where((e) => e.productId == item.id),
+                        typedResults: items),
+                  if (stockMovementsRefs)
+                    await $_getPrefetchedData(
+                        currentTable: table,
+                        referencedTable: $$ProductsTableReferences
+                            ._stockMovementsRefsTable(db),
+                        managerFromTypedResult: (p0) =>
+                            $$ProductsTableReferences(db, table, p0)
+                                .stockMovementsRefs,
                         referencedItemsForCurrentItem:
                             (item, referencedItems) => referencedItems
                                 .where((e) => e.productId == item.id),
@@ -4212,7 +3856,8 @@ typedef $$ProductsTableProcessedTableManager = ProcessedTableManager<
         {bool supplierId,
         bool saleLineItemsRefs,
         bool purchaseLineItemsRefs,
-        bool batchesRefs})>;
+        bool stockAdjustmentsRefs,
+        bool stockMovementsRefs})>;
 typedef $$SalesTableCreateCompanionBuilder = SalesCompanion Function({
   Value<int> id,
   Value<DateTime> createdAt,
@@ -5452,457 +5097,13 @@ typedef $$PurchaseLineItemsTableProcessedTableManager = ProcessedTableManager<
     (PurchaseLineItem, $$PurchaseLineItemsTableReferences),
     PurchaseLineItem,
     PrefetchHooks Function({bool productId, bool purchaseId})>;
-typedef $$BatchesTableCreateCompanionBuilder = BatchesCompanion Function({
-  Value<int> id,
-  Value<DateTime> createdAt,
-  Value<String?> remoteId,
-  required int productId,
-  Value<double?> totalCost,
-  required String referenceType,
-  required int referenceId,
-});
-typedef $$BatchesTableUpdateCompanionBuilder = BatchesCompanion Function({
-  Value<int> id,
-  Value<DateTime> createdAt,
-  Value<String?> remoteId,
-  Value<int> productId,
-  Value<double?> totalCost,
-  Value<String> referenceType,
-  Value<int> referenceId,
-});
-
-final class $$BatchesTableReferences
-    extends BaseReferences<_$AppDatabase, $BatchesTable, Batche> {
-  $$BatchesTableReferences(super.$_db, super.$_table, super.$_typedResult);
-
-  static $ProductsTable _productIdTable(_$AppDatabase db) => db.products
-      .createAlias($_aliasNameGenerator(db.batches.productId, db.products.id));
-
-  $$ProductsTableProcessedTableManager get productId {
-    final $_column = $_itemColumn<int>('product_id')!;
-
-    final manager = $$ProductsTableTableManager($_db, $_db.products)
-        .filter((f) => f.id.sqlEquals($_column));
-    final item = $_typedResult.readTableOrNull(_productIdTable($_db));
-    if (item == null) return manager;
-    return ProcessedTableManager(
-        manager.$state.copyWith(prefetchedData: [item]));
-  }
-
-  static MultiTypedResultKey<$StockAdjustmentsTable, List<StockAdjustment>>
-      _stockAdjustmentsRefsTable(_$AppDatabase db) =>
-          MultiTypedResultKey.fromTable(db.stockAdjustments,
-              aliasName: $_aliasNameGenerator(
-                  db.batches.id, db.stockAdjustments.batchId));
-
-  $$StockAdjustmentsTableProcessedTableManager get stockAdjustmentsRefs {
-    final manager =
-        $$StockAdjustmentsTableTableManager($_db, $_db.stockAdjustments)
-            .filter((f) => f.batchId.id.sqlEquals($_itemColumn<int>('id')!));
-
-    final cache =
-        $_typedResult.readTableOrNull(_stockAdjustmentsRefsTable($_db));
-    return ProcessedTableManager(
-        manager.$state.copyWith(prefetchedData: cache));
-  }
-
-  static MultiTypedResultKey<$BatchMovementsTable, List<BatchMovement>>
-      _batchMovementsRefsTable(_$AppDatabase db) =>
-          MultiTypedResultKey.fromTable(db.batchMovements,
-              aliasName: $_aliasNameGenerator(
-                  db.batches.id, db.batchMovements.batchId));
-
-  $$BatchMovementsTableProcessedTableManager get batchMovementsRefs {
-    final manager = $$BatchMovementsTableTableManager($_db, $_db.batchMovements)
-        .filter((f) => f.batchId.id.sqlEquals($_itemColumn<int>('id')!));
-
-    final cache = $_typedResult.readTableOrNull(_batchMovementsRefsTable($_db));
-    return ProcessedTableManager(
-        manager.$state.copyWith(prefetchedData: cache));
-  }
-}
-
-class $$BatchesTableFilterComposer
-    extends Composer<_$AppDatabase, $BatchesTable> {
-  $$BatchesTableFilterComposer({
-    required super.$db,
-    required super.$table,
-    super.joinBuilder,
-    super.$addJoinBuilderToRootComposer,
-    super.$removeJoinBuilderFromRootComposer,
-  });
-  ColumnFilters<int> get id => $composableBuilder(
-      column: $table.id, builder: (column) => ColumnFilters(column));
-
-  ColumnFilters<DateTime> get createdAt => $composableBuilder(
-      column: $table.createdAt, builder: (column) => ColumnFilters(column));
-
-  ColumnFilters<String> get remoteId => $composableBuilder(
-      column: $table.remoteId, builder: (column) => ColumnFilters(column));
-
-  ColumnFilters<double> get totalCost => $composableBuilder(
-      column: $table.totalCost, builder: (column) => ColumnFilters(column));
-
-  ColumnFilters<String> get referenceType => $composableBuilder(
-      column: $table.referenceType, builder: (column) => ColumnFilters(column));
-
-  ColumnFilters<int> get referenceId => $composableBuilder(
-      column: $table.referenceId, builder: (column) => ColumnFilters(column));
-
-  $$ProductsTableFilterComposer get productId {
-    final $$ProductsTableFilterComposer composer = $composerBuilder(
-        composer: this,
-        getCurrentColumn: (t) => t.productId,
-        referencedTable: $db.products,
-        getReferencedColumn: (t) => t.id,
-        builder: (joinBuilder,
-                {$addJoinBuilderToRootComposer,
-                $removeJoinBuilderFromRootComposer}) =>
-            $$ProductsTableFilterComposer(
-              $db: $db,
-              $table: $db.products,
-              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-              joinBuilder: joinBuilder,
-              $removeJoinBuilderFromRootComposer:
-                  $removeJoinBuilderFromRootComposer,
-            ));
-    return composer;
-  }
-
-  Expression<bool> stockAdjustmentsRefs(
-      Expression<bool> Function($$StockAdjustmentsTableFilterComposer f) f) {
-    final $$StockAdjustmentsTableFilterComposer composer = $composerBuilder(
-        composer: this,
-        getCurrentColumn: (t) => t.id,
-        referencedTable: $db.stockAdjustments,
-        getReferencedColumn: (t) => t.batchId,
-        builder: (joinBuilder,
-                {$addJoinBuilderToRootComposer,
-                $removeJoinBuilderFromRootComposer}) =>
-            $$StockAdjustmentsTableFilterComposer(
-              $db: $db,
-              $table: $db.stockAdjustments,
-              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-              joinBuilder: joinBuilder,
-              $removeJoinBuilderFromRootComposer:
-                  $removeJoinBuilderFromRootComposer,
-            ));
-    return f(composer);
-  }
-
-  Expression<bool> batchMovementsRefs(
-      Expression<bool> Function($$BatchMovementsTableFilterComposer f) f) {
-    final $$BatchMovementsTableFilterComposer composer = $composerBuilder(
-        composer: this,
-        getCurrentColumn: (t) => t.id,
-        referencedTable: $db.batchMovements,
-        getReferencedColumn: (t) => t.batchId,
-        builder: (joinBuilder,
-                {$addJoinBuilderToRootComposer,
-                $removeJoinBuilderFromRootComposer}) =>
-            $$BatchMovementsTableFilterComposer(
-              $db: $db,
-              $table: $db.batchMovements,
-              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-              joinBuilder: joinBuilder,
-              $removeJoinBuilderFromRootComposer:
-                  $removeJoinBuilderFromRootComposer,
-            ));
-    return f(composer);
-  }
-}
-
-class $$BatchesTableOrderingComposer
-    extends Composer<_$AppDatabase, $BatchesTable> {
-  $$BatchesTableOrderingComposer({
-    required super.$db,
-    required super.$table,
-    super.joinBuilder,
-    super.$addJoinBuilderToRootComposer,
-    super.$removeJoinBuilderFromRootComposer,
-  });
-  ColumnOrderings<int> get id => $composableBuilder(
-      column: $table.id, builder: (column) => ColumnOrderings(column));
-
-  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
-      column: $table.createdAt, builder: (column) => ColumnOrderings(column));
-
-  ColumnOrderings<String> get remoteId => $composableBuilder(
-      column: $table.remoteId, builder: (column) => ColumnOrderings(column));
-
-  ColumnOrderings<double> get totalCost => $composableBuilder(
-      column: $table.totalCost, builder: (column) => ColumnOrderings(column));
-
-  ColumnOrderings<String> get referenceType => $composableBuilder(
-      column: $table.referenceType,
-      builder: (column) => ColumnOrderings(column));
-
-  ColumnOrderings<int> get referenceId => $composableBuilder(
-      column: $table.referenceId, builder: (column) => ColumnOrderings(column));
-
-  $$ProductsTableOrderingComposer get productId {
-    final $$ProductsTableOrderingComposer composer = $composerBuilder(
-        composer: this,
-        getCurrentColumn: (t) => t.productId,
-        referencedTable: $db.products,
-        getReferencedColumn: (t) => t.id,
-        builder: (joinBuilder,
-                {$addJoinBuilderToRootComposer,
-                $removeJoinBuilderFromRootComposer}) =>
-            $$ProductsTableOrderingComposer(
-              $db: $db,
-              $table: $db.products,
-              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-              joinBuilder: joinBuilder,
-              $removeJoinBuilderFromRootComposer:
-                  $removeJoinBuilderFromRootComposer,
-            ));
-    return composer;
-  }
-}
-
-class $$BatchesTableAnnotationComposer
-    extends Composer<_$AppDatabase, $BatchesTable> {
-  $$BatchesTableAnnotationComposer({
-    required super.$db,
-    required super.$table,
-    super.joinBuilder,
-    super.$addJoinBuilderToRootComposer,
-    super.$removeJoinBuilderFromRootComposer,
-  });
-  GeneratedColumn<int> get id =>
-      $composableBuilder(column: $table.id, builder: (column) => column);
-
-  GeneratedColumn<DateTime> get createdAt =>
-      $composableBuilder(column: $table.createdAt, builder: (column) => column);
-
-  GeneratedColumn<String> get remoteId =>
-      $composableBuilder(column: $table.remoteId, builder: (column) => column);
-
-  GeneratedColumn<double> get totalCost =>
-      $composableBuilder(column: $table.totalCost, builder: (column) => column);
-
-  GeneratedColumn<String> get referenceType => $composableBuilder(
-      column: $table.referenceType, builder: (column) => column);
-
-  GeneratedColumn<int> get referenceId => $composableBuilder(
-      column: $table.referenceId, builder: (column) => column);
-
-  $$ProductsTableAnnotationComposer get productId {
-    final $$ProductsTableAnnotationComposer composer = $composerBuilder(
-        composer: this,
-        getCurrentColumn: (t) => t.productId,
-        referencedTable: $db.products,
-        getReferencedColumn: (t) => t.id,
-        builder: (joinBuilder,
-                {$addJoinBuilderToRootComposer,
-                $removeJoinBuilderFromRootComposer}) =>
-            $$ProductsTableAnnotationComposer(
-              $db: $db,
-              $table: $db.products,
-              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-              joinBuilder: joinBuilder,
-              $removeJoinBuilderFromRootComposer:
-                  $removeJoinBuilderFromRootComposer,
-            ));
-    return composer;
-  }
-
-  Expression<T> stockAdjustmentsRefs<T extends Object>(
-      Expression<T> Function($$StockAdjustmentsTableAnnotationComposer a) f) {
-    final $$StockAdjustmentsTableAnnotationComposer composer = $composerBuilder(
-        composer: this,
-        getCurrentColumn: (t) => t.id,
-        referencedTable: $db.stockAdjustments,
-        getReferencedColumn: (t) => t.batchId,
-        builder: (joinBuilder,
-                {$addJoinBuilderToRootComposer,
-                $removeJoinBuilderFromRootComposer}) =>
-            $$StockAdjustmentsTableAnnotationComposer(
-              $db: $db,
-              $table: $db.stockAdjustments,
-              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-              joinBuilder: joinBuilder,
-              $removeJoinBuilderFromRootComposer:
-                  $removeJoinBuilderFromRootComposer,
-            ));
-    return f(composer);
-  }
-
-  Expression<T> batchMovementsRefs<T extends Object>(
-      Expression<T> Function($$BatchMovementsTableAnnotationComposer a) f) {
-    final $$BatchMovementsTableAnnotationComposer composer = $composerBuilder(
-        composer: this,
-        getCurrentColumn: (t) => t.id,
-        referencedTable: $db.batchMovements,
-        getReferencedColumn: (t) => t.batchId,
-        builder: (joinBuilder,
-                {$addJoinBuilderToRootComposer,
-                $removeJoinBuilderFromRootComposer}) =>
-            $$BatchMovementsTableAnnotationComposer(
-              $db: $db,
-              $table: $db.batchMovements,
-              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-              joinBuilder: joinBuilder,
-              $removeJoinBuilderFromRootComposer:
-                  $removeJoinBuilderFromRootComposer,
-            ));
-    return f(composer);
-  }
-}
-
-class $$BatchesTableTableManager extends RootTableManager<
-    _$AppDatabase,
-    $BatchesTable,
-    Batche,
-    $$BatchesTableFilterComposer,
-    $$BatchesTableOrderingComposer,
-    $$BatchesTableAnnotationComposer,
-    $$BatchesTableCreateCompanionBuilder,
-    $$BatchesTableUpdateCompanionBuilder,
-    (Batche, $$BatchesTableReferences),
-    Batche,
-    PrefetchHooks Function(
-        {bool productId, bool stockAdjustmentsRefs, bool batchMovementsRefs})> {
-  $$BatchesTableTableManager(_$AppDatabase db, $BatchesTable table)
-      : super(TableManagerState(
-          db: db,
-          table: table,
-          createFilteringComposer: () =>
-              $$BatchesTableFilterComposer($db: db, $table: table),
-          createOrderingComposer: () =>
-              $$BatchesTableOrderingComposer($db: db, $table: table),
-          createComputedFieldComposer: () =>
-              $$BatchesTableAnnotationComposer($db: db, $table: table),
-          updateCompanionCallback: ({
-            Value<int> id = const Value.absent(),
-            Value<DateTime> createdAt = const Value.absent(),
-            Value<String?> remoteId = const Value.absent(),
-            Value<int> productId = const Value.absent(),
-            Value<double?> totalCost = const Value.absent(),
-            Value<String> referenceType = const Value.absent(),
-            Value<int> referenceId = const Value.absent(),
-          }) =>
-              BatchesCompanion(
-            id: id,
-            createdAt: createdAt,
-            remoteId: remoteId,
-            productId: productId,
-            totalCost: totalCost,
-            referenceType: referenceType,
-            referenceId: referenceId,
-          ),
-          createCompanionCallback: ({
-            Value<int> id = const Value.absent(),
-            Value<DateTime> createdAt = const Value.absent(),
-            Value<String?> remoteId = const Value.absent(),
-            required int productId,
-            Value<double?> totalCost = const Value.absent(),
-            required String referenceType,
-            required int referenceId,
-          }) =>
-              BatchesCompanion.insert(
-            id: id,
-            createdAt: createdAt,
-            remoteId: remoteId,
-            productId: productId,
-            totalCost: totalCost,
-            referenceType: referenceType,
-            referenceId: referenceId,
-          ),
-          withReferenceMapper: (p0) => p0
-              .map((e) =>
-                  (e.readTable(table), $$BatchesTableReferences(db, table, e)))
-              .toList(),
-          prefetchHooksCallback: (
-              {productId = false,
-              stockAdjustmentsRefs = false,
-              batchMovementsRefs = false}) {
-            return PrefetchHooks(
-              db: db,
-              explicitlyWatchedTables: [
-                if (stockAdjustmentsRefs) db.stockAdjustments,
-                if (batchMovementsRefs) db.batchMovements
-              ],
-              addJoins: <
-                  T extends TableManagerState<
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic>>(state) {
-                if (productId) {
-                  state = state.withJoin(
-                    currentTable: table,
-                    currentColumn: table.productId,
-                    referencedTable:
-                        $$BatchesTableReferences._productIdTable(db),
-                    referencedColumn:
-                        $$BatchesTableReferences._productIdTable(db).id,
-                  ) as T;
-                }
-
-                return state;
-              },
-              getPrefetchedDataCallback: (items) async {
-                return [
-                  if (stockAdjustmentsRefs)
-                    await $_getPrefetchedData(
-                        currentTable: table,
-                        referencedTable: $$BatchesTableReferences
-                            ._stockAdjustmentsRefsTable(db),
-                        managerFromTypedResult: (p0) =>
-                            $$BatchesTableReferences(db, table, p0)
-                                .stockAdjustmentsRefs,
-                        referencedItemsForCurrentItem: (item,
-                                referencedItems) =>
-                            referencedItems.where((e) => e.batchId == item.id),
-                        typedResults: items),
-                  if (batchMovementsRefs)
-                    await $_getPrefetchedData(
-                        currentTable: table,
-                        referencedTable: $$BatchesTableReferences
-                            ._batchMovementsRefsTable(db),
-                        managerFromTypedResult: (p0) =>
-                            $$BatchesTableReferences(db, table, p0)
-                                .batchMovementsRefs,
-                        referencedItemsForCurrentItem: (item,
-                                referencedItems) =>
-                            referencedItems.where((e) => e.batchId == item.id),
-                        typedResults: items)
-                ];
-              },
-            );
-          },
-        ));
-}
-
-typedef $$BatchesTableProcessedTableManager = ProcessedTableManager<
-    _$AppDatabase,
-    $BatchesTable,
-    Batche,
-    $$BatchesTableFilterComposer,
-    $$BatchesTableOrderingComposer,
-    $$BatchesTableAnnotationComposer,
-    $$BatchesTableCreateCompanionBuilder,
-    $$BatchesTableUpdateCompanionBuilder,
-    (Batche, $$BatchesTableReferences),
-    Batche,
-    PrefetchHooks Function(
-        {bool productId, bool stockAdjustmentsRefs, bool batchMovementsRefs})>;
 typedef $$StockConversionsTableCreateCompanionBuilder
     = StockConversionsCompanion Function({
   Value<int> id,
   Value<DateTime> createdAt,
   Value<String?> remoteId,
-  required int fromBatchId,
-  required int toBatchId,
+  required int fromProductId,
+  required int toProductId,
   required double quantity,
 });
 typedef $$StockConversionsTableUpdateCompanionBuilder
@@ -5910,8 +5111,8 @@ typedef $$StockConversionsTableUpdateCompanionBuilder
   Value<int> id,
   Value<DateTime> createdAt,
   Value<String?> remoteId,
-  Value<int> fromBatchId,
-  Value<int> toBatchId,
+  Value<int> fromProductId,
+  Value<int> toProductId,
   Value<double> quantity,
 });
 
@@ -5920,31 +5121,31 @@ final class $$StockConversionsTableReferences extends BaseReferences<
   $$StockConversionsTableReferences(
       super.$_db, super.$_table, super.$_typedResult);
 
-  static $BatchesTable _fromBatchIdTable(_$AppDatabase db) =>
-      db.batches.createAlias(
-          $_aliasNameGenerator(db.stockConversions.fromBatchId, db.batches.id));
+  static $ProductsTable _fromProductIdTable(_$AppDatabase db) =>
+      db.products.createAlias($_aliasNameGenerator(
+          db.stockConversions.fromProductId, db.products.id));
 
-  $$BatchesTableProcessedTableManager get fromBatchId {
-    final $_column = $_itemColumn<int>('from_batch_id')!;
+  $$ProductsTableProcessedTableManager get fromProductId {
+    final $_column = $_itemColumn<int>('from_product_id')!;
 
-    final manager = $$BatchesTableTableManager($_db, $_db.batches)
+    final manager = $$ProductsTableTableManager($_db, $_db.products)
         .filter((f) => f.id.sqlEquals($_column));
-    final item = $_typedResult.readTableOrNull(_fromBatchIdTable($_db));
+    final item = $_typedResult.readTableOrNull(_fromProductIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
         manager.$state.copyWith(prefetchedData: [item]));
   }
 
-  static $BatchesTable _toBatchIdTable(_$AppDatabase db) =>
-      db.batches.createAlias(
-          $_aliasNameGenerator(db.stockConversions.toBatchId, db.batches.id));
+  static $ProductsTable _toProductIdTable(_$AppDatabase db) =>
+      db.products.createAlias($_aliasNameGenerator(
+          db.stockConversions.toProductId, db.products.id));
 
-  $$BatchesTableProcessedTableManager get toBatchId {
-    final $_column = $_itemColumn<int>('to_batch_id')!;
+  $$ProductsTableProcessedTableManager get toProductId {
+    final $_column = $_itemColumn<int>('to_product_id')!;
 
-    final manager = $$BatchesTableTableManager($_db, $_db.batches)
+    final manager = $$ProductsTableTableManager($_db, $_db.products)
         .filter((f) => f.id.sqlEquals($_column));
-    final item = $_typedResult.readTableOrNull(_toBatchIdTable($_db));
+    final item = $_typedResult.readTableOrNull(_toProductIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
         manager.$state.copyWith(prefetchedData: [item]));
@@ -5972,18 +5173,18 @@ class $$StockConversionsTableFilterComposer
   ColumnFilters<double> get quantity => $composableBuilder(
       column: $table.quantity, builder: (column) => ColumnFilters(column));
 
-  $$BatchesTableFilterComposer get fromBatchId {
-    final $$BatchesTableFilterComposer composer = $composerBuilder(
+  $$ProductsTableFilterComposer get fromProductId {
+    final $$ProductsTableFilterComposer composer = $composerBuilder(
         composer: this,
-        getCurrentColumn: (t) => t.fromBatchId,
-        referencedTable: $db.batches,
+        getCurrentColumn: (t) => t.fromProductId,
+        referencedTable: $db.products,
         getReferencedColumn: (t) => t.id,
         builder: (joinBuilder,
                 {$addJoinBuilderToRootComposer,
                 $removeJoinBuilderFromRootComposer}) =>
-            $$BatchesTableFilterComposer(
+            $$ProductsTableFilterComposer(
               $db: $db,
-              $table: $db.batches,
+              $table: $db.products,
               $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
               joinBuilder: joinBuilder,
               $removeJoinBuilderFromRootComposer:
@@ -5992,18 +5193,18 @@ class $$StockConversionsTableFilterComposer
     return composer;
   }
 
-  $$BatchesTableFilterComposer get toBatchId {
-    final $$BatchesTableFilterComposer composer = $composerBuilder(
+  $$ProductsTableFilterComposer get toProductId {
+    final $$ProductsTableFilterComposer composer = $composerBuilder(
         composer: this,
-        getCurrentColumn: (t) => t.toBatchId,
-        referencedTable: $db.batches,
+        getCurrentColumn: (t) => t.toProductId,
+        referencedTable: $db.products,
         getReferencedColumn: (t) => t.id,
         builder: (joinBuilder,
                 {$addJoinBuilderToRootComposer,
                 $removeJoinBuilderFromRootComposer}) =>
-            $$BatchesTableFilterComposer(
+            $$ProductsTableFilterComposer(
               $db: $db,
-              $table: $db.batches,
+              $table: $db.products,
               $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
               joinBuilder: joinBuilder,
               $removeJoinBuilderFromRootComposer:
@@ -6034,18 +5235,18 @@ class $$StockConversionsTableOrderingComposer
   ColumnOrderings<double> get quantity => $composableBuilder(
       column: $table.quantity, builder: (column) => ColumnOrderings(column));
 
-  $$BatchesTableOrderingComposer get fromBatchId {
-    final $$BatchesTableOrderingComposer composer = $composerBuilder(
+  $$ProductsTableOrderingComposer get fromProductId {
+    final $$ProductsTableOrderingComposer composer = $composerBuilder(
         composer: this,
-        getCurrentColumn: (t) => t.fromBatchId,
-        referencedTable: $db.batches,
+        getCurrentColumn: (t) => t.fromProductId,
+        referencedTable: $db.products,
         getReferencedColumn: (t) => t.id,
         builder: (joinBuilder,
                 {$addJoinBuilderToRootComposer,
                 $removeJoinBuilderFromRootComposer}) =>
-            $$BatchesTableOrderingComposer(
+            $$ProductsTableOrderingComposer(
               $db: $db,
-              $table: $db.batches,
+              $table: $db.products,
               $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
               joinBuilder: joinBuilder,
               $removeJoinBuilderFromRootComposer:
@@ -6054,18 +5255,18 @@ class $$StockConversionsTableOrderingComposer
     return composer;
   }
 
-  $$BatchesTableOrderingComposer get toBatchId {
-    final $$BatchesTableOrderingComposer composer = $composerBuilder(
+  $$ProductsTableOrderingComposer get toProductId {
+    final $$ProductsTableOrderingComposer composer = $composerBuilder(
         composer: this,
-        getCurrentColumn: (t) => t.toBatchId,
-        referencedTable: $db.batches,
+        getCurrentColumn: (t) => t.toProductId,
+        referencedTable: $db.products,
         getReferencedColumn: (t) => t.id,
         builder: (joinBuilder,
                 {$addJoinBuilderToRootComposer,
                 $removeJoinBuilderFromRootComposer}) =>
-            $$BatchesTableOrderingComposer(
+            $$ProductsTableOrderingComposer(
               $db: $db,
-              $table: $db.batches,
+              $table: $db.products,
               $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
               joinBuilder: joinBuilder,
               $removeJoinBuilderFromRootComposer:
@@ -6096,18 +5297,18 @@ class $$StockConversionsTableAnnotationComposer
   GeneratedColumn<double> get quantity =>
       $composableBuilder(column: $table.quantity, builder: (column) => column);
 
-  $$BatchesTableAnnotationComposer get fromBatchId {
-    final $$BatchesTableAnnotationComposer composer = $composerBuilder(
+  $$ProductsTableAnnotationComposer get fromProductId {
+    final $$ProductsTableAnnotationComposer composer = $composerBuilder(
         composer: this,
-        getCurrentColumn: (t) => t.fromBatchId,
-        referencedTable: $db.batches,
+        getCurrentColumn: (t) => t.fromProductId,
+        referencedTable: $db.products,
         getReferencedColumn: (t) => t.id,
         builder: (joinBuilder,
                 {$addJoinBuilderToRootComposer,
                 $removeJoinBuilderFromRootComposer}) =>
-            $$BatchesTableAnnotationComposer(
+            $$ProductsTableAnnotationComposer(
               $db: $db,
-              $table: $db.batches,
+              $table: $db.products,
               $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
               joinBuilder: joinBuilder,
               $removeJoinBuilderFromRootComposer:
@@ -6116,18 +5317,18 @@ class $$StockConversionsTableAnnotationComposer
     return composer;
   }
 
-  $$BatchesTableAnnotationComposer get toBatchId {
-    final $$BatchesTableAnnotationComposer composer = $composerBuilder(
+  $$ProductsTableAnnotationComposer get toProductId {
+    final $$ProductsTableAnnotationComposer composer = $composerBuilder(
         composer: this,
-        getCurrentColumn: (t) => t.toBatchId,
-        referencedTable: $db.batches,
+        getCurrentColumn: (t) => t.toProductId,
+        referencedTable: $db.products,
         getReferencedColumn: (t) => t.id,
         builder: (joinBuilder,
                 {$addJoinBuilderToRootComposer,
                 $removeJoinBuilderFromRootComposer}) =>
-            $$BatchesTableAnnotationComposer(
+            $$ProductsTableAnnotationComposer(
               $db: $db,
-              $table: $db.batches,
+              $table: $db.products,
               $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
               joinBuilder: joinBuilder,
               $removeJoinBuilderFromRootComposer:
@@ -6148,7 +5349,7 @@ class $$StockConversionsTableTableManager extends RootTableManager<
     $$StockConversionsTableUpdateCompanionBuilder,
     (StockConversion, $$StockConversionsTableReferences),
     StockConversion,
-    PrefetchHooks Function({bool fromBatchId, bool toBatchId})> {
+    PrefetchHooks Function({bool fromProductId, bool toProductId})> {
   $$StockConversionsTableTableManager(
       _$AppDatabase db, $StockConversionsTable table)
       : super(TableManagerState(
@@ -6164,32 +5365,32 @@ class $$StockConversionsTableTableManager extends RootTableManager<
             Value<int> id = const Value.absent(),
             Value<DateTime> createdAt = const Value.absent(),
             Value<String?> remoteId = const Value.absent(),
-            Value<int> fromBatchId = const Value.absent(),
-            Value<int> toBatchId = const Value.absent(),
+            Value<int> fromProductId = const Value.absent(),
+            Value<int> toProductId = const Value.absent(),
             Value<double> quantity = const Value.absent(),
           }) =>
               StockConversionsCompanion(
             id: id,
             createdAt: createdAt,
             remoteId: remoteId,
-            fromBatchId: fromBatchId,
-            toBatchId: toBatchId,
+            fromProductId: fromProductId,
+            toProductId: toProductId,
             quantity: quantity,
           ),
           createCompanionCallback: ({
             Value<int> id = const Value.absent(),
             Value<DateTime> createdAt = const Value.absent(),
             Value<String?> remoteId = const Value.absent(),
-            required int fromBatchId,
-            required int toBatchId,
+            required int fromProductId,
+            required int toProductId,
             required double quantity,
           }) =>
               StockConversionsCompanion.insert(
             id: id,
             createdAt: createdAt,
             remoteId: remoteId,
-            fromBatchId: fromBatchId,
-            toBatchId: toBatchId,
+            fromProductId: fromProductId,
+            toProductId: toProductId,
             quantity: quantity,
           ),
           withReferenceMapper: (p0) => p0
@@ -6198,7 +5399,8 @@ class $$StockConversionsTableTableManager extends RootTableManager<
                     $$StockConversionsTableReferences(db, table, e)
                   ))
               .toList(),
-          prefetchHooksCallback: ({fromBatchId = false, toBatchId = false}) {
+          prefetchHooksCallback: (
+              {fromProductId = false, toProductId = false}) {
             return PrefetchHooks(
               db: db,
               explicitlyWatchedTables: [],
@@ -6215,25 +5417,25 @@ class $$StockConversionsTableTableManager extends RootTableManager<
                       dynamic,
                       dynamic,
                       dynamic>>(state) {
-                if (fromBatchId) {
+                if (fromProductId) {
                   state = state.withJoin(
                     currentTable: table,
-                    currentColumn: table.fromBatchId,
-                    referencedTable:
-                        $$StockConversionsTableReferences._fromBatchIdTable(db),
+                    currentColumn: table.fromProductId,
+                    referencedTable: $$StockConversionsTableReferences
+                        ._fromProductIdTable(db),
                     referencedColumn: $$StockConversionsTableReferences
-                        ._fromBatchIdTable(db)
+                        ._fromProductIdTable(db)
                         .id,
                   ) as T;
                 }
-                if (toBatchId) {
+                if (toProductId) {
                   state = state.withJoin(
                     currentTable: table,
-                    currentColumn: table.toBatchId,
+                    currentColumn: table.toProductId,
                     referencedTable:
-                        $$StockConversionsTableReferences._toBatchIdTable(db),
+                        $$StockConversionsTableReferences._toProductIdTable(db),
                     referencedColumn: $$StockConversionsTableReferences
-                        ._toBatchIdTable(db)
+                        ._toProductIdTable(db)
                         .id,
                   ) as T;
                 }
@@ -6259,13 +5461,13 @@ typedef $$StockConversionsTableProcessedTableManager = ProcessedTableManager<
     $$StockConversionsTableUpdateCompanionBuilder,
     (StockConversion, $$StockConversionsTableReferences),
     StockConversion,
-    PrefetchHooks Function({bool fromBatchId, bool toBatchId})>;
+    PrefetchHooks Function({bool fromProductId, bool toProductId})>;
 typedef $$StockAdjustmentsTableCreateCompanionBuilder
     = StockAdjustmentsCompanion Function({
   Value<int> id,
   Value<DateTime> createdAt,
   Value<String?> remoteId,
-  required int batchId,
+  required int productId,
   required double quantity,
 });
 typedef $$StockAdjustmentsTableUpdateCompanionBuilder
@@ -6273,7 +5475,7 @@ typedef $$StockAdjustmentsTableUpdateCompanionBuilder
   Value<int> id,
   Value<DateTime> createdAt,
   Value<String?> remoteId,
-  Value<int> batchId,
+  Value<int> productId,
   Value<double> quantity,
 });
 
@@ -6282,16 +5484,16 @@ final class $$StockAdjustmentsTableReferences extends BaseReferences<
   $$StockAdjustmentsTableReferences(
       super.$_db, super.$_table, super.$_typedResult);
 
-  static $BatchesTable _batchIdTable(_$AppDatabase db) =>
-      db.batches.createAlias(
-          $_aliasNameGenerator(db.stockAdjustments.batchId, db.batches.id));
+  static $ProductsTable _productIdTable(_$AppDatabase db) =>
+      db.products.createAlias(
+          $_aliasNameGenerator(db.stockAdjustments.productId, db.products.id));
 
-  $$BatchesTableProcessedTableManager get batchId {
-    final $_column = $_itemColumn<int>('batch_id')!;
+  $$ProductsTableProcessedTableManager get productId {
+    final $_column = $_itemColumn<int>('product_id')!;
 
-    final manager = $$BatchesTableTableManager($_db, $_db.batches)
+    final manager = $$ProductsTableTableManager($_db, $_db.products)
         .filter((f) => f.id.sqlEquals($_column));
-    final item = $_typedResult.readTableOrNull(_batchIdTable($_db));
+    final item = $_typedResult.readTableOrNull(_productIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
         manager.$state.copyWith(prefetchedData: [item]));
@@ -6319,18 +5521,18 @@ class $$StockAdjustmentsTableFilterComposer
   ColumnFilters<double> get quantity => $composableBuilder(
       column: $table.quantity, builder: (column) => ColumnFilters(column));
 
-  $$BatchesTableFilterComposer get batchId {
-    final $$BatchesTableFilterComposer composer = $composerBuilder(
+  $$ProductsTableFilterComposer get productId {
+    final $$ProductsTableFilterComposer composer = $composerBuilder(
         composer: this,
-        getCurrentColumn: (t) => t.batchId,
-        referencedTable: $db.batches,
+        getCurrentColumn: (t) => t.productId,
+        referencedTable: $db.products,
         getReferencedColumn: (t) => t.id,
         builder: (joinBuilder,
                 {$addJoinBuilderToRootComposer,
                 $removeJoinBuilderFromRootComposer}) =>
-            $$BatchesTableFilterComposer(
+            $$ProductsTableFilterComposer(
               $db: $db,
-              $table: $db.batches,
+              $table: $db.products,
               $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
               joinBuilder: joinBuilder,
               $removeJoinBuilderFromRootComposer:
@@ -6361,18 +5563,18 @@ class $$StockAdjustmentsTableOrderingComposer
   ColumnOrderings<double> get quantity => $composableBuilder(
       column: $table.quantity, builder: (column) => ColumnOrderings(column));
 
-  $$BatchesTableOrderingComposer get batchId {
-    final $$BatchesTableOrderingComposer composer = $composerBuilder(
+  $$ProductsTableOrderingComposer get productId {
+    final $$ProductsTableOrderingComposer composer = $composerBuilder(
         composer: this,
-        getCurrentColumn: (t) => t.batchId,
-        referencedTable: $db.batches,
+        getCurrentColumn: (t) => t.productId,
+        referencedTable: $db.products,
         getReferencedColumn: (t) => t.id,
         builder: (joinBuilder,
                 {$addJoinBuilderToRootComposer,
                 $removeJoinBuilderFromRootComposer}) =>
-            $$BatchesTableOrderingComposer(
+            $$ProductsTableOrderingComposer(
               $db: $db,
-              $table: $db.batches,
+              $table: $db.products,
               $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
               joinBuilder: joinBuilder,
               $removeJoinBuilderFromRootComposer:
@@ -6403,18 +5605,18 @@ class $$StockAdjustmentsTableAnnotationComposer
   GeneratedColumn<double> get quantity =>
       $composableBuilder(column: $table.quantity, builder: (column) => column);
 
-  $$BatchesTableAnnotationComposer get batchId {
-    final $$BatchesTableAnnotationComposer composer = $composerBuilder(
+  $$ProductsTableAnnotationComposer get productId {
+    final $$ProductsTableAnnotationComposer composer = $composerBuilder(
         composer: this,
-        getCurrentColumn: (t) => t.batchId,
-        referencedTable: $db.batches,
+        getCurrentColumn: (t) => t.productId,
+        referencedTable: $db.products,
         getReferencedColumn: (t) => t.id,
         builder: (joinBuilder,
                 {$addJoinBuilderToRootComposer,
                 $removeJoinBuilderFromRootComposer}) =>
-            $$BatchesTableAnnotationComposer(
+            $$ProductsTableAnnotationComposer(
               $db: $db,
-              $table: $db.batches,
+              $table: $db.products,
               $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
               joinBuilder: joinBuilder,
               $removeJoinBuilderFromRootComposer:
@@ -6435,7 +5637,7 @@ class $$StockAdjustmentsTableTableManager extends RootTableManager<
     $$StockAdjustmentsTableUpdateCompanionBuilder,
     (StockAdjustment, $$StockAdjustmentsTableReferences),
     StockAdjustment,
-    PrefetchHooks Function({bool batchId})> {
+    PrefetchHooks Function({bool productId})> {
   $$StockAdjustmentsTableTableManager(
       _$AppDatabase db, $StockAdjustmentsTable table)
       : super(TableManagerState(
@@ -6451,28 +5653,28 @@ class $$StockAdjustmentsTableTableManager extends RootTableManager<
             Value<int> id = const Value.absent(),
             Value<DateTime> createdAt = const Value.absent(),
             Value<String?> remoteId = const Value.absent(),
-            Value<int> batchId = const Value.absent(),
+            Value<int> productId = const Value.absent(),
             Value<double> quantity = const Value.absent(),
           }) =>
               StockAdjustmentsCompanion(
             id: id,
             createdAt: createdAt,
             remoteId: remoteId,
-            batchId: batchId,
+            productId: productId,
             quantity: quantity,
           ),
           createCompanionCallback: ({
             Value<int> id = const Value.absent(),
             Value<DateTime> createdAt = const Value.absent(),
             Value<String?> remoteId = const Value.absent(),
-            required int batchId,
+            required int productId,
             required double quantity,
           }) =>
               StockAdjustmentsCompanion.insert(
             id: id,
             createdAt: createdAt,
             remoteId: remoteId,
-            batchId: batchId,
+            productId: productId,
             quantity: quantity,
           ),
           withReferenceMapper: (p0) => p0
@@ -6481,7 +5683,7 @@ class $$StockAdjustmentsTableTableManager extends RootTableManager<
                     $$StockAdjustmentsTableReferences(db, table, e)
                   ))
               .toList(),
-          prefetchHooksCallback: ({batchId = false}) {
+          prefetchHooksCallback: ({productId = false}) {
             return PrefetchHooks(
               db: db,
               explicitlyWatchedTables: [],
@@ -6498,14 +5700,15 @@ class $$StockAdjustmentsTableTableManager extends RootTableManager<
                       dynamic,
                       dynamic,
                       dynamic>>(state) {
-                if (batchId) {
+                if (productId) {
                   state = state.withJoin(
                     currentTable: table,
-                    currentColumn: table.batchId,
+                    currentColumn: table.productId,
                     referencedTable:
-                        $$StockAdjustmentsTableReferences._batchIdTable(db),
-                    referencedColumn:
-                        $$StockAdjustmentsTableReferences._batchIdTable(db).id,
+                        $$StockAdjustmentsTableReferences._productIdTable(db),
+                    referencedColumn: $$StockAdjustmentsTableReferences
+                        ._productIdTable(db)
+                        .id,
                   ) as T;
                 }
 
@@ -6530,54 +5733,52 @@ typedef $$StockAdjustmentsTableProcessedTableManager = ProcessedTableManager<
     $$StockAdjustmentsTableUpdateCompanionBuilder,
     (StockAdjustment, $$StockAdjustmentsTableReferences),
     StockAdjustment,
-    PrefetchHooks Function({bool batchId})>;
-typedef $$BatchMovementsTableCreateCompanionBuilder = BatchMovementsCompanion
+    PrefetchHooks Function({bool productId})>;
+typedef $$StockMovementsTableCreateCompanionBuilder = StockMovementsCompanion
     Function({
   Value<int> id,
   Value<DateTime> createdAt,
   Value<String?> remoteId,
-  required int batchId,
-  Value<double?> unitPrice,
+  required int productId,
   required double quantity,
   required String referenceType,
   required int referenceId,
 });
-typedef $$BatchMovementsTableUpdateCompanionBuilder = BatchMovementsCompanion
+typedef $$StockMovementsTableUpdateCompanionBuilder = StockMovementsCompanion
     Function({
   Value<int> id,
   Value<DateTime> createdAt,
   Value<String?> remoteId,
-  Value<int> batchId,
-  Value<double?> unitPrice,
+  Value<int> productId,
   Value<double> quantity,
   Value<String> referenceType,
   Value<int> referenceId,
 });
 
-final class $$BatchMovementsTableReferences
-    extends BaseReferences<_$AppDatabase, $BatchMovementsTable, BatchMovement> {
-  $$BatchMovementsTableReferences(
+final class $$StockMovementsTableReferences
+    extends BaseReferences<_$AppDatabase, $StockMovementsTable, StockMovement> {
+  $$StockMovementsTableReferences(
       super.$_db, super.$_table, super.$_typedResult);
 
-  static $BatchesTable _batchIdTable(_$AppDatabase db) =>
-      db.batches.createAlias(
-          $_aliasNameGenerator(db.batchMovements.batchId, db.batches.id));
+  static $ProductsTable _productIdTable(_$AppDatabase db) =>
+      db.products.createAlias(
+          $_aliasNameGenerator(db.stockMovements.productId, db.products.id));
 
-  $$BatchesTableProcessedTableManager get batchId {
-    final $_column = $_itemColumn<int>('batch_id')!;
+  $$ProductsTableProcessedTableManager get productId {
+    final $_column = $_itemColumn<int>('product_id')!;
 
-    final manager = $$BatchesTableTableManager($_db, $_db.batches)
+    final manager = $$ProductsTableTableManager($_db, $_db.products)
         .filter((f) => f.id.sqlEquals($_column));
-    final item = $_typedResult.readTableOrNull(_batchIdTable($_db));
+    final item = $_typedResult.readTableOrNull(_productIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
         manager.$state.copyWith(prefetchedData: [item]));
   }
 }
 
-class $$BatchMovementsTableFilterComposer
-    extends Composer<_$AppDatabase, $BatchMovementsTable> {
-  $$BatchMovementsTableFilterComposer({
+class $$StockMovementsTableFilterComposer
+    extends Composer<_$AppDatabase, $StockMovementsTable> {
+  $$StockMovementsTableFilterComposer({
     required super.$db,
     required super.$table,
     super.joinBuilder,
@@ -6593,9 +5794,6 @@ class $$BatchMovementsTableFilterComposer
   ColumnFilters<String> get remoteId => $composableBuilder(
       column: $table.remoteId, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<double> get unitPrice => $composableBuilder(
-      column: $table.unitPrice, builder: (column) => ColumnFilters(column));
-
   ColumnFilters<double> get quantity => $composableBuilder(
       column: $table.quantity, builder: (column) => ColumnFilters(column));
 
@@ -6605,18 +5803,18 @@ class $$BatchMovementsTableFilterComposer
   ColumnFilters<int> get referenceId => $composableBuilder(
       column: $table.referenceId, builder: (column) => ColumnFilters(column));
 
-  $$BatchesTableFilterComposer get batchId {
-    final $$BatchesTableFilterComposer composer = $composerBuilder(
+  $$ProductsTableFilterComposer get productId {
+    final $$ProductsTableFilterComposer composer = $composerBuilder(
         composer: this,
-        getCurrentColumn: (t) => t.batchId,
-        referencedTable: $db.batches,
+        getCurrentColumn: (t) => t.productId,
+        referencedTable: $db.products,
         getReferencedColumn: (t) => t.id,
         builder: (joinBuilder,
                 {$addJoinBuilderToRootComposer,
                 $removeJoinBuilderFromRootComposer}) =>
-            $$BatchesTableFilterComposer(
+            $$ProductsTableFilterComposer(
               $db: $db,
-              $table: $db.batches,
+              $table: $db.products,
               $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
               joinBuilder: joinBuilder,
               $removeJoinBuilderFromRootComposer:
@@ -6626,9 +5824,9 @@ class $$BatchMovementsTableFilterComposer
   }
 }
 
-class $$BatchMovementsTableOrderingComposer
-    extends Composer<_$AppDatabase, $BatchMovementsTable> {
-  $$BatchMovementsTableOrderingComposer({
+class $$StockMovementsTableOrderingComposer
+    extends Composer<_$AppDatabase, $StockMovementsTable> {
+  $$StockMovementsTableOrderingComposer({
     required super.$db,
     required super.$table,
     super.joinBuilder,
@@ -6644,9 +5842,6 @@ class $$BatchMovementsTableOrderingComposer
   ColumnOrderings<String> get remoteId => $composableBuilder(
       column: $table.remoteId, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<double> get unitPrice => $composableBuilder(
-      column: $table.unitPrice, builder: (column) => ColumnOrderings(column));
-
   ColumnOrderings<double> get quantity => $composableBuilder(
       column: $table.quantity, builder: (column) => ColumnOrderings(column));
 
@@ -6657,18 +5852,18 @@ class $$BatchMovementsTableOrderingComposer
   ColumnOrderings<int> get referenceId => $composableBuilder(
       column: $table.referenceId, builder: (column) => ColumnOrderings(column));
 
-  $$BatchesTableOrderingComposer get batchId {
-    final $$BatchesTableOrderingComposer composer = $composerBuilder(
+  $$ProductsTableOrderingComposer get productId {
+    final $$ProductsTableOrderingComposer composer = $composerBuilder(
         composer: this,
-        getCurrentColumn: (t) => t.batchId,
-        referencedTable: $db.batches,
+        getCurrentColumn: (t) => t.productId,
+        referencedTable: $db.products,
         getReferencedColumn: (t) => t.id,
         builder: (joinBuilder,
                 {$addJoinBuilderToRootComposer,
                 $removeJoinBuilderFromRootComposer}) =>
-            $$BatchesTableOrderingComposer(
+            $$ProductsTableOrderingComposer(
               $db: $db,
-              $table: $db.batches,
+              $table: $db.products,
               $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
               joinBuilder: joinBuilder,
               $removeJoinBuilderFromRootComposer:
@@ -6678,9 +5873,9 @@ class $$BatchMovementsTableOrderingComposer
   }
 }
 
-class $$BatchMovementsTableAnnotationComposer
-    extends Composer<_$AppDatabase, $BatchMovementsTable> {
-  $$BatchMovementsTableAnnotationComposer({
+class $$StockMovementsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $StockMovementsTable> {
+  $$StockMovementsTableAnnotationComposer({
     required super.$db,
     required super.$table,
     super.joinBuilder,
@@ -6696,9 +5891,6 @@ class $$BatchMovementsTableAnnotationComposer
   GeneratedColumn<String> get remoteId =>
       $composableBuilder(column: $table.remoteId, builder: (column) => column);
 
-  GeneratedColumn<double> get unitPrice =>
-      $composableBuilder(column: $table.unitPrice, builder: (column) => column);
-
   GeneratedColumn<double> get quantity =>
       $composableBuilder(column: $table.quantity, builder: (column) => column);
 
@@ -6708,18 +5900,18 @@ class $$BatchMovementsTableAnnotationComposer
   GeneratedColumn<int> get referenceId => $composableBuilder(
       column: $table.referenceId, builder: (column) => column);
 
-  $$BatchesTableAnnotationComposer get batchId {
-    final $$BatchesTableAnnotationComposer composer = $composerBuilder(
+  $$ProductsTableAnnotationComposer get productId {
+    final $$ProductsTableAnnotationComposer composer = $composerBuilder(
         composer: this,
-        getCurrentColumn: (t) => t.batchId,
-        referencedTable: $db.batches,
+        getCurrentColumn: (t) => t.productId,
+        referencedTable: $db.products,
         getReferencedColumn: (t) => t.id,
         builder: (joinBuilder,
                 {$addJoinBuilderToRootComposer,
                 $removeJoinBuilderFromRootComposer}) =>
-            $$BatchesTableAnnotationComposer(
+            $$ProductsTableAnnotationComposer(
               $db: $db,
-              $table: $db.batches,
+              $table: $db.products,
               $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
               joinBuilder: joinBuilder,
               $removeJoinBuilderFromRootComposer:
@@ -6729,45 +5921,43 @@ class $$BatchMovementsTableAnnotationComposer
   }
 }
 
-class $$BatchMovementsTableTableManager extends RootTableManager<
+class $$StockMovementsTableTableManager extends RootTableManager<
     _$AppDatabase,
-    $BatchMovementsTable,
-    BatchMovement,
-    $$BatchMovementsTableFilterComposer,
-    $$BatchMovementsTableOrderingComposer,
-    $$BatchMovementsTableAnnotationComposer,
-    $$BatchMovementsTableCreateCompanionBuilder,
-    $$BatchMovementsTableUpdateCompanionBuilder,
-    (BatchMovement, $$BatchMovementsTableReferences),
-    BatchMovement,
-    PrefetchHooks Function({bool batchId})> {
-  $$BatchMovementsTableTableManager(
-      _$AppDatabase db, $BatchMovementsTable table)
+    $StockMovementsTable,
+    StockMovement,
+    $$StockMovementsTableFilterComposer,
+    $$StockMovementsTableOrderingComposer,
+    $$StockMovementsTableAnnotationComposer,
+    $$StockMovementsTableCreateCompanionBuilder,
+    $$StockMovementsTableUpdateCompanionBuilder,
+    (StockMovement, $$StockMovementsTableReferences),
+    StockMovement,
+    PrefetchHooks Function({bool productId})> {
+  $$StockMovementsTableTableManager(
+      _$AppDatabase db, $StockMovementsTable table)
       : super(TableManagerState(
           db: db,
           table: table,
           createFilteringComposer: () =>
-              $$BatchMovementsTableFilterComposer($db: db, $table: table),
+              $$StockMovementsTableFilterComposer($db: db, $table: table),
           createOrderingComposer: () =>
-              $$BatchMovementsTableOrderingComposer($db: db, $table: table),
+              $$StockMovementsTableOrderingComposer($db: db, $table: table),
           createComputedFieldComposer: () =>
-              $$BatchMovementsTableAnnotationComposer($db: db, $table: table),
+              $$StockMovementsTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback: ({
             Value<int> id = const Value.absent(),
             Value<DateTime> createdAt = const Value.absent(),
             Value<String?> remoteId = const Value.absent(),
-            Value<int> batchId = const Value.absent(),
-            Value<double?> unitPrice = const Value.absent(),
+            Value<int> productId = const Value.absent(),
             Value<double> quantity = const Value.absent(),
             Value<String> referenceType = const Value.absent(),
             Value<int> referenceId = const Value.absent(),
           }) =>
-              BatchMovementsCompanion(
+              StockMovementsCompanion(
             id: id,
             createdAt: createdAt,
             remoteId: remoteId,
-            batchId: batchId,
-            unitPrice: unitPrice,
+            productId: productId,
             quantity: quantity,
             referenceType: referenceType,
             referenceId: referenceId,
@@ -6776,18 +5966,16 @@ class $$BatchMovementsTableTableManager extends RootTableManager<
             Value<int> id = const Value.absent(),
             Value<DateTime> createdAt = const Value.absent(),
             Value<String?> remoteId = const Value.absent(),
-            required int batchId,
-            Value<double?> unitPrice = const Value.absent(),
+            required int productId,
             required double quantity,
             required String referenceType,
             required int referenceId,
           }) =>
-              BatchMovementsCompanion.insert(
+              StockMovementsCompanion.insert(
             id: id,
             createdAt: createdAt,
             remoteId: remoteId,
-            batchId: batchId,
-            unitPrice: unitPrice,
+            productId: productId,
             quantity: quantity,
             referenceType: referenceType,
             referenceId: referenceId,
@@ -6795,10 +5983,10 @@ class $$BatchMovementsTableTableManager extends RootTableManager<
           withReferenceMapper: (p0) => p0
               .map((e) => (
                     e.readTable(table),
-                    $$BatchMovementsTableReferences(db, table, e)
+                    $$StockMovementsTableReferences(db, table, e)
                   ))
               .toList(),
-          prefetchHooksCallback: ({batchId = false}) {
+          prefetchHooksCallback: ({productId = false}) {
             return PrefetchHooks(
               db: db,
               explicitlyWatchedTables: [],
@@ -6815,14 +6003,14 @@ class $$BatchMovementsTableTableManager extends RootTableManager<
                       dynamic,
                       dynamic,
                       dynamic>>(state) {
-                if (batchId) {
+                if (productId) {
                   state = state.withJoin(
                     currentTable: table,
-                    currentColumn: table.batchId,
+                    currentColumn: table.productId,
                     referencedTable:
-                        $$BatchMovementsTableReferences._batchIdTable(db),
+                        $$StockMovementsTableReferences._productIdTable(db),
                     referencedColumn:
-                        $$BatchMovementsTableReferences._batchIdTable(db).id,
+                        $$StockMovementsTableReferences._productIdTable(db).id,
                   ) as T;
                 }
 
@@ -6836,18 +6024,18 @@ class $$BatchMovementsTableTableManager extends RootTableManager<
         ));
 }
 
-typedef $$BatchMovementsTableProcessedTableManager = ProcessedTableManager<
+typedef $$StockMovementsTableProcessedTableManager = ProcessedTableManager<
     _$AppDatabase,
-    $BatchMovementsTable,
-    BatchMovement,
-    $$BatchMovementsTableFilterComposer,
-    $$BatchMovementsTableOrderingComposer,
-    $$BatchMovementsTableAnnotationComposer,
-    $$BatchMovementsTableCreateCompanionBuilder,
-    $$BatchMovementsTableUpdateCompanionBuilder,
-    (BatchMovement, $$BatchMovementsTableReferences),
-    BatchMovement,
-    PrefetchHooks Function({bool batchId})>;
+    $StockMovementsTable,
+    StockMovement,
+    $$StockMovementsTableFilterComposer,
+    $$StockMovementsTableOrderingComposer,
+    $$StockMovementsTableAnnotationComposer,
+    $$StockMovementsTableCreateCompanionBuilder,
+    $$StockMovementsTableUpdateCompanionBuilder,
+    (StockMovement, $$StockMovementsTableReferences),
+    StockMovement,
+    PrefetchHooks Function({bool productId})>;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -6864,12 +6052,10 @@ class $AppDatabaseManager {
       $$PurchasesTableTableManager(_db, _db.purchases);
   $$PurchaseLineItemsTableTableManager get purchaseLineItems =>
       $$PurchaseLineItemsTableTableManager(_db, _db.purchaseLineItems);
-  $$BatchesTableTableManager get batches =>
-      $$BatchesTableTableManager(_db, _db.batches);
   $$StockConversionsTableTableManager get stockConversions =>
       $$StockConversionsTableTableManager(_db, _db.stockConversions);
   $$StockAdjustmentsTableTableManager get stockAdjustments =>
       $$StockAdjustmentsTableTableManager(_db, _db.stockAdjustments);
-  $$BatchMovementsTableTableManager get batchMovements =>
-      $$BatchMovementsTableTableManager(_db, _db.batchMovements);
+  $$StockMovementsTableTableManager get stockMovements =>
+      $$StockMovementsTableTableManager(_db, _db.stockMovements);
 }

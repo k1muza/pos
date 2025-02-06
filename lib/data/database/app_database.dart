@@ -14,7 +14,7 @@ mixin TableMixin on Table {
   late final createdAt = dateTime().withDefault(currentDateAndTime)();
 
   // Remote ID
-  late final remoteId = text().nullable()(); 
+  late final remoteId = text().nullable()();
 }
 
 class Suppliers extends Table with TableMixin {
@@ -40,11 +40,11 @@ class SaleLineItems extends Table with TableMixin {
   late final Column<double> quantity =
       real().check(quantity.isBiggerThanValue(0))();
   late final totalPrice = real()();
-  late final unitPrice = real().generatedAs(totalPrice/quantity)();
+  late final unitPrice = real().generatedAs(totalPrice / quantity)();
 }
 
 @UseRowClass(Purchase)
-class Purchases extends Table with TableMixin{
+class Purchases extends Table with TableMixin {
   late final notes = text().nullable()();
 }
 
@@ -54,32 +54,24 @@ class PurchaseLineItems extends Table with TableMixin {
   late final Column<double> quantity =
       real().check(quantity.isBiggerThanValue(0))();
   late final totalCost = real()();
-  late final unitCost = real().generatedAs(totalCost/quantity)();
+  late final unitCost = real().generatedAs(totalCost / quantity)();
 }
 
 class StockConversions extends Table with TableMixin {
-  late final fromBatchId = integer().references(Batches, #id)();
-  late final toBatchId = integer().references(Batches, #id)();
+  late final fromProductId = integer().references(Products, #id)();
+  late final toProductId = integer().references(Products, #id)();
   late final Column<double> quantity =
       real().check(quantity.isBiggerThanValue(0))();
 }
 
 class StockAdjustments extends Table with TableMixin {
-  late final batchId = integer().references(Batches, #id)();
+  late final productId = integer().references(Products, #id)();
   late final quantity = real()();
 }
 
-class Batches extends Table with TableMixin {
+class StockMovements extends Table with TableMixin {
   late final productId = integer().references(Products, #id)();
-  late final totalCost = real().nullable()();
-  late final referenceType = text()();
-  late final referenceId = integer()();
-}
-
-class BatchMovements extends Table with TableMixin {
-  late final batchId = integer().references(Batches, #id)();
-  late final unitPrice = real().nullable()();
-  late final quantity = real()(); // neg or positive
+  late final quantity = real()();
   late final referenceType = text()();
   late final referenceId = integer()();
 }
@@ -94,8 +86,7 @@ class BatchMovements extends Table with TableMixin {
   PurchaseLineItems,
   StockConversions,
   StockAdjustments,
-  Batches,
-  BatchMovements,
+  StockMovements,
 ])
 class AppDatabase extends _$AppDatabase {
   // Specify the location of the database file
@@ -103,7 +94,7 @@ class AppDatabase extends _$AppDatabase {
 
   // Create Singleton instance
   static AppDatabase? _instance;
-  
+
   factory AppDatabase.getInstance() {
     _instance ??= AppDatabase();
     return _instance!;
@@ -117,6 +108,44 @@ class AppDatabase extends _$AppDatabase {
   MigrationStrategy get migration => MigrationStrategy(
         onCreate: (Migrator m) async {
           await m.createAll();
+          await customStatement('''
+            CREATE TRIGGER IF NOT EXISTS stock_movement_on_sale
+            AFTER INSERT ON sale_line_items
+            FOR EACH ROW
+            BEGIN
+              INSERT INTO stock_movements (product_id, quantity, reference_type, reference_id)
+              VALUES (NEW.product_id, -NEW.quantity, 'sale', NEW.id);
+            END
+          ''');
+          await customStatement('''
+            CREATE TRIGGER IF NOT EXISTS stock_movement_on_purchase
+            AFTER INSERT ON purchase_line_items
+            FOR EACH ROW
+            BEGIN
+              INSERT INTO stock_movements (product_id, quantity, reference_type, reference_id)
+              VALUES (NEW.product_id, NEW.quantity, 'purchase', NEW.id);
+            END
+          ''');
+          await customStatement('''
+            CREATE TRIGGER IF NOT EXISTS stock_movement_on_stock_conversion
+            AFTER INSERT ON stock_conversions
+            FOR EACH ROW
+            BEGIN
+              INSERT INTO stock_movements (product_id, quantity, reference_type, reference_id)
+              VALUES (NEW.from_product_id, -NEW.quantity, 'conversion', NEW.id);
+              INSERT INTO stock_movements (product_id, quantity, reference_type, reference_id)
+              VALUES (NEW.to_product_id, NEW.quantity, 'conversion', NEW.id);
+            END
+          ''');
+          await customStatement('''
+            CREATE TRIGGER IF NOT EXISTS stock_movement_on_stock_adjustment
+            AFTER INSERT ON stock_adjustments
+            FOR EACH ROW
+            BEGIN
+              INSERT INTO stock_movements (product_id, quantity, reference_type, reference_id)
+              VALUES (NEW.product_id, NEW.quantity, 'adjustment', NEW.id);
+            END
+          ''');
         },
         onUpgrade: (Migrator m, int from, int to) async {
           // Handle migrations here
