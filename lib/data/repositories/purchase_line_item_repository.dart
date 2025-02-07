@@ -1,6 +1,6 @@
 import 'package:pos_meat_shop/data/database/app_database.dart';
 import 'package:pos_meat_shop/data/database/purchase_line_item_dao.dart';
-import 'package:pos_meat_shop/data/repos/I_purchase_line_repo.dart';
+import 'package:pos_meat_shop/data/repositories/I_purchase_line_repo.dart';
 
 class PurchaseLineItemRepository implements IPurchaseLineItemRepository {
   final PurchaseLineItemDao _purchaselineitemDao;

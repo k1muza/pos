@@ -1,6 +1,6 @@
 // Purchase Line Item Provider
 
-import 'package:pos_meat_shop/data/repos/purchase_line_item_repository.dart';
+import 'package:pos_meat_shop/data/repositories/purchase_line_item_repository.dart';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pos_meat_shop/data/database/app_database.dart';

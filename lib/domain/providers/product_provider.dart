@@ -1,18 +1,39 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:http/http.dart' as http;
 import 'package:pos_meat_shop/data/database/app_database.dart';
 import 'package:pos_meat_shop/data/database/product_dao.dart';
-import 'package:pos_meat_shop/data/repos/product_repository.dart';
+import 'package:pos_meat_shop/data/datasources/I_product_datasource.dart';
+import 'package:pos_meat_shop/data/datasources/local/product_datasource.dart';
+import 'package:pos_meat_shop/data/datasources/remote/product_datasource.dart';
+import 'package:pos_meat_shop/data/repositories/product_repository.dart';
 
 final appDatabaseProvider = Provider<AppDatabase>((ref) {
   return AppDatabase.getInstance();
+});
+
+final httpClientProvider = Provider<http.Client>((ref) {
+  return http.Client();
 });
 
 final productDaoProvider = Provider<ProductDao>((ref) {
   return ProductDao(ref.watch(appDatabaseProvider));
 });
 
+final productLocalDatasourceProvider = Provider<IProductDataSource>((ref) {
+  return ProductLocalDataSourceImpl(ref.watch(productDaoProvider));
+});
+
+final productRemoteDatasourceProvider = Provider<IProductDataSource>((ref) {
+  return ProductRemoteDataSourceImpl(client: ref.watch(httpClientProvider));
+});
+
 final productRepositoryProvider = Provider<ProductRepository>((ref) {
-  return ProductRepository(ref.watch(productDaoProvider));
+  final productLocalDatasource = ref.watch(productLocalDatasourceProvider);
+  final productRemoteDatasource = ref.watch(productRemoteDatasourceProvider);
+  return ProductRepository(
+    productLocalDatasource,
+    productRemoteDatasource,
+  );
 });
 
 final productProvider =

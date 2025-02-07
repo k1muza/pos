@@ -1,11 +1,11 @@
 import 'package:pos_meat_shop/data/database/app_database.dart';
 import 'package:pos_meat_shop/data/database/product_dao.dart';
-import 'package:pos_meat_shop/data/repos/I_product_repo.dart';
+import 'package:pos_meat_shop/data/datasources/I_product_datasource.dart';
 
-class ProductRepository implements IProductRepository {
+class ProductLocalDataSourceImpl implements IProductDataSource {
   final ProductDao _productDao;
 
-  ProductRepository(this._productDao);
+  ProductLocalDataSourceImpl(this._productDao);
 
   @override
   Stream<List<Product>> watchAllProducts() => _productDao.watchAllProducts();

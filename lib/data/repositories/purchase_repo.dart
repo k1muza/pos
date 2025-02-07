@@ -1,7 +1,7 @@
 import 'package:pos_meat_shop/data/database/app_database.dart';
 import 'package:pos_meat_shop/data/database/purchase_dao.dart';
 import 'package:pos_meat_shop/data/database/purchase_line_item_dao.dart';
-import 'package:pos_meat_shop/data/repos/I_purchase_repo.dart';
+import 'package:pos_meat_shop/data/repositories/I_purchase_repo.dart';
 import 'package:pos_meat_shop/domain/models/purchase.dart';
 
 class PurchaseRepository implements IPurchaseRepository {

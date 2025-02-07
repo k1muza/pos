@@ -1,8 +1,6 @@
-
-
 import 'package:pos_meat_shop/data/database/app_database.dart';
 
-abstract class IProductRepository {
+abstract class IProductDataSource {
   Future<List<Product>> getAllProducts();
   Future<Product?> getProductById(int productId);
   Future<bool> updateProduct(ProductsCompanion product);

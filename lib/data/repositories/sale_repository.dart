@@ -1,6 +1,6 @@
 import 'package:pos_meat_shop/data/database/app_database.dart';
 import 'package:pos_meat_shop/data/database/sale_dao.dart';
-import 'package:pos_meat_shop/data/repos/I_sale_repo.dart';
+import 'package:pos_meat_shop/data/repositories/I_sale_repo.dart';
 
 class SaleRepository implements ISaleRepository {
   final SaleDao _saleDao;
