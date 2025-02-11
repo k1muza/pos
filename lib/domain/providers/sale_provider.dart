@@ -34,13 +34,13 @@ class SaleStateNotifier extends StateNotifier<AsyncValue<List<Sale>>> {
     });
   }
 
-  Future<int> addSale(SalesCompanion sale) async => _repository.addSale(sale);
+  Future<int> addSale(Sale sale) async => _repository.addSale(sale);
 
   Future<void> updateSale(SalesCompanion sale) async {
     await _repository.updateSale(sale);
   }
 
-  Future<void> deleteSale(int saleId) async {
+  Future<void> deleteSale(String saleId) async {
     await _repository.deleteSale(saleId);
   }
 

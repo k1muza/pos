@@ -24,7 +24,7 @@ class SaleLineItemRepository implements ISaleLineItemRepository {
       _salelineitemDao.getSaleLineItemBySaleId(salelineitemId);
 
   @override
-  Future<void> addSaleLineItem(SaleLineItemsCompanion salelineitem) =>
+  Future<int> addSaleLineItem(SaleLineItemsCompanion salelineitem) =>
       _salelineitemDao.insertSaleLineItem(salelineitem);
 
   @override
@@ -32,6 +32,6 @@ class SaleLineItemRepository implements ISaleLineItemRepository {
       _salelineitemDao.updateSaleLineItemData(salelineitem);
 
   @override
-  Future<int> deleteSaleLineItem(int id) =>
+  Future<int> deleteSaleLineItem(String id) =>
       _salelineitemDao.deleteSaleLineItem(id);
 }

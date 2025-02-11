@@ -2,10 +2,13 @@ import 'package:drift/drift.dart' show Value;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pos_meat_shop/data/database/app_database.dart';
+import 'package:pos_meat_shop/domain/models/purchase.dart';
+import 'package:pos_meat_shop/domain/models/purchase_line_item.dart';
 import 'package:pos_meat_shop/domain/providers/purchase_line_item_provider.dart';
 import 'package:pos_meat_shop/domain/providers/purchase_provider.dart';
 import 'package:pos_meat_shop/presentation/widgets/product_text.dart';
 import 'package:pos_meat_shop/presentation/widgets/purchase_item_dialog.dart';
+import 'package:uuid/uuid.dart';
 
 final purchaseLineItemsNotifierProvider =
     StateNotifierProvider<PurchaseLineItemsNotifier, List<PurchaseLineItem>>(
@@ -81,24 +84,24 @@ class FloatingActionDoneButton extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final purchaseDao = ref.watch(purchaseDaoProvider);
-    final purchaseLineItemDao = ref.watch(purchaseLineItemDaoProvider);
-    final db = AppDatabase.getInstance();
+    final purchaseRepository = ref.watch(purchaseRepositoryProvider);
+    final purchaseLineItemRepository = ref.watch(purchaseLineItemRepositoryProvider);
 
     return FloatingActionButton(
       heroTag: 'done',
       onPressed: () async {
-        // await db.transaction(() async {
-        final newPurchaseId = await purchaseDao.insertPurchase(
-          PurchasesCompanion(),
+        final id = Uuid().v4();
+
+        await purchaseRepository.addPurchase(
+          Purchase(id: id, createdAt: DateTime.now()),
         );
 
         final purchaseLineItems = ref.watch(purchaseLineItemsNotifierProvider);
 
         for (final purchaseLineItem in purchaseLineItems) {
-          await purchaseLineItemDao.insertPurchaseLineItem(
+          await purchaseLineItemRepository.addPurchaseLineItem(
             PurchaseLineItemsCompanion(
-              purchaseId: Value(newPurchaseId),
+              purchaseId: Value(id),
               productId: Value(purchaseLineItem.productId),
               quantity: Value(purchaseLineItem.quantity),
               totalCost: Value(purchaseLineItem.totalCost),
@@ -107,7 +110,6 @@ class FloatingActionDoneButton extends ConsumerWidget {
         }
         ref.watch(purchaseLineItemsNotifierProvider.notifier).clear();
         Navigator.pop(context);
-        // });
       },
       child: const Icon(Icons.check),
     );

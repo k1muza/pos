@@ -1,7 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:pos_meat_shop/data/database/app_database.dart';
+import 'package:pos_meat_shop/domain/models/purchase_line_item.dart';
 import 'package:pos_meat_shop/presentation/widgets/product_dropdown.dart';
 
 class PurchaseItemDialog extends StatefulWidget {
@@ -36,14 +36,13 @@ class _PurchaseItemDialogState extends State<PurchaseItemDialog> {
 
       // Create a new PurchaseLineItem
       final newItem = PurchaseLineItem(
-        id: 0, // or null if autoIncrement
-        purchaseId: 0, // Might be assigned after creating a Purchase
+        id: '', // or null if autoIncrement
+        purchaseId: '', // Might be assigned after creating a Purchase
         productId: product.id,
         quantity: quantity,
         unitCost: unitCost,
         totalCost: cost,
         createdAt: DateTime.now(),
-        remoteId: null,
       );
 
       Navigator.pop(context, newItem);

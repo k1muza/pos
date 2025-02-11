@@ -4,6 +4,7 @@ import 'package:pos_meat_shop/data/database/app_database.dart';
 import 'package:pos_meat_shop/domain/providers/cart_provider.dart';
 import 'package:pos_meat_shop/domain/providers/sale_line_item_provider.dart';
 import 'package:pos_meat_shop/domain/providers/sale_provider.dart';
+import 'package:uuid/uuid.dart';
 
 sealed class SaleState {
   const SaleState();
@@ -18,7 +19,7 @@ class SaleLoading extends SaleState {
 }
 
 class SaleSuccess extends SaleState {
-  final int saleId;
+  final String saleId;
   const SaleSuccess(this.saleId);
 }
 
@@ -45,13 +46,16 @@ class SaleNotifier extends StateNotifier<SaleState> {
     }
 
     try {
-      final saleId = await saleRepository.addSale(
-        SalesCompanion.insert(),
+      var id = Uuid().v4();
+
+      await saleRepository.addSale(
+        Sale(id: id, createdAt: DateTime.now()),
       );
+
       for (final cartItem in cartItems) {
         saleLineItemRepository.addSaleLineItem(
           SaleLineItemsCompanion(
-            saleId: Value(saleId),
+            saleId: Value(id),
             productId: Value(cartItem.product.id),
             quantity: Value(cartItem.quantity),
             totalPrice: Value(cartItem.product.unitPrice * cartItem.quantity),
@@ -62,7 +66,7 @@ class SaleNotifier extends StateNotifier<SaleState> {
       ref.read(cartProvider.notifier).clearCart();
 
       // Update state
-      state = SaleSuccess(saleId);
+      state = SaleSuccess(id);
     } catch (error) {
       // On any error, set failure
       state = SaleFailure(error.toString());

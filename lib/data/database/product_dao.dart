@@ -1,4 +1,5 @@
 import 'package:drift/drift.dart';
+import 'package:pos_meat_shop/domain/models/product.dart';
 import 'app_database.dart';
 
 part 'product_dao.g.dart';
@@ -29,11 +30,12 @@ class ProductDao extends DatabaseAccessor<AppDatabase> with _$ProductDaoMixin {
   }
 
   // Delete a product
-  Future<int> deleteProduct(int id) {
+  Future<int> deleteProduct(String id) {
       return (delete(products)..where((tbl) => tbl.id.equals(id))).go();
   }
 
-  Future<Product?> getProductById(int id) {
+
+  Future<Product?> getProductById(String id) {
     return (select(products)..where((tbl) => tbl.id.equals(id))).getSingleOrNull();
   }
 }

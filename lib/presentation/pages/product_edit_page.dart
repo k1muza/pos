@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pos_meat_shop/data/database/app_database.dart';
+import 'package:pos_meat_shop/domain/models/product.dart';
 import 'package:pos_meat_shop/domain/providers/product_provider.dart';
+import 'package:uuid/uuid.dart';
 
 enum FormStatus { initial, submitting, success, failure }
 
@@ -135,6 +137,7 @@ class FormNotifier extends StateNotifier<FormState> {
       if (initialProduct == null) {
         // Create a new product
         final newProduct = ProductsCompanion(
+            id: Value(Uuid().v4()),
             name: Value(state.name),
             unitPrice: Value(state.unitPrice),
             unit: Value(state.unit),
@@ -256,7 +259,7 @@ class ProductEditPage extends ConsumerWidget {
               items: [
                 DropdownMenuItem(child: Text('kilogram'), value: 'kg'),
                 DropdownMenuItem(child: Text('litre'), value: 'L'),
-                DropdownMenuItem(child: Text('none'), value: ''),
+                DropdownMenuItem(child: Text('piece'), value: 'unit'),
               ],
               onChanged: (String? value) {
                 formNotifier.setUnit(value!);

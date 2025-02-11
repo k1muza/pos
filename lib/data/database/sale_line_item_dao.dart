@@ -19,7 +19,7 @@ class SaleLineItemDao extends DatabaseAccessor<AppDatabase>
       select(saleLineItems).watch();
 
   // Insert a salelineitem
-  Future<void> insertSaleLineItem(SaleLineItemsCompanion salelineitem) {
+  Future<int> insertSaleLineItem(SaleLineItemsCompanion salelineitem) {
     return into(saleLineItems)
         .insert(salelineitem, mode: InsertMode.insertOrReplace);
   }
@@ -30,16 +30,16 @@ class SaleLineItemDao extends DatabaseAccessor<AppDatabase>
   }
 
   // Delete a salelineitem
-  Future<int> deleteSaleLineItem(int id) {
+  Future<int> deleteSaleLineItem(String id) {
     return (delete(saleLineItems)..where((tbl) => tbl.id.equals(id))).go();
   }
 
-  Future<SaleLineItem?> getSaleLineItemById(int id) {
+  Future<SaleLineItem?> getSaleLineItemById(String id) {
     return (select(saleLineItems)..where((tbl) => tbl.id.equals(id)))
         .getSingleOrNull();
   }
 
-  Future<List<SaleLineItem>> getSaleLineItemBySaleId(int id) {
+  Future<List<SaleLineItem>> getSaleLineItemBySaleId(String id) {
     return (select(saleLineItems)..where((tbl) => tbl.saleId.equals(id))).get();
   }
 }

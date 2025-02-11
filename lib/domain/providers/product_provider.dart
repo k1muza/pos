@@ -1,30 +1,41 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:http/http.dart' as http;
+import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:pos_meat_shop/data/database/app_database.dart';
 import 'package:pos_meat_shop/data/database/product_dao.dart';
-import 'package:pos_meat_shop/data/datasources/I_product_datasource.dart';
 import 'package:pos_meat_shop/data/datasources/local/product_datasource.dart';
 import 'package:pos_meat_shop/data/datasources/remote/product_datasource.dart';
 import 'package:pos_meat_shop/data/repositories/product_repository.dart';
+import 'package:pos_meat_shop/domain/models/product.dart';
 
 final appDatabaseProvider = Provider<AppDatabase>((ref) {
   return AppDatabase.getInstance();
 });
 
-final httpClientProvider = Provider<http.Client>((ref) {
-  return http.Client();
+final graphQLClientProvider = Provider<GraphQLClient>((ref) {
+  final httpLink = HttpLink('http://18.201.166.166/graphql/');
+
+  // Optionally, you could combine multiple links or add AuthLink for headers.
+  // final authLink = AuthLink(
+  //   getToken: () async => 'Bearer <YOUR_TOKEN>',
+  // );
+  // final link = authLink.concat(httpLink);
+
+  return GraphQLClient(
+    cache: GraphQLCache(), // Basic in-memory cache or custom
+    link: httpLink, // or link if you have combined links
+  );
 });
 
 final productDaoProvider = Provider<ProductDao>((ref) {
   return ProductDao(ref.watch(appDatabaseProvider));
 });
 
-final productLocalDatasourceProvider = Provider<IProductDataSource>((ref) {
+final productLocalDatasourceProvider = Provider<ProductLocalDataSourceImpl>((ref) {
   return ProductLocalDataSourceImpl(ref.watch(productDaoProvider));
 });
 
-final productRemoteDatasourceProvider = Provider<IProductDataSource>((ref) {
-  return ProductRemoteDataSourceImpl(client: ref.watch(httpClientProvider));
+final productRemoteDatasourceProvider = Provider<ProductRemoteDataSourceImpl>((ref) {
+  return ProductRemoteDataSourceImpl(client: ref.watch(graphQLClientProvider));
 });
 
 final productRepositoryProvider = Provider<ProductRepository>((ref) {
@@ -37,7 +48,7 @@ final productRepositoryProvider = Provider<ProductRepository>((ref) {
 });
 
 final productProvider =
-    FutureProvider.family<Product?, int>((ref, productId) async {
+    FutureProvider.family<Product?, String>((ref, productId) async {
   final productRepository = ref.watch(productRepositoryProvider);
   return productRepository.getProductById(productId);
 });
@@ -54,6 +65,7 @@ class ProductStateNotifier extends StateNotifier<AsyncValue<List<Product>>> {
   late final Stream<List<Product>> _productStream;
 
   ProductStateNotifier(this._repository) : super(const AsyncValue.loading()) {
+    _repository.getAllProducts();
     _productStream = _repository.watchAllProducts();
     _productStream.listen((products) {
       state = AsyncValue.data(products);
@@ -70,7 +82,7 @@ class ProductStateNotifier extends StateNotifier<AsyncValue<List<Product>>> {
     await _repository.updateProduct(product);
   }
 
-  Future<void> deleteProduct(int productId) async {
+  Future<void> deleteProduct(String productId) async {
     await _repository.deleteProduct(productId);
   }
 

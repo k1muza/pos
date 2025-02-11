@@ -16,7 +16,7 @@ final saleLineItemRepositoryProvider = Provider<SaleLineItemRepository>((ref) {
 });
 
 final saleLineItemsProvider =
-    FutureProvider.family<List<SaleLineItem>, int>((ref, saleId) async {
+    FutureProvider.family<List<SaleLineItem>, String>((ref, saleId) async {
   final saleLineItemRepository = ref.watch(saleLineItemRepositoryProvider);
   return saleLineItemRepository.getSaleLineItemBySaleId(saleId);
 });

@@ -1,6 +1,7 @@
 import 'package:pos_meat_shop/data/database/app_database.dart';
 import 'package:pos_meat_shop/data/database/purchase_line_item_dao.dart';
 import 'package:pos_meat_shop/data/repositories/I_purchase_line_repo.dart';
+import 'package:pos_meat_shop/domain/models/purchase_line_item.dart';
 
 class PurchaseLineItemRepository implements IPurchaseLineItemRepository {
   final PurchaseLineItemDao _purchaselineitemDao;
@@ -24,7 +25,7 @@ class PurchaseLineItemRepository implements IPurchaseLineItemRepository {
       _purchaselineitemDao.getPurchaseLineItemByPurchaseId(purchaselineitemId);
 
   @override
-  Future<void> addPurchaseLineItem(PurchaseLineItemsCompanion purchaselineitem) =>
+  Future<int> addPurchaseLineItem(PurchaseLineItemsCompanion purchaselineitem) =>
       _purchaselineitemDao.insertPurchaseLineItem(purchaselineitem);
 
   @override
@@ -32,6 +33,6 @@ class PurchaseLineItemRepository implements IPurchaseLineItemRepository {
       _purchaselineitemDao.updatePurchaseLineItemData(purchaselineitem);
 
   @override
-  Future<int> deletePurchaseLineItem(int id) =>
+  Future<int> deletePurchaseLineItem(String id) =>
       _purchaselineitemDao.deletePurchaseLineItem(id);
 }

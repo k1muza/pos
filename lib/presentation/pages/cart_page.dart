@@ -140,7 +140,7 @@ class CartListItem extends StatelessWidget {
               barrierDismissible:
                   false, // optional, so they must confirm or cancel
               builder: (BuildContext context) {
-                if (item.product.isWeightBased) {
+                if (item.product.isWeightBased == true) {
                   return WeightCapture(onWeightEntered: (double weight) {
                     Navigator.pop(context, weight);
                   });

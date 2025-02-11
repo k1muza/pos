@@ -17,11 +17,11 @@ class SaleRepository implements ISaleRepository {
   Future<Sale?> getSaleById(saleId) => _saleDao.getSaleById(saleId);
 
   @override
-  Future<int> addSale(SalesCompanion sale) => _saleDao.insertSale(sale);
+  Future<int> addSale(Sale sale) => _saleDao.insertSale(sale.toCompanion(true));
 
   @override
   Future<bool> updateSale(SalesCompanion sale) => _saleDao.updateSaleData(sale);
 
   @override
-  Future<int> deleteSale(int id) => _saleDao.deleteSale(id);
+  Future<int> deleteSale(String id) => _saleDao.deleteSale(id);
 }

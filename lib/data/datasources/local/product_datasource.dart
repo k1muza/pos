@@ -1,6 +1,7 @@
 import 'package:pos_meat_shop/data/database/app_database.dart';
 import 'package:pos_meat_shop/data/database/product_dao.dart';
 import 'package:pos_meat_shop/data/datasources/I_product_datasource.dart';
+import 'package:pos_meat_shop/domain/models/product.dart';
 
 class ProductLocalDataSourceImpl implements IProductDataSource {
   final ProductDao _productDao;
@@ -23,5 +24,5 @@ class ProductLocalDataSourceImpl implements IProductDataSource {
   Future<bool> updateProduct(ProductsCompanion product ) => _productDao.updateProductData(product);
 
   @override
-  Future<int> deleteProduct(int id) => _productDao.deleteProduct(id);
+  Future<int> deleteProduct(String id) => _productDao.deleteProduct(id);
 }

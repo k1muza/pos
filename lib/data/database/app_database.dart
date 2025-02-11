@@ -2,32 +2,34 @@ import 'package:drift/drift.dart';
 import 'package:drift_flutter/drift_flutter.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pos_meat_shop/domain/models/purchase.dart';
+import 'package:pos_meat_shop/domain/models/product.dart';
+import 'package:pos_meat_shop/domain/models/purchase_line_item.dart';
+import 'package:pos_meat_shop/domain/models/supplier.dart';
 
 // Include generated file
 part 'app_database.g.dart';
 
 mixin TableMixin on Table {
   // Primary key column
-  late final id = integer().autoIncrement()();
+  late final id = text().unique()();
 
   // Column for created at timestamp
   late final createdAt = dateTime().withDefault(currentDateAndTime)();
-
-  // Remote ID
-  late final remoteId = text().nullable()();
 }
 
+@UseRowClass(Supplier)
 class Suppliers extends Table with TableMixin {
   late final name = text().withLength(min: 1, max: 250)();
 }
 
+@UseRowClass(Product)
 class Products extends Table with TableMixin {
   late final name = text().withLength(min: 1, max: 250)();
   late final unitPrice = real()();
   late final unit = text()();
   late final isWeightBased = boolean().generatedAs(unit.equals('kg'))();
   late final isActive = boolean().withDefault(Constant(true))();
-  late final supplierId = integer().references(Suppliers, #id).nullable()();
+  late final supplierId = text().references(Suppliers, #id).nullable()();
 }
 
 class Sales extends Table with TableMixin {
@@ -35,8 +37,8 @@ class Sales extends Table with TableMixin {
 }
 
 class SaleLineItems extends Table with TableMixin {
-  late final productId = integer().references(Products, #id)();
-  late final saleId = integer().references(Sales, #id)();
+  late final productId = text().references(Products, #id)();
+  late final saleId = text().references(Sales, #id)();
   late final Column<double> quantity =
       real().check(quantity.isBiggerThanValue(0))();
   late final totalPrice = real()();
@@ -48,9 +50,10 @@ class Purchases extends Table with TableMixin {
   late final notes = text().nullable()();
 }
 
+@UseRowClass(PurchaseLineItem)
 class PurchaseLineItems extends Table with TableMixin {
-  late final productId = integer().references(Products, #id)();
-  late final purchaseId = integer().references(Purchases, #id)();
+  late final productId = text().references(Products, #id)();
+  late final purchaseId = text().references(Purchases, #id)();
   late final Column<double> quantity =
       real().check(quantity.isBiggerThanValue(0))();
   late final totalCost = real()();
@@ -58,22 +61,22 @@ class PurchaseLineItems extends Table with TableMixin {
 }
 
 class StockConversions extends Table with TableMixin {
-  late final fromProductId = integer().references(Products, #id)();
-  late final toProductId = integer().references(Products, #id)();
+  late final fromProductId = text().references(Products, #id)();
+  late final toProductId = text().references(Products, #id)();
   late final Column<double> quantity =
       real().check(quantity.isBiggerThanValue(0))();
 }
 
 class StockAdjustments extends Table with TableMixin {
-  late final productId = integer().references(Products, #id)();
+  late final productId = text().references(Products, #id)();
   late final quantity = real()();
 }
 
 class StockMovements extends Table with TableMixin {
-  late final productId = integer().references(Products, #id)();
+  late final productId = text().references(Products, #id)();
   late final quantity = real()();
   late final referenceType = text()();
-  late final referenceId = integer()();
+  late final referenceId = text()();
 }
 
 // Define the AppDatabase

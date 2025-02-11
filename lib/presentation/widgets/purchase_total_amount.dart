@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pos_meat_shop/domain/providers/purchase_line_item_provider.dart';
 
 class PurchaseTotalAmountWidget extends ConsumerWidget {
-  final int purchaseId;
+  final String purchaseId;
   const PurchaseTotalAmountWidget({super.key, required this.purchaseId});
 
   @override

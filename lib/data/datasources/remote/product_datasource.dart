@@ -1,55 +1,98 @@
 import 'dart:convert';
 
-import 'package:http/http.dart' as http;
+import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:pos_meat_shop/data/database/app_database.dart';
-import 'package:pos_meat_shop/data/datasources/I_product_datasource.dart';
+import 'package:pos_meat_shop/domain/models/product.dart';
 
-class ProductRemoteDataSourceImpl implements IProductDataSource {
-  final http.Client client;
-  final url = 'https://jsonplaceholder.typicode.com/posts';
+class ProductRemoteDataSourceImpl {
+  final GraphQLClient client;
 
   ProductRemoteDataSourceImpl({required this.client});
-  
-  @override
-  Future<List<Product>> getAllProducts() async {
-    final response = await client.get(Uri.parse(url));
-    if (response.statusCode == 200) {
-      final data = jsonDecode(response.body) as List;
-      return data.map((e) => Product.fromJson(e)).toList();
-    } else {
-      throw Exception('Failed to load products');
+
+  Future<List<Product>> fetchAllProducts() async {
+    final response = await client.query(
+      QueryOptions(
+        document: gql('query { products { id name unitPrice unit createdAt } }'),
+      ),
+    );
+    if (response.hasException) {
+      throw Exception(response.exception.toString());
     }
+
+    // Extract the data
+    final data = response.data?['products'] as List<dynamic>?;
+    if (data == null) {
+      return [];
+    }
+
+    // Convert to ProductModel
+    return data.map((json) => Product.fromJson(json)).toList();
   }
 
-  @override
-  Future<Product?> getProductById(int productId) async {
-    final response = await client.get(Uri.parse('$url/$productId'));
-    if (response.statusCode == 200) {
-      return Product.fromJson(jsonDecode(response.body));
-    } else {
-      throw Exception('Failed to load product');
+  Future<Product?> fetchProductById(String productId) async {
+    final query = r'''
+      query GetProductById($id: String!) {
+        product(id: $id) {
+          id
+          name
+          unitPrice
+        }
+      }
+    ''';
+
+    final result = await client.query(
+      QueryOptions(
+        document: gql(query),
+        variables: {'id': productId},
+      ),
+    );
+
+    if (result.hasException) {
+      throw Exception(result.exception.toString());
     }
+
+    final productJson = result.data?['product'];
+    if (productJson == null) return null;
+    return Product.fromJson(productJson);
   }
 
-  @override
   Future<bool> updateProduct(ProductsCompanion product) {
     // TODO: implement updateProduct
     throw UnimplementedError();
   }
 
-  @override
-  Future<void> addProduct(ProductsCompanion product) {
-    // TODO: implement addProduct
-    throw UnimplementedError();
+  Future<void> addProduct(ProductsCompanion product) async {
+    // for example:
+    final mutation = r'''
+      mutation AddProduct($input: ProductInput!) {
+        addProduct(input: $input) {
+          id
+        }
+      }
+    ''';
+
+    final variables = {
+      'input': {
+        'id': product.id,
+        'name': product.name,
+        'unitPrice': product.unitPrice,
+      }
+    };
+
+    final result = await client.mutate(
+      MutationOptions(document: gql(mutation), variables: variables),
+    );
+
+    if (result.hasException) {
+      throw Exception(result.exception.toString());
+    }
   }
 
-  @override
-  Future<int> deleteProduct(int id) {
+  Future<String> deleteProduct(String id) {
     // TODO: implement deleteProduct
     throw UnimplementedError();
   }
-  
-  @override
+
   Stream<List<Product>> watchAllProducts() {
     // TODO: implement watchAllProducts
     throw UnimplementedError();

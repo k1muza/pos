@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pos_meat_shop/data/database/app_database.dart';
+import 'package:pos_meat_shop/domain/models/product.dart';
 import 'package:pos_meat_shop/domain/providers/product_provider.dart';
 import 'package:pos_meat_shop/presentation/pages/product_edit_page.dart';
 
@@ -10,19 +11,17 @@ class ProductListPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Product List'),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.add),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => ProductEditPage(product: null),
-                ),
-              );
-            },
-          ),
-        ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => ProductEditPage(product: null),
+            ),
+          );
+        },
+        child: const Icon(Icons.add),
       ),
       body: ProductListView(),
     );
@@ -35,10 +34,15 @@ class ProductListView extends ConsumerWidget {
     final productState = ref.watch(productNotifierProvider);
 
     return productState.when(
-      data: (products) => products.isNotEmpty ? _ProductList(products: products) : Center(child: Text('No products yet'),),
-      loading: () => const Center(child: CircularProgressIndicator()),
-      error: (err, stack) => Center(child: Text('Error: $err'),)
-    );
+        data: (products) => products.isNotEmpty
+            ? _ProductList(products: products)
+            : Center(
+                child: Text('No products yet'),
+              ),
+        loading: () => const Center(child: CircularProgressIndicator()),
+        error: (err, stack) => Center(
+              child: Text('Error: $err'),
+            ));
   }
 }
 
@@ -80,7 +84,9 @@ class _ProductListItem extends StatelessWidget {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (_) => ProductEditPage(product: product,),
+              builder: (_) => ProductEditPage(
+                product: product,
+              ),
             ),
           );
         },

@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pos_meat_shop/domain/providers/product_provider.dart';
 
 class ProductText extends ConsumerWidget {
-  final int productId;
+  final String productId;
   final String attributeName;
 
   // We replicate some of the most common Text properties here:

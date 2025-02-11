@@ -26,11 +26,13 @@ class SaleDao extends DatabaseAccessor<AppDatabase> with _$SaleDaoMixin {
   }
 
   // Delete a sale
-  Future<int> deleteSale(int id) {
+  Future<int> deleteSale(String id) {
     return (delete(sales)..where((tbl) => tbl.id.equals(id))).go();
   }
 
-  Future<Sale?> getSaleById(int id) {
+
+
+  Future<Sale?> getSaleById(String id) {
     return (select(sales)..where((tbl) => tbl.id.equals(id))).getSingleOrNull();
   }
 }

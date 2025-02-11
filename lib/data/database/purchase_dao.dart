@@ -27,11 +27,11 @@ class PurchaseDao extends DatabaseAccessor<AppDatabase> with _$PurchaseDaoMixin 
   }
 
   // Delete a purchase
-  Future<int> deletePurchase(int id) {
+  Future<int> deletePurchase(String id) {
     return (delete(purchases)..where((tbl) => tbl.id.equals(id))).go();
   }
 
-  Future<Purchase?> getPurchaseById(int id) {
+  Future<Purchase?> getPurchaseById(String id) {
     return (select(purchases)..where((tbl) => tbl.id.equals(id))).getSingleOrNull();
   }
 }

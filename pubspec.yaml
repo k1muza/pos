@@ -42,6 +42,8 @@ dependencies:
   jiffy: ^6.3.2
   drift_db_viewer: ^2.1.0
   http: ^1.3.0
+  graphql_flutter: ^5.2.0-beta.8
+  rxdart: ^0.28.0
 
 dev_dependencies:
   flutter_test:

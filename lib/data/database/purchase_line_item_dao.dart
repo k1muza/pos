@@ -1,4 +1,5 @@
 import 'package:drift/drift.dart';
+import 'package:pos_meat_shop/domain/models/purchase_line_item.dart';
 import 'app_database.dart';
 
 part 'purchase_line_item_dao.g.dart';
@@ -19,14 +20,14 @@ class PurchaseLineItemDao extends DatabaseAccessor<AppDatabase>
       select(purchaseLineItems).watch();
 
 
-  Stream<List<PurchaseLineItem>> watchPurchaseLineItemsByPurchaseId(int id) =>
+  Stream<List<PurchaseLineItem>> watchPurchaseLineItemsByPurchaseId(String id) =>
       (select(purchaseLineItems)..where((tbl) => tbl.purchaseId.equals(id))).watch();
 
-  Future<List<PurchaseLineItem>> getPurchaseLineItemsByPurchaseId(int id) =>
+  Future<List<PurchaseLineItem>> getPurchaseLineItemsByPurchaseId(String id) =>
       (select(purchaseLineItems)..where((tbl) => tbl.purchaseId.equals(id))).get();
 
   // Insert a purchaselineitem
-  Future<void> insertPurchaseLineItem(PurchaseLineItemsCompanion purchaselineitem) {
+  Future<int> insertPurchaseLineItem(PurchaseLineItemsCompanion purchaselineitem) {
     return into(purchaseLineItems)
         .insert(purchaselineitem, mode: InsertMode.insertOrReplace);
   }
@@ -37,16 +38,16 @@ class PurchaseLineItemDao extends DatabaseAccessor<AppDatabase>
   }
 
   // Delete a purchaselineitem
-  Future<int> deletePurchaseLineItem(int id) {
+  Future<int> deletePurchaseLineItem(String id) {
     return (delete(purchaseLineItems)..where((tbl) => tbl.id.equals(id))).go();
   }
 
-  Future<PurchaseLineItem?> getPurchaseLineItemById(int id) {
+  Future<PurchaseLineItem?> getPurchaseLineItemById(String id) {
     return (select(purchaseLineItems)..where((tbl) => tbl.id.equals(id)))
         .getSingleOrNull();
   }
 
-  Future<List<PurchaseLineItem>> getPurchaseLineItemByPurchaseId(int id) {
+  Future<List<PurchaseLineItem>> getPurchaseLineItemByPurchaseId(String id) {
     return (select(purchaseLineItems)..where((tbl) => tbl.purchaseId.equals(id))).get();
   }
 }

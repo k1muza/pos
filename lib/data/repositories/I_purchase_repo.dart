@@ -3,9 +3,9 @@ import 'package:pos_meat_shop/domain/models/purchase.dart';
 
 abstract class IPurchaseRepository {
   Future<List<Purchase>> getAllPurchases();
-  Future<Purchase?> getPurchaseById(int purchaseId);
+  Future<Purchase?> getPurchaseById(String purchaseId);
   Future<bool> updatePurchase(PurchasesCompanion purchase);
-  Future<void> addPurchase(PurchasesCompanion purchase);
+  Future<int> addPurchase(Purchase purchase);
   Stream<List<Purchase>> watchAllPurchases();
-  Future<int> deletePurchase(int id);
+  Future<int> deletePurchase(String id);
 }

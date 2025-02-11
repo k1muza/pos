@@ -1,28 +1,25 @@
 import 'package:drift/drift.dart';
 import 'package:pos_meat_shop/data/database/app_database.dart';
+import 'package:pos_meat_shop/domain/models/purchase_line_item.dart';
 
 class Purchase extends DataClass implements Insertable<Purchase> {
-  final int id;
+  final String id;
   final DateTime createdAt;
-  final String? remoteId;
   final String? notes;
-  List<PurchaseLineItem>? lineItems;
+  List<PurchaseLineItem>? lineItems = [];
 
   Purchase({
     required this.id,
     required this.createdAt,
-    this.remoteId,
     this.notes,
+    this.lineItems,
   });
-  
+
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
-    map['id'] = Variable<int>(id);
+    map['id'] = Variable<String>(id);
     map['created_at'] = Variable<DateTime>(createdAt);
-    if (!nullToAbsent || remoteId != null) {
-      map['remote_id'] = Variable<String>(remoteId);
-    }
     if (!nullToAbsent || notes != null) {
       map['notes'] = Variable<String>(notes);
     }
@@ -33,9 +30,6 @@ class Purchase extends DataClass implements Insertable<Purchase> {
     return PurchasesCompanion(
       id: Value(id),
       createdAt: Value(createdAt),
-      remoteId: remoteId == null && nullToAbsent
-          ? const Value.absent()
-          : Value(remoteId),
       notes:
           notes == null && nullToAbsent ? const Value.absent() : Value(notes),
     );
@@ -44,40 +38,53 @@ class Purchase extends DataClass implements Insertable<Purchase> {
   factory Purchase.fromJson(Map<String, dynamic> json,
       {ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
+
+    final itemsJson = json['items'] as List<dynamic>? ?? [];
+    for (var item in itemsJson) {
+      item['purchaseId'] = json['id'];
+    }
+    final itemList = itemsJson
+        .map((itemJson) =>
+            PurchaseLineItem.fromJson(itemJson as Map<String, dynamic>))
+        .toList();
+        
     return Purchase(
-      id: serializer.fromJson<int>(json['id']),
-      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
-      remoteId: serializer.fromJson<String?>(json['remoteId']),
-      notes: serializer.fromJson<String?>(json['notes']),
+      id: serializer.fromJson<String>(json['id']),
+      createdAt: json.containsKey('createdAt')
+          ? serializer.fromJson<DateTime>(json['createdAt'])
+          : DateTime.now(),
+      lineItems: itemList,
     );
   }
+
   @override
+
+  /// Converts this [Purchase] object to a json-like [Map].
+  ///
+  /// This is the inverse of [Purchase.fromJson].
   Map<String, dynamic> toJson({ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
-      'id': serializer.toJson<int>(id),
+      'id': serializer.toJson<String>(id),
       'createdAt': serializer.toJson<DateTime>(createdAt),
-      'remoteId': serializer.toJson<String?>(remoteId),
       'notes': serializer.toJson<String?>(notes),
     };
   }
 
   Purchase copyWith(
-          {int? id,
+          {String? id,
           DateTime? createdAt,
-          Value<String?> remoteId = const Value.absent(),
-          Value<String?> notes = const Value.absent()}) =>
+          Value<String?> notes = const Value.absent(),
+          required List<PurchaseLineItem> lineItems}) =>
       Purchase(
         id: id ?? this.id,
         createdAt: createdAt ?? this.createdAt,
-        remoteId: remoteId.present ? remoteId.value : this.remoteId,
         notes: notes.present ? notes.value : this.notes,
       );
   Purchase copyWithCompanion(PurchasesCompanion data) {
     return Purchase(
       id: data.id.present ? data.id.value : this.id,
       createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
-      remoteId: data.remoteId.present ? data.remoteId.value : this.remoteId,
       notes: data.notes.present ? data.notes.value : this.notes,
     );
   }
@@ -87,20 +94,18 @@ class Purchase extends DataClass implements Insertable<Purchase> {
     return (StringBuffer('Purchase(')
           ..write('id: $id, ')
           ..write('createdAt: $createdAt, ')
-          ..write('remoteId: $remoteId, ')
           ..write('notes: $notes')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(id, createdAt, remoteId, notes);
+  int get hashCode => Object.hash(id, createdAt, notes);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is Purchase &&
           other.id == this.id &&
           other.createdAt == this.createdAt &&
-          other.remoteId == this.remoteId &&
           other.notes == this.notes);
 }

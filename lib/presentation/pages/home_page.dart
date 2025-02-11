@@ -2,6 +2,7 @@ import 'package:drift_db_viewer/drift_db_viewer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pos_meat_shop/data/database/app_database.dart';
+import 'package:pos_meat_shop/domain/models/product.dart';
 import 'package:pos_meat_shop/domain/providers/cart_provider.dart';
 import 'package:pos_meat_shop/domain/providers/product_provider.dart';
 import 'package:pos_meat_shop/presentation/pages/cart_page.dart';
@@ -10,6 +11,7 @@ import 'package:pos_meat_shop/presentation/pages/sale_list_page.dart';
 import 'package:pos_meat_shop/presentation/widgets/cart_icon.dart';
 import 'package:pos_meat_shop/presentation/widgets/unit_input.dart';
 import 'package:pos_meat_shop/presentation/widgets/weight_input.dart';
+import 'product_edit_page.dart';
 import 'purchase_list_page.dart';
 import 'sync_page.dart';
 
@@ -29,7 +31,31 @@ class HomePage extends ConsumerWidget {
         child: NavDrawer(),
       ),
       body: productState.when(
-        data: (products) => _SaleGrid(products: products, cartItems: cartItems),
+        data: (products) => products.isNotEmpty
+            ? _SaleGrid(
+                products: products,
+                cartItems: cartItems,
+              )
+            : Center(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text('No products yet'),
+                    SizedBox(height: 16),
+                    ElevatedButton(
+                      child: Text('Add Product'),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => ProductEditPage(product: null),
+                          ),
+                        );
+                      },
+                    )
+                  ],
+                ),
+              ),
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (err, stack) => Center(
           child: Text('Error: $err'),
@@ -214,7 +240,7 @@ class _ProductCard extends ConsumerWidget {
             barrierDismissible:
                 false, // optional, so they must confirm or cancel
             builder: (BuildContext context) {
-              if (product.isWeightBased) {
+              if (product.isWeightBased == true) {
                 return WeightCapture(onWeightEntered: (double weight) {
                   Navigator.pop(context, weight);
                 });
