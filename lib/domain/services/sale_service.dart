@@ -49,7 +49,7 @@ class SaleNotifier extends StateNotifier<SaleState> {
       var id = Uuid().v4();
 
       await saleRepository.addSale(
-        Sale(id: id, createdAt: DateTime.now()),
+        Sale(id: id, createdAt: DateTime.now(), date: DateTime.now()),
       );
 
       for (final cartItem in cartItems) {

@@ -15,6 +15,7 @@ mixin TableMixin on Table {
 
   // Column for created at timestamp
   late final createdAt = dateTime().withDefault(currentDateAndTime)();
+  late final updatedAt = dateTime().nullable()();
 }
 
 @UseRowClass(Supplier)
@@ -34,6 +35,7 @@ class Products extends Table with TableMixin {
 
 class Sales extends Table with TableMixin {
   late final notes = text().nullable()();
+  late final date = dateTime()();
 }
 
 class SaleLineItems extends Table with TableMixin {
@@ -48,6 +50,7 @@ class SaleLineItems extends Table with TableMixin {
 @UseRowClass(Purchase)
 class Purchases extends Table with TableMixin {
   late final notes = text().nullable()();
+  late final date = dateTime()();
 }
 
 @UseRowClass(PurchaseLineItem)
@@ -65,18 +68,23 @@ class StockConversions extends Table with TableMixin {
   late final toProductId = text().references(Products, #id)();
   late final Column<double> quantity =
       real().check(quantity.isBiggerThanValue(0))();
+  late final date = dateTime()();
 }
 
 class StockAdjustments extends Table with TableMixin {
   late final productId = text().references(Products, #id)();
   late final quantity = real()();
+  late final date = dateTime()();
 }
 
-class StockMovements extends Table with TableMixin {
+class StockMovements extends Table {
+  late final id = integer().autoIncrement()();
+  late final createdAt = dateTime().withDefault(currentDateAndTime)();
   late final productId = text().references(Products, #id)();
   late final quantity = real()();
   late final referenceType = text()();
   late final referenceId = text()();
+  late final date = dateTime()();
 }
 
 // Define the AppDatabase
@@ -116,8 +124,8 @@ class AppDatabase extends _$AppDatabase {
             AFTER INSERT ON sale_line_items
             FOR EACH ROW
             BEGIN
-              INSERT INTO stock_movements (product_id, quantity, reference_type, reference_id)
-              VALUES (NEW.product_id, -NEW.quantity, 'sale', NEW.id);
+              INSERT INTO stock_movements (product_id, quantity, reference_type, reference_id, date)
+              VALUES (NEW.product_id, -NEW.quantity, 'sale', NEW.id, (SELECT date FROM sales WHERE id = NEW.sale_id));
             END
           ''');
           await customStatement('''
@@ -125,8 +133,8 @@ class AppDatabase extends _$AppDatabase {
             AFTER INSERT ON purchase_line_items
             FOR EACH ROW
             BEGIN
-              INSERT INTO stock_movements (product_id, quantity, reference_type, reference_id)
-              VALUES (NEW.product_id, NEW.quantity, 'purchase', NEW.id);
+              INSERT INTO stock_movements (product_id, quantity, reference_type, reference_id, date)
+              VALUES (NEW.product_id, NEW.quantity, 'purchase', NEW.id, (SELECT date FROM purchases WHERE id = NEW.purchase_id));
             END
           ''');
           await customStatement('''
@@ -134,10 +142,10 @@ class AppDatabase extends _$AppDatabase {
             AFTER INSERT ON stock_conversions
             FOR EACH ROW
             BEGIN
-              INSERT INTO stock_movements (product_id, quantity, reference_type, reference_id)
-              VALUES (NEW.from_product_id, -NEW.quantity, 'conversion', NEW.id);
-              INSERT INTO stock_movements (product_id, quantity, reference_type, reference_id)
-              VALUES (NEW.to_product_id, NEW.quantity, 'conversion', NEW.id);
+              INSERT INTO stock_movements (product_id, quantity, reference_type, reference_id, date)
+              VALUES (NEW.from_product_id, -NEW.quantity, 'conversion', NEW.id, NEW.date);
+              INSERT INTO stock_movements (product_id, quantity, reference_type, reference_id, date)
+              VALUES (NEW.to_product_id, NEW.quantity, 'conversion', NEW.id, NEW.date);
             END
           ''');
           await customStatement('''
@@ -145,8 +153,8 @@ class AppDatabase extends _$AppDatabase {
             AFTER INSERT ON stock_adjustments
             FOR EACH ROW
             BEGIN
-              INSERT INTO stock_movements (product_id, quantity, reference_type, reference_id)
-              VALUES (NEW.product_id, NEW.quantity, 'adjustment', NEW.id);
+              INSERT INTO stock_movements (product_id, quantity, reference_type, reference_id, date)
+              VALUES (NEW.product_id, NEW.quantity, 'adjustment', NEW.id, NEW.date);
             END
           ''');
         },

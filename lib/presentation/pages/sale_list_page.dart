@@ -21,6 +21,8 @@ class SaleListPage extends StatelessWidget {
             icon: Icon(Icons.filter_alt_outlined),
           ),
         ],
+        backgroundColor: Colors.teal,
+        foregroundColor: Colors.white,
       ),
       body: SaleListView(),
     );

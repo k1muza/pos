@@ -26,6 +26,8 @@ class HomePage extends ConsumerWidget {
       appBar: AppBar(
         title: const Text('Point of Sale'),
         actions: const [CartIcon()],
+        backgroundColor: Colors.teal,
+        foregroundColor: Colors.white,
       ),
       drawer: Drawer(
         child: NavDrawer(),
@@ -78,7 +80,7 @@ class NavDrawer extends StatelessWidget {
         children: [
           DrawerHeader(
             decoration: BoxDecoration(
-              color: Colors.deepPurple,
+              color: Colors.teal,
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,

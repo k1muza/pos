@@ -33,6 +33,8 @@ class CartPage extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Cart'),
+        backgroundColor: Colors.teal,
+        foregroundColor: Colors.white,
       ),
       floatingActionButton: Column(
         mainAxisSize: MainAxisSize.min,

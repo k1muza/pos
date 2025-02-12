@@ -27,12 +27,12 @@ class PurchaseLocalDataSource {
   Future<bool> updatePurchase(PurchasesCompanion purchase) =>
       _purchaseDao.updatePurchaseData(purchase);
 
-  Future<int> addPurchase(Purchase purchase) {
-    var purchaseId = _purchaseDao.insertPurchase(purchase.toCompanion(true));
-    if (purchase.lineItems!.isEmpty) return purchaseId;
+  Future<int> addPurchase(Purchase purchase) async {
+    var purchaseId = await _purchaseDao.insertPurchase(purchase.toCompanion(true));
+    if (purchase.lineItems.isEmpty) return purchaseId;
 
-    for (final item in purchase.lineItems!) {
-      _purchaseLineItemDao.insertPurchaseLineItem(item.toCompanion(true));
+    for (final item in purchase.lineItems.where((item) => item.quantity > 0)) {
+      await _purchaseLineItemDao.insertPurchaseLineItem(item.toCompanion(true));
     }
     return purchaseId;
   }

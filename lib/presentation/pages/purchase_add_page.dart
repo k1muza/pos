@@ -93,7 +93,7 @@ class FloatingActionDoneButton extends ConsumerWidget {
         final id = Uuid().v4();
 
         await purchaseRepository.addPurchase(
-          Purchase(id: id, createdAt: DateTime.now()),
+          Purchase(id: id, date: DateTime.now(), createdAt: DateTime.now()),
         );
 
         final purchaseLineItems = ref.watch(purchaseLineItemsNotifierProvider);
