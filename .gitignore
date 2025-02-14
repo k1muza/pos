@@ -73,3 +73,7 @@ linux/Flutter/GeneratedPluginRegistrant.*
 # If you have environment-specific configuration files or secrets, consider adding them here
 # example.env
 # secrets.dart
+
+# Generated files
+.flutter-plugins
+.flutter-plugins-dependencies
