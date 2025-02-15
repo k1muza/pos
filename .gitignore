@@ -77,3 +77,6 @@ linux/Flutter/GeneratedPluginRegistrant.*
 # Generated files
 .flutter-plugins
 .flutter-plugins-dependencies
+generated_plugin_registrant.h
+generated_plugin_registrant.cc 
+generated_plugins.cmake
