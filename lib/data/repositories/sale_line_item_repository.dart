@@ -1,6 +1,7 @@
 import 'package:pos_meat_shop/data/database/app_database.dart';
 import 'package:pos_meat_shop/data/database/sale_line_item_dao.dart';
 import 'package:pos_meat_shop/data/repositories/I_sale_line_item_repo.dart';
+import 'package:pos_meat_shop/domain/models/sale_line_item.dart';
 
 class SaleLineItemRepository implements ISaleLineItemRepository {
   final SaleLineItemDao _salelineitemDao;

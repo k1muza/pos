@@ -1,4 +1,5 @@
 import 'package:pos_meat_shop/data/database/app_database.dart';
+import 'package:pos_meat_shop/domain/models/sale_line_item.dart';
 
 abstract class ISaleLineItemRepository {
   Future<List<SaleLineItem>> getAllSaleLineItems();

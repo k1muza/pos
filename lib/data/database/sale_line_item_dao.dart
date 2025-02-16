@@ -1,4 +1,5 @@
 import 'package:drift/drift.dart';
+import 'package:pos_meat_shop/domain/models/sale_line_item.dart';
 import 'app_database.dart';
 
 part 'sale_line_item_dao.g.dart';

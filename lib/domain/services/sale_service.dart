@@ -1,6 +1,7 @@
 import 'package:drift/drift.dart' show Value;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pos_meat_shop/data/database/app_database.dart';
+import 'package:pos_meat_shop/domain/models/sale.dart';
 import 'package:pos_meat_shop/domain/providers/cart_provider.dart';
 import 'package:pos_meat_shop/domain/providers/sale_line_item_provider.dart';
 import 'package:pos_meat_shop/domain/providers/sale_provider.dart';

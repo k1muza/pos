@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pos_meat_shop/presentation/widgets/datatable.dart';
 
 /// Flutter code sample for [DataTable].
 
@@ -38,6 +39,48 @@ class _DataTableExampleState extends State<DataTableExample> {
   static const int numItems = 20;
   List<bool> selected = List<bool>.generate(numItems, (int index) => false);
 
+  final List<Map<String, dynamic>> sampleData = [
+    {"name": "Alice", "age": 30, "job": "Engineer"},
+    {"name": "Bob", "age": 25, "job": "Designer"},
+    {"name": "Charlie", "age": 35, "job": "Manager"},
+    {"name": "David", "age": 28, "job": "Developer"},
+    {"name": "Eva", "age": 32, "job": "Designer"},
+    {"name": "Frank", "age": 29, "job": "Engineer"},
+    {"name": "Grace", "age": 31, "job": "Developer"},
+    {"name": "Henry", "age": 33, "job": "Manager"},
+    {"name": "Ivy", "age": 27, "job": "Designer"},
+    {"name": "Jack", "age": 34, "job": "Developer"},
+    {"name": "Kate", "age": 26, "job": "Designer"},
+    {"name": "Liam", "age": 31, "job": "Engineer"},
+    {"name": "Mia", "age": 29, "job": "Developer"},
+    {"name": "Nathan", "age": 33, "job": "Manager"},
+    {"name": "Olivia", "age": 28, "job": "Designer"},
+    {"name": "Peter", "age": 30, "job": "Developer"},
+    {"name": "Quinn", "age": 27, "job": "Designer"},
+    {"name": "Riley", "age": 32, "job": "Engineer"},
+    {"name": "Sophia", "age": 29, "job": "Developer"},
+    {"name": "Thomas", "age": 33, "job": "Manager"},
+    {"name": "Uma", "age": 28, "job": "Designer"},
+    
+  ];
+
+  final List<String> columns = ["name", "age", "job"];
+
+  @override
+  Widget build(BuildContext context) {
+    // return MyWidget(numItems: 20,);
+    return ReusableDataTable(
+      // Define the columns you want to show. Ensure the keys match those in the row data.
+      columns: const ["name", "age", "job"],
+      data: sampleData,
+    );
+  }
+}
+
+class MyWidget extends StatelessWidget {
+  final int numItems;
+  MyWidget({super.key, required this.numItems});
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -63,12 +106,8 @@ class _DataTableExampleState extends State<DataTableExample> {
               return null; // Use default value for other states and odd rows.
             }),
             cells: <DataCell>[DataCell(Text('Row $index'))],
-            selected: selected[index],
-            onSelectChanged: (bool? value) {
-              setState(() {
-                selected[index] = value!;
-              });
-            },
+            selected: false,
+            onSelectChanged: (bool? value) {},
           ),
         ),
       ),

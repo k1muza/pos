@@ -8,6 +8,7 @@ import 'package:pos_meat_shop/domain/providers/product_provider.dart';
 import 'package:pos_meat_shop/presentation/pages/cart_page.dart';
 import 'package:pos_meat_shop/presentation/pages/product_list_page.dart';
 import 'package:pos_meat_shop/presentation/pages/sale_list_page.dart';
+import 'package:pos_meat_shop/presentation/pages/sales_table_page.dart';
 import 'package:pos_meat_shop/presentation/widgets/cart_icon.dart';
 import 'package:pos_meat_shop/presentation/widgets/unit_input.dart';
 import 'package:pos_meat_shop/presentation/widgets/weight_input.dart';
@@ -135,11 +136,26 @@ class NavDrawer extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (_) => SaleListPage(),
+                  builder: (_) => SalesTablePage(),
                 ),
               );
             },
           ),
+          ListTile(
+            title: const Text('Adjustments'),
+            leading: Icon(Icons.adjust),
+            onTap: () {
+              // Handle adjustments navigation
+            },
+          ),
+          ListTile(
+            title: const Text('Conversions'),
+            leading: Icon(Icons.compare_arrows),
+            onTap: () {
+              // Handle conversions navigation
+            },
+          ),
+          Divider(),
           ListTile(
             title: const Text('Sync'),
             leading: Icon(Icons.sync),

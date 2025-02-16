@@ -572,12 +572,10 @@ class $SalesTable extends Sales with TableInfo<$SalesTable, Sale> {
           .read(DriftSqlType.string, data['${effectivePrefix}id'])!,
       createdAt: attachedDatabase.typeMapping
           .read(DriftSqlType.dateTime, data['${effectivePrefix}created_at'])!,
-      updatedAt: attachedDatabase.typeMapping
-          .read(DriftSqlType.dateTime, data['${effectivePrefix}updated_at']),
-      notes: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}notes']),
       date: attachedDatabase.typeMapping
           .read(DriftSqlType.dateTime, data['${effectivePrefix}date'])!,
+      notes: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}notes']),
     );
   }
 
@@ -585,117 +583,6 @@ class $SalesTable extends Sales with TableInfo<$SalesTable, Sale> {
   $SalesTable createAlias(String alias) {
     return $SalesTable(attachedDatabase, alias);
   }
-}
-
-class Sale extends DataClass implements Insertable<Sale> {
-  final String id;
-  final DateTime createdAt;
-  final DateTime? updatedAt;
-  final String? notes;
-  final DateTime date;
-  const Sale(
-      {required this.id,
-      required this.createdAt,
-      this.updatedAt,
-      this.notes,
-      required this.date});
-  @override
-  Map<String, Expression> toColumns(bool nullToAbsent) {
-    final map = <String, Expression>{};
-    map['id'] = Variable<String>(id);
-    map['created_at'] = Variable<DateTime>(createdAt);
-    if (!nullToAbsent || updatedAt != null) {
-      map['updated_at'] = Variable<DateTime>(updatedAt);
-    }
-    if (!nullToAbsent || notes != null) {
-      map['notes'] = Variable<String>(notes);
-    }
-    map['date'] = Variable<DateTime>(date);
-    return map;
-  }
-
-  SalesCompanion toCompanion(bool nullToAbsent) {
-    return SalesCompanion(
-      id: Value(id),
-      createdAt: Value(createdAt),
-      updatedAt: updatedAt == null && nullToAbsent
-          ? const Value.absent()
-          : Value(updatedAt),
-      notes:
-          notes == null && nullToAbsent ? const Value.absent() : Value(notes),
-      date: Value(date),
-    );
-  }
-
-  factory Sale.fromJson(Map<String, dynamic> json,
-      {ValueSerializer? serializer}) {
-    serializer ??= driftRuntimeOptions.defaultSerializer;
-    return Sale(
-      id: serializer.fromJson<String>(json['id']),
-      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
-      updatedAt: serializer.fromJson<DateTime?>(json['updatedAt']),
-      notes: serializer.fromJson<String?>(json['notes']),
-      date: serializer.fromJson<DateTime>(json['date']),
-    );
-  }
-  @override
-  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
-    serializer ??= driftRuntimeOptions.defaultSerializer;
-    return <String, dynamic>{
-      'id': serializer.toJson<String>(id),
-      'createdAt': serializer.toJson<DateTime>(createdAt),
-      'updatedAt': serializer.toJson<DateTime?>(updatedAt),
-      'notes': serializer.toJson<String?>(notes),
-      'date': serializer.toJson<DateTime>(date),
-    };
-  }
-
-  Sale copyWith(
-          {String? id,
-          DateTime? createdAt,
-          Value<DateTime?> updatedAt = const Value.absent(),
-          Value<String?> notes = const Value.absent(),
-          DateTime? date}) =>
-      Sale(
-        id: id ?? this.id,
-        createdAt: createdAt ?? this.createdAt,
-        updatedAt: updatedAt.present ? updatedAt.value : this.updatedAt,
-        notes: notes.present ? notes.value : this.notes,
-        date: date ?? this.date,
-      );
-  Sale copyWithCompanion(SalesCompanion data) {
-    return Sale(
-      id: data.id.present ? data.id.value : this.id,
-      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
-      updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
-      notes: data.notes.present ? data.notes.value : this.notes,
-      date: data.date.present ? data.date.value : this.date,
-    );
-  }
-
-  @override
-  String toString() {
-    return (StringBuffer('Sale(')
-          ..write('id: $id, ')
-          ..write('createdAt: $createdAt, ')
-          ..write('updatedAt: $updatedAt, ')
-          ..write('notes: $notes, ')
-          ..write('date: $date')
-          ..write(')'))
-        .toString();
-  }
-
-  @override
-  int get hashCode => Object.hash(id, createdAt, updatedAt, notes, date);
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      (other is Sale &&
-          other.id == this.id &&
-          other.createdAt == this.createdAt &&
-          other.updatedAt == this.updatedAt &&
-          other.notes == this.notes &&
-          other.date == this.date);
 }
 
 class SalesCompanion extends UpdateCompanion<Sale> {
@@ -938,8 +825,6 @@ class $SaleLineItemsTable extends SaleLineItems
           .read(DriftSqlType.string, data['${effectivePrefix}id'])!,
       createdAt: attachedDatabase.typeMapping
           .read(DriftSqlType.dateTime, data['${effectivePrefix}created_at'])!,
-      updatedAt: attachedDatabase.typeMapping
-          .read(DriftSqlType.dateTime, data['${effectivePrefix}updated_at']),
       productId: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}product_id'])!,
       saleId: attachedDatabase.typeMapping
@@ -957,133 +842,6 @@ class $SaleLineItemsTable extends SaleLineItems
   $SaleLineItemsTable createAlias(String alias) {
     return $SaleLineItemsTable(attachedDatabase, alias);
   }
-}
-
-class SaleLineItem extends DataClass implements Insertable<SaleLineItem> {
-  final String id;
-  final DateTime createdAt;
-  final DateTime? updatedAt;
-  final String productId;
-  final String saleId;
-  final double quantity;
-  final double totalPrice;
-  final double unitPrice;
-  const SaleLineItem(
-      {required this.id,
-      required this.createdAt,
-      this.updatedAt,
-      required this.productId,
-      required this.saleId,
-      required this.quantity,
-      required this.totalPrice,
-      required this.unitPrice});
-  @override
-  Map<String, Expression> toColumns(bool nullToAbsent) {
-    final map = <String, Expression>{};
-    map['id'] = Variable<String>(id);
-    map['created_at'] = Variable<DateTime>(createdAt);
-    if (!nullToAbsent || updatedAt != null) {
-      map['updated_at'] = Variable<DateTime>(updatedAt);
-    }
-    map['product_id'] = Variable<String>(productId);
-    map['sale_id'] = Variable<String>(saleId);
-    map['quantity'] = Variable<double>(quantity);
-    map['total_price'] = Variable<double>(totalPrice);
-    return map;
-  }
-
-  SaleLineItemsCompanion toCompanion(bool nullToAbsent) {
-    return SaleLineItemsCompanion(
-      id: Value(id),
-      createdAt: Value(createdAt),
-      updatedAt: updatedAt == null && nullToAbsent
-          ? const Value.absent()
-          : Value(updatedAt),
-      productId: Value(productId),
-      saleId: Value(saleId),
-      quantity: Value(quantity),
-      totalPrice: Value(totalPrice),
-    );
-  }
-
-  factory SaleLineItem.fromJson(Map<String, dynamic> json,
-      {ValueSerializer? serializer}) {
-    serializer ??= driftRuntimeOptions.defaultSerializer;
-    return SaleLineItem(
-      id: serializer.fromJson<String>(json['id']),
-      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
-      updatedAt: serializer.fromJson<DateTime?>(json['updatedAt']),
-      productId: serializer.fromJson<String>(json['productId']),
-      saleId: serializer.fromJson<String>(json['saleId']),
-      quantity: serializer.fromJson<double>(json['quantity']),
-      totalPrice: serializer.fromJson<double>(json['totalPrice']),
-      unitPrice: serializer.fromJson<double>(json['unitPrice']),
-    );
-  }
-  @override
-  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
-    serializer ??= driftRuntimeOptions.defaultSerializer;
-    return <String, dynamic>{
-      'id': serializer.toJson<String>(id),
-      'createdAt': serializer.toJson<DateTime>(createdAt),
-      'updatedAt': serializer.toJson<DateTime?>(updatedAt),
-      'productId': serializer.toJson<String>(productId),
-      'saleId': serializer.toJson<String>(saleId),
-      'quantity': serializer.toJson<double>(quantity),
-      'totalPrice': serializer.toJson<double>(totalPrice),
-      'unitPrice': serializer.toJson<double>(unitPrice),
-    };
-  }
-
-  SaleLineItem copyWith(
-          {String? id,
-          DateTime? createdAt,
-          Value<DateTime?> updatedAt = const Value.absent(),
-          String? productId,
-          String? saleId,
-          double? quantity,
-          double? totalPrice,
-          double? unitPrice}) =>
-      SaleLineItem(
-        id: id ?? this.id,
-        createdAt: createdAt ?? this.createdAt,
-        updatedAt: updatedAt.present ? updatedAt.value : this.updatedAt,
-        productId: productId ?? this.productId,
-        saleId: saleId ?? this.saleId,
-        quantity: quantity ?? this.quantity,
-        totalPrice: totalPrice ?? this.totalPrice,
-        unitPrice: unitPrice ?? this.unitPrice,
-      );
-  @override
-  String toString() {
-    return (StringBuffer('SaleLineItem(')
-          ..write('id: $id, ')
-          ..write('createdAt: $createdAt, ')
-          ..write('updatedAt: $updatedAt, ')
-          ..write('productId: $productId, ')
-          ..write('saleId: $saleId, ')
-          ..write('quantity: $quantity, ')
-          ..write('totalPrice: $totalPrice, ')
-          ..write('unitPrice: $unitPrice')
-          ..write(')'))
-        .toString();
-  }
-
-  @override
-  int get hashCode => Object.hash(id, createdAt, updatedAt, productId, saleId,
-      quantity, totalPrice, unitPrice);
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      (other is SaleLineItem &&
-          other.id == this.id &&
-          other.createdAt == this.createdAt &&
-          other.updatedAt == this.updatedAt &&
-          other.productId == this.productId &&
-          other.saleId == this.saleId &&
-          other.quantity == this.quantity &&
-          other.totalPrice == this.totalPrice &&
-          other.unitPrice == this.unitPrice);
 }
 
 class SaleLineItemsCompanion extends UpdateCompanion<SaleLineItem> {

@@ -32,7 +32,6 @@ class PurchaseRepository implements IPurchaseRepository {
       purchaseLocalDataSource.getPurchaseById(purchaseId);
 
   @override
-
   Future<bool> updatePurchase(PurchasesCompanion purchase) =>
       purchaseLocalDataSource.updatePurchase(purchase);
 
@@ -41,7 +40,6 @@ class PurchaseRepository implements IPurchaseRepository {
       purchaseLocalDataSource.addPurchase(purchase);
 
   @override
-
   Stream<List<Purchase>> watchAllPurchases() =>
       purchaseLocalDataSource.watchAllPurchases();
 

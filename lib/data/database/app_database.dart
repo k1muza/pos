@@ -4,6 +4,8 @@ import 'package:path_provider/path_provider.dart';
 import 'package:pos_meat_shop/domain/models/purchase.dart';
 import 'package:pos_meat_shop/domain/models/product.dart';
 import 'package:pos_meat_shop/domain/models/purchase_line_item.dart';
+import 'package:pos_meat_shop/domain/models/sale.dart';
+import 'package:pos_meat_shop/domain/models/sale_line_item.dart';
 import 'package:pos_meat_shop/domain/models/supplier.dart';
 
 // Include generated file
@@ -33,11 +35,13 @@ class Products extends Table with TableMixin {
   late final supplierId = text().references(Suppliers, #id).nullable()();
 }
 
+@UseRowClass(Sale)
 class Sales extends Table with TableMixin {
   late final notes = text().nullable()();
   late final date = dateTime()();
 }
 
+@UseRowClass(SaleLineItem)
 class SaleLineItems extends Table with TableMixin {
   late final productId = text().references(Products, #id)();
   late final saleId = text().references(Sales, #id)();
