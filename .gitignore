@@ -80,3 +80,5 @@ linux/Flutter/GeneratedPluginRegistrant.*
 generated_plugin_registrant.h
 generated_plugin_registrant.cc 
 generated_plugins.cmake
+
+android/app/.cxx/Debug/
