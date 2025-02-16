@@ -21,14 +21,23 @@ class PurchaseLocalDataSource {
     return purchases;
   }
 
-  Future<Purchase?> getPurchaseById(String purchaseId) =>
-      _purchaseDao.getPurchaseById(purchaseId);
+  Future<Purchase?> getPurchaseById(String purchaseId) async {
+    var purchase = await _purchaseDao.getPurchaseById(purchaseId);
+
+    if (purchase != null) {
+      purchase.lineItems = await _purchaseLineItemDao
+          .getPurchaseLineItemsByPurchaseId(purchase.id);
+    }
+
+    return purchase;
+  }
 
   Future<bool> updatePurchase(PurchasesCompanion purchase) =>
       _purchaseDao.updatePurchaseData(purchase);
 
   Future<int> addPurchase(Purchase purchase) async {
-    var purchaseId = await _purchaseDao.insertPurchase(purchase.toCompanion(true));
+    var purchaseId =
+        await _purchaseDao.insertPurchase(purchase.toCompanion(true));
     if (purchase.lineItems.isEmpty) return purchaseId;
 
     for (final item in purchase.lineItems.where((item) => item.quantity > 0)) {
@@ -41,12 +50,11 @@ class PurchaseLocalDataSource {
     final purchasesStream = _purchaseDao.watchAllPurchases();
     final lineItemsStream = _purchaseLineItemDao.watchAllPurchaseLineItems();
 
-  // Combine the two streams so that whenever either emits new data,
-  // we recalculate a joined List<PurchaseWithItems>
-  return Rx.combineLatest2<List<Purchase>, List<PurchaseLineItem>, List<Purchase>>(
-    purchasesStream,
-    lineItemsStream,
-    (purchases, lineItems) {
+    // Combine the two streams so that whenever either emits new data,
+    // we recalculate a joined List<PurchaseWithItems>
+    return Rx.combineLatest2<List<Purchase>, List<PurchaseLineItem>,
+            List<Purchase>>(purchasesStream, lineItemsStream,
+        (purchases, lineItems) {
       // group lineItems by purchaseId
       final itemsByPurchaseId = <String, List<PurchaseLineItem>>{};
 
@@ -59,7 +67,6 @@ class PurchaseLocalDataSource {
         final items = itemsByPurchaseId[purchase.id] ?? <PurchaseLineItem>[];
 
         return purchase.copyWith(lineItems: items);
-        
       }).toList();
 
       return purchaseWithItemsList;
