@@ -7,13 +7,13 @@ import 'package:pos_meat_shop/domain/providers/cart_provider.dart';
 import 'package:pos_meat_shop/domain/providers/product_provider.dart';
 import 'package:pos_meat_shop/presentation/pages/cart_page.dart';
 import 'package:pos_meat_shop/presentation/pages/product_list_page.dart';
-import 'package:pos_meat_shop/presentation/pages/sale_list_page.dart';
+import 'package:pos_meat_shop/presentation/pages/purchases_table_page.dart';
 import 'package:pos_meat_shop/presentation/pages/sales_table_page.dart';
 import 'package:pos_meat_shop/presentation/widgets/cart_icon.dart';
 import 'package:pos_meat_shop/presentation/widgets/unit_input.dart';
 import 'package:pos_meat_shop/presentation/widgets/weight_input.dart';
+
 import 'product_edit_page.dart';
-import 'purchase_list_page.dart';
 import 'sync_page.dart';
 
 class HomePage extends ConsumerWidget {
@@ -124,7 +124,7 @@ class NavDrawer extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (_) => PurchaseListPage(),
+                  builder: (_) => PurchasesTablePage(),
                 ),
               );
             },

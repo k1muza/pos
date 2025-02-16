@@ -7,10 +7,13 @@ class ReusableDataTable extends StatelessWidget {
   /// The list of row data, where each row is a map with keys matching the column names.
   final List<Map<String, dynamic>> data;
 
+  final Function? onRowSelected;
+
   const ReusableDataTable({
     Key? key,
     required this.columns,
     required this.data,
+    this.onRowSelected,
   }) : super(key: key);
 
   @override
@@ -53,7 +56,11 @@ class ReusableDataTable extends StatelessWidget {
                         return null; // Use default value for other states and odd rows.
                       }),
                       selected: false,
-                      onSelectChanged: (bool? value) {},
+                      onSelectChanged: (bool? value) {
+                        if (onRowSelected != null) {
+                          onRowSelected!(entry.value);
+                        }
+                      },                     
                     ),
                   )
                   .toList(),

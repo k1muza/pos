@@ -49,17 +49,17 @@ final saleProvider = FutureProvider.family<Sale?, String>((ref, id) async {
 });
 
 final saleNotifierProvider =
-    StateNotifierProvider<SaleStateNotifier, AsyncValue<List<Sale>>>(
+    StateNotifierProvider<SalesStateNotifier, AsyncValue<List<Sale>>>(
         (ref) {
-  return SaleStateNotifier(ref.watch(saleRepositoryProvider));
+  return SalesStateNotifier(ref.watch(saleRepositoryProvider));
 });
 
-class SaleStateNotifier extends StateNotifier<AsyncValue<List<Sale>>> {
+class SalesStateNotifier extends StateNotifier<AsyncValue<List<Sale>>> {
   final SaleRepository repo;
 
   late Stream<List<Sale>> _saleStream;
 
-  SaleStateNotifier(this.repo) : super(const AsyncValue.loading()) {
+  SalesStateNotifier(this.repo) : super(const AsyncValue.loading()) {
     _loadSales();
   }
 
