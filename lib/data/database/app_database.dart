@@ -8,6 +8,9 @@ import 'package:pos_meat_shop/domain/models/sale.dart';
 import 'package:pos_meat_shop/domain/models/sale_line_item.dart';
 import 'package:pos_meat_shop/domain/models/supplier.dart';
 
+import '../../domain/models/stock_adjustment.dart';
+import '../../domain/models/stock_conversion.dart';
+
 // Include generated file
 part 'app_database.g.dart';
 
@@ -67,6 +70,7 @@ class PurchaseLineItems extends Table with TableMixin {
   late final unitCost = real().generatedAs(totalCost / quantity)();
 }
 
+@UseRowClass(StockConversion)
 class StockConversions extends Table with TableMixin {
   late final fromProductId = text().references(Products, #id)();
   late final toProductId = text().references(Products, #id)();
@@ -75,6 +79,7 @@ class StockConversions extends Table with TableMixin {
   late final date = dateTime()();
 }
 
+@UseRowClass(StockAdjustment)
 class StockAdjustments extends Table with TableMixin {
   late final productId = text().references(Products, #id)();
   late final quantity = real()();
@@ -163,18 +168,6 @@ class AppDatabase extends _$AppDatabase {
           ''');
         },
         onUpgrade: (Migrator m, int from, int to) async {
-          // Handle migrations here
-          // Example for future migrations:
-          // if (from < 2) {
-          //   await m.addColumn(products, products.createdAt);
-          //   await customStatement(
-          //     '''
-          //     UPDATE products
-          //     SET created_at = CURRENT_TIMESTAMP
-          //     WHERE created_at IS NULL
-          //     '''
-          //   );
-          // }
         },
       );
 

@@ -14,12 +14,6 @@ final appDatabaseProvider = Provider<AppDatabase>((ref) {
 final graphQLClientProvider = Provider<GraphQLClient>((ref) {
   final httpLink = HttpLink('http://18.201.166.166/graphql/');
 
-  // Optionally, you could combine multiple links or add AuthLink for headers.
-  // final authLink = AuthLink(
-  //   getToken: () async => 'Bearer <YOUR_TOKEN>',
-  // );
-  // final link = authLink.concat(httpLink);
-
   return GraphQLClient(
     cache: GraphQLCache(), // Basic in-memory cache or custom
     link: httpLink, // or link if you have combined links
