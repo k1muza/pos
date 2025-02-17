@@ -12,21 +12,7 @@ class StockAdjustmentRepository implements IStockAdjustmentRepository {
   StockAdjustmentRepository(this.stockAdjustmentLocalDataSource, this.stockAdjustmentRemoteDataSource);
 
   @override
-  Future<List<StockAdjustment>> getAllStockAdjustments() async {
-    var stockAdjustments = await stockAdjustmentLocalDataSource.getAllStockAdjustments();
-
-    if (stockAdjustments.isNotEmpty) {
-      return stockAdjustments;
-    }
-
-    stockAdjustments = await stockAdjustmentRemoteDataSource.fetchAllStockAdjustments();
-
-    for (final stockAdjustment in stockAdjustments) {
-      await stockAdjustmentLocalDataSource.insertStockAdjustment(stockAdjustment.toCompanion(true));
-    }
-
-    return await stockAdjustmentLocalDataSource.getAllStockAdjustments();
-  }
+  Future<List<StockAdjustment>> getAllStockAdjustments() => stockAdjustmentLocalDataSource.getAllStockAdjustments();
 
   @override
   Future<StockAdjustment?> getStockAdjustmentById(String stockAdjustmentId) =>

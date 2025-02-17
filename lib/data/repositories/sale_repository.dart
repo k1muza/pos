@@ -11,21 +11,7 @@ class SaleRepository implements ISaleRepository {
   SaleRepository(this.saleLocalDataSource, this.saleRemoteDataSource);
 
   @override
-  Future<List<Sale>> getAllSales() async {
-    var sales = await saleLocalDataSource.getAllSales();
-
-    if (sales.isNotEmpty) {
-      return sales;
-    }
-
-    sales = await saleRemoteDataSource.fetchAllSales();
-
-    for (final sale in sales) {
-      await saleLocalDataSource.addSale(sale);
-    }
-
-    return await saleLocalDataSource.getAllSales();
-  }
+  Future<List<Sale>> getAllSales() => saleLocalDataSource.getAllSales();
 
   @override
   Future<Sale?> getSaleById(String saleId) =>

@@ -48,6 +48,7 @@ class ProductStateNotifier extends StateNotifier<AsyncValue<List<Product>>> {
   late final Stream<List<Product>> _productStream;
 
   ProductStateNotifier(this._repository) : super(const AsyncValue.loading()) {
+    _repository.getAllProducts();
     _productStream = _repository.watchAllProducts();
     _productStream.listen((products) {
       state = AsyncValue.data(products);

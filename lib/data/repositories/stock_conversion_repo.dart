@@ -12,21 +12,7 @@ class StockConversionRepository implements IStockConversionRepository {
   StockConversionRepository(this.stockConversionLocalDataSource, this.stockConversionRemoteDataSource);
 
   @override
-  Future<List<StockConversion>> getAllStockConversions() async {
-    var stockConversions = await stockConversionLocalDataSource.getAllStockConversions();
-
-    if (stockConversions.isNotEmpty) {
-      return stockConversions;
-    }
-
-    stockConversions = await stockConversionRemoteDataSource.fetchAllStockConversions();
-
-    for (final stockConversion in stockConversions) {
-      await stockConversionLocalDataSource.insertStockConversion(stockConversion.toCompanion(true));
-    }
-
-    return await stockConversionLocalDataSource.getAllStockConversions();
-  }
+  Future<List<StockConversion>> getAllStockConversions() => stockConversionLocalDataSource.getAllStockConversions();
 
   @override
   Future<StockConversion?> getStockConversionById(String stockConversionId) =>

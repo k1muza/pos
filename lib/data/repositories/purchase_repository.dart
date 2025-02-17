@@ -11,21 +11,7 @@ class PurchaseRepository implements IPurchaseRepository {
   PurchaseRepository(this.purchaseLocalDataSource, this.purchaseRemoteDataSource);
 
   @override
-  Future<List<Purchase>> getAllPurchases() async {
-    var purchases = await purchaseLocalDataSource.getAllPurchases();
-
-    if (purchases.isNotEmpty) {
-      return purchases;
-    }
-
-    purchases = await purchaseRemoteDataSource.fetchAllPurchases();
-
-    for (final purchase in purchases) {
-      await purchaseLocalDataSource.addPurchase(purchase);
-    }
-
-    return await purchaseLocalDataSource.getAllPurchases();
-  }
+  Future<List<Purchase>> getAllPurchases() => purchaseLocalDataSource.getAllPurchases();
 
   @override
   Future<Purchase?> getPurchaseById(String purchaseId) =>
