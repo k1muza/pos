@@ -24,8 +24,8 @@ A Flutter-based Point-of-Sale (POS) application that streamlines sales, inventor
 1. **Clone the repository:**
 
    ```bash
-   git clone https://github.com/yourusername/flutter-pos.git
-   cd flutter-pos
+   git clone https://github.com/k1muza/pos.git
+   cd pos
 
 2. **Install dependencies:**
 
@@ -39,7 +39,7 @@ A Flutter-based Point-of-Sale (POS) application that streamlines sales, inventor
    
 ### Configuration
 
-The application is configured to use a SQLite database for data persistence. You can modify the database schema and queries in the `lib/db/database.dart` file.
+The application is configured to use a SQLite database for data persistence. You can modify the database schema and queries in the `lib/data/database/app_database.dart` file.
 
 ### Project Structure
 

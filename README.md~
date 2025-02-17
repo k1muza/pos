@@ -24,8 +24,8 @@ A Flutter-based Point-of-Sale (POS) application that streamlines sales, inventor
 1. **Clone the repository:**
 
    ```bash
-   git clone https://github.com/yourusername/flutter-pos.git
-   cd flutter-pos
+   git clone https://github.com/k1muza/pos.git
+   cd pos
 
 2. **Install dependencies:**
 
@@ -68,6 +68,16 @@ flutter-pos/
 └── README.md
 ```
 
+## Usage
+
+### Running the App
+
+1. Open the project in your IDE.
+2. Run the app using the `flutter run` command.
+3. Select a device or emulator to run the app on.
+4. You should see the app running in the background.
+5. You can use the app to manage sales, inventory, and customers.
+6. You can also use the app to generate reports and analytics.
 
 ## Contributing
 
