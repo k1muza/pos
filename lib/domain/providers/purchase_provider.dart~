@@ -64,6 +64,7 @@ class PurchaseStateNotifier extends StateNotifier<AsyncValue<List<Purchase>>> {
   }
 
   Future<void> _loadPurchases() async {
+    repo.getAllPurchases();
     _purchaseStream = repo.watchAllPurchases();
 
     _purchaseStream.listen((purchases) {

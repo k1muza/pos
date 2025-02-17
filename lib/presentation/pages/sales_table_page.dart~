@@ -1,27 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:pos_meat_shop/domain/providers/purchase_provider.dart';
-import 'package:pos_meat_shop/presentation/pages/purchase_add_page.dart';
-import 'package:pos_meat_shop/presentation/pages/purchase_detail_page.dart';
+import 'package:pos_meat_shop/domain/providers/sale_provider.dart';
+import 'package:pos_meat_shop/presentation/pages/sale_add_page.dart';
+import 'package:pos_meat_shop/presentation/pages/sale_detail_page.dart';
 import 'package:pos_meat_shop/presentation/widgets/datatable.dart';
 
-class PurchasesTablePage extends StatelessWidget {
-  const PurchasesTablePage({super.key});
+class SalesTablePage extends StatelessWidget {
+  const SalesTablePage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Purchases'),
+        title: const Text('Sales'),
         backgroundColor: Colors.teal,
         foregroundColor: Colors.white,
       ),
-      body: const PurchaseListView(),
+      body: const SaleListView(),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (_) => const PurchaseAddPage()),
+            MaterialPageRoute(builder: (_) => const SaleAddPage()),
           );
         },
         child: const Icon(Icons.add),
@@ -30,37 +30,37 @@ class PurchasesTablePage extends StatelessWidget {
   }
 }
 
-class PurchaseListView extends ConsumerWidget {
-  const PurchaseListView({super.key});
+class SaleListView extends ConsumerWidget {
+  const SaleListView({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final purchasesAsync = ref.watch(purchaseNotifierProvider);
-    return purchasesAsync.when(
-      data: (purchases) {
-        if (purchases.isEmpty) {
-          return const Center(child: Text('No purchases yet'));
+    final salesAsync = ref.watch(saleNotifierProvider);
+    return salesAsync.when(
+      data: (sales) {
+        if (sales.isEmpty) {
+          return const Center(child: Text('No sales yet'));
         }
 
-        var data = purchases.map((purchase) {
+        var data = sales.map((sale) {
           return Map<String, dynamic>.from({
-            "id": purchase.id,
-            "date": purchase.date.toIso8601String().substring(0, 10),
-            "notes": purchase.notes,
-            "amount": purchase.lineItems.fold(0.0, (sum, li) => sum + li.totalCost).toStringAsFixed(2),
+            "id": sale.id,
+            "date": sale.date.toIso8601String().substring(0, 10),
+            "notes": sale.notes,
+            "amount": sale.lineItems.fold(0.0, (sum, li) => sum + li.totalPrice).toStringAsFixed(2),
           });
-        }).toList();
+        }).toList().reversed.toList();
 
         return ReusableDataTable(
           // Define the columns you want to show. Ensure the keys match those in the row data.
           columns: const ["date", "amount"],
           data: data,
           onRowSelected: (data) {
-            final purchaseId = data["id"];
+            final saleId = data["id"];
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (_) => PurchaseDetailsPage(purchaseId: purchaseId),
+                builder: (_) => SaleDetailsPage(saleId: saleId),
               ),
             );
           },

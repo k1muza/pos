@@ -24,6 +24,18 @@ class SaleLocalDataSource {
   Future<Sale?> getSaleById(String saleId) =>
       _saleDao.getSaleById(saleId);
 
+  Stream<Sale?> watchSaleById(String saleId) {
+    Stream<Sale?> stream = _saleDao.watchSaleById(saleId);
+    Stream<List<SaleLineItem>> lineItemsStream = _saleLineItemDao.watchSaleLineItemBySaleId(saleId);
+
+    return Rx.combineLatest2<Sale?, List<SaleLineItem>, Sale?>(stream, lineItemsStream, (sale, lineItems) {
+      if (sale != null) {
+        sale.lineItems = lineItems;
+      }
+      return sale;
+    });
+  }
+
   Future<bool> updateSale(SalesCompanion sale) =>
       _saleDao.updateSaleData(sale);
 

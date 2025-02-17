@@ -11,13 +11,22 @@ class ProductDao extends DatabaseAccessor<AppDatabase> with _$ProductDaoMixin {
   ProductDao(this.db) : super(db);
 
   // Get all products
-  Future<List<Product>> getAllProducts() => select(products).get();
+  Future<List<Product>> getAllProducts() => (select(products)
+        ..orderBy(
+            [(t) => OrderingTerm(expression: t.name, mode: OrderingMode.asc)]))
+      .get();
 
   // Stream of all products (for reactive UI)
-  Stream<List<Product>> watchActiveProducts() => (select(products)..where((tbl) => tbl.isActive,)).watch();
+  Stream<List<Product>> watchActiveProducts() => (select(products)
+        ..where(
+          (tbl) => tbl.isActive,
+        ))
+      .watch();
 
   // Stream of all products (for reactive UI)
-  Stream<List<Product>> watchAllProducts() => select(products).watch();
+  Stream<List<Product>> watchAllProducts() => (select(products)
+        ..orderBy([(t) => OrderingTerm(expression: t.name, mode: OrderingMode.asc)]))
+      .watch();
 
   // Insert a product
   Future<void> insertProduct(ProductsCompanion product) {
@@ -26,16 +35,16 @@ class ProductDao extends DatabaseAccessor<AppDatabase> with _$ProductDaoMixin {
 
   // Update a product
   Future<bool> updateProductData(Insertable<Product> product) {
-      return update(products).replace(product);
+    return update(products).replace(product);
   }
 
   // Delete a product
   Future<int> deleteProduct(String id) {
-      return (delete(products)..where((tbl) => tbl.id.equals(id))).go();
+    return (delete(products)..where((tbl) => tbl.id.equals(id))).go();
   }
 
-
   Future<Product?> getProductById(String id) {
-    return (select(products)..where((tbl) => tbl.id.equals(id))).getSingleOrNull();
+    return (select(products)..where((tbl) => tbl.id.equals(id)))
+        .getSingleOrNull();
   }
 }

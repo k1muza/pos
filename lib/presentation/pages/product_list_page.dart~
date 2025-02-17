@@ -4,8 +4,6 @@ import 'package:pos_meat_shop/domain/models/product.dart';
 import 'package:pos_meat_shop/domain/providers/product_provider.dart';
 import 'package:pos_meat_shop/presentation/pages/product_edit_page.dart';
 
-import '../widgets/datatable.dart';
-
 class ProductListPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -56,17 +54,11 @@ class _ProductList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var data = products.map((product) {
-      return Map<String, dynamic>.from({
-        "id": product.id,
-        "name": product.name,
-        "unitPrice": product.unitPrice,
-      });
-    });
-    return ReusableDataTable(
-      // Define the columns you want to show. Ensure the keys match those in the row data.
-      columns: const ["id", "name", "unitPrice"],
-      data: data.toList(),
+    return ListView.builder(
+      itemCount: products.length,
+      itemBuilder: (context, index) {
+        return _ProductListItem(product: products[index]);
+      },
     );
   }
 }

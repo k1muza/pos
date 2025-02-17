@@ -64,6 +64,7 @@ class SalesStateNotifier extends StateNotifier<AsyncValue<List<Sale>>> {
   }
 
   Future<void> _loadSales() async {
+    repo.getAllSales();
     _saleStream = repo.watchAllSales();
 
     _saleStream.listen((sales) {

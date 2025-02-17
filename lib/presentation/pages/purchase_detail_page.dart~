@@ -43,7 +43,7 @@ class PurchaseDetailsView extends StatelessWidget {
         .map((item) {
           return Map<String, dynamic>.from({
             "id": item.id,
-            "product": item.product!.name,
+            "product": 'item.product!.name',
             "quantity": item.quantity,
             "amount": item.totalCost.toStringAsFixed(2),
           });

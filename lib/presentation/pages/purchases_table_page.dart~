@@ -49,7 +49,7 @@ class PurchaseListView extends ConsumerWidget {
             "notes": purchase.notes,
             "amount": purchase.lineItems.fold(0.0, (sum, li) => sum + li.totalCost).toStringAsFixed(2),
           });
-        }).toList();
+        }).toList().reversed.toList();
 
         return ReusableDataTable(
           // Define the columns you want to show. Ensure the keys match those in the row data.

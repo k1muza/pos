@@ -47,18 +47,7 @@ class PurchaseRepository implements IPurchaseRepository {
   Stream<List<Purchase>> watchAllPurchases() {
     Stream<List<Purchase>> stream = purchaseLocalDataSource.watchAllPurchases();
 
-    // Trigger a remote fetch in parallel (fire-and-forget)
-    purchaseRemoteDataSource.fetchAllPurchases().then((remotePurchases) async {
-      // Optionally, check for duplicates or merge changes.
-      for (final purchase in remotePurchases) {
-        await purchaseLocalDataSource.addPurchase(purchase);
-      }
-    }).catchError((error) {
-      // Handle errors if needed.
-      print("Remote fetch error: $error");
-    });
-
-    return stream;
+    
   }
 
   @override

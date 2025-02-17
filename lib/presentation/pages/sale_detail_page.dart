@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pos_meat_shop/domain/models/sale.dart';
 import 'package:pos_meat_shop/domain/providers/sale_provider.dart';
 
+import '../widgets/datatable.dart';
+
 class SaleDetailsPage extends ConsumerWidget {
   final String saleId;
 
@@ -38,6 +40,22 @@ class SaleDetailsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    var data = sale.lineItems
+        .map((item) {
+      return Map<String, dynamic>.from({
+        "id": item.id,
+        "product": item.product!.name,
+        "quantity": item.quantity,
+        "amount": item.totalPrice.toStringAsFixed(2),
+      });
+    })
+        .toList()
+        .reversed
+        .toList();
+    return ReusableDataTable(
+      // Define the columns you want to show. Ensure the keys match those in the row data.
+      columns: const ["product", "quantity", "amount"],
+      data: data,
+    );
   }
 }

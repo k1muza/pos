@@ -7,5 +7,6 @@ abstract class IPurchaseRepository {
   Future<bool> updatePurchase(PurchasesCompanion purchase);
   Future<int> addPurchase(Purchase purchase);
   Stream<List<Purchase>> watchAllPurchases();
+  Stream<Purchase?> watchPurchaseById(String purchaseId);
   Future<int> deletePurchase(String id);
 }

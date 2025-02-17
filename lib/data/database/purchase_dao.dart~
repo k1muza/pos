@@ -5,8 +5,7 @@ import 'app_database.dart';
 part 'purchase_dao.g.dart';
 
 @DriftAccessor(tables: [Purchases])
-class PurchaseDao extends DatabaseAccessor<AppDatabase>
-    with _$PurchaseDaoMixin {
+class PurchaseDao extends DatabaseAccessor<AppDatabase> with _$PurchaseDaoMixin {
   final AppDatabase db;
 
   PurchaseDao(this.db) : super(db);
@@ -14,14 +13,10 @@ class PurchaseDao extends DatabaseAccessor<AppDatabase>
   // Get all purchases
   Future<List<Purchase>> getAllPurchases() => select(purchases).get();
 
-  Stream<Purchase?> watchPurchaseById(String id) =>
-      (select(purchases)..where((tbl) => tbl.id.equals(id)))
-          .watchSingleOrNull();
+  Stream<Purchase?> watchPurchaseById(String id) => (select(purchases)..where((tbl) => tbl.id.equals(id))).watchSingleOrNull();
 
   // Stream of all purchases (for reactive UI)
-  Stream<List<Purchase>> watchAllPurchases() =>
-      (select(purchases)..orderBy([(tbl) => OrderingTerm.desc(tbl.date)]))
-          .watch();
+  Stream<List<Purchase>> watchAllPurchases() => select(purchases).watch();
 
   // Insert a purchase
   Future<int> insertPurchase(PurchasesCompanion purchase) {
@@ -39,7 +34,6 @@ class PurchaseDao extends DatabaseAccessor<AppDatabase>
   }
 
   Future<Purchase?> getPurchaseById(String id) {
-    return (select(purchases)..where((tbl) => tbl.id.equals(id)))
-        .getSingleOrNull();
+    return (select(purchases)..where((tbl) => tbl.id.equals(id))).getSingleOrNull();
   }
 }

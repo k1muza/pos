@@ -17,11 +17,9 @@ class SaleDao extends DatabaseAccessor<AppDatabase> with _$SaleDaoMixin {
       .get();
 
   // Stream of all sales (for reactive UI)
-  Stream<List<Sale>> watchAllSales() => (select(sales)
-        ..orderBy(
-            [(t) => OrderingTerm(expression: t.date, mode: OrderingMode.desc)]))
-      .watch();
-
+  Stream<List<Sale>> watchAllSales() =>
+      (select(sales)..orderBy([(t) => OrderingTerm(expression: t.date, mode: OrderingMode.desc)])).watch();
+  
   // Stream of sale by id
   Stream<Sale?> watchSaleById(String id) =>
       (select(sales)..where((tbl) => tbl.id.equals(id))).watchSingleOrNull();

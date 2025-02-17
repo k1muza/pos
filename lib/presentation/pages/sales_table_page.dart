@@ -49,7 +49,7 @@ class SaleListView extends ConsumerWidget {
             "notes": sale.notes,
             "amount": sale.lineItems.fold(0.0, (sum, li) => sum + li.totalPrice).toStringAsFixed(2),
           });
-        }).toList().reversed.toList();
+        }).toList();
 
         return ReusableDataTable(
           // Define the columns you want to show. Ensure the keys match those in the row data.

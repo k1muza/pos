@@ -32,6 +32,10 @@ class SaleRepository implements ISaleRepository {
       saleLocalDataSource.getSaleById(saleId);
 
   @override
+  Stream<Sale?> watchSaleById(String saleId) =>
+      saleLocalDataSource.watchSaleById(saleId);
+
+  @override
   Future<bool> updateSale(SalesCompanion sale) =>
       saleLocalDataSource.updateSale(sale);
 
@@ -40,8 +44,22 @@ class SaleRepository implements ISaleRepository {
       saleLocalDataSource.addSale(sale);
 
   @override
-  Stream<List<Sale>> watchAllSales() =>
-      saleLocalDataSource.watchAllSales();
+  Stream<List<Sale>> watchAllSales() {
+      Stream<List<Sale>> stream = saleLocalDataSource.watchAllSales();
+
+      // Trigger a remote fetch in parallel (fire-and-forget)
+      saleRemoteDataSource.fetchAllSales().then((remoteSales) async {
+        // Optionally, check for duplicates or merge changes.
+        for (final sale in remoteSales) {
+          await saleLocalDataSource.addSale(sale);
+        }
+      }).catchError((error) {
+        // Handle errors if needed.
+        print("Remote fetch error: $error");
+      });
+
+      return stream;
+  }
 
   @override
   Future<int> deleteSale(String id) => saleLocalDataSource.deleteSale(id);
