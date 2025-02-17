@@ -8,9 +8,7 @@ import 'package:pos_meat_shop/data/datasources/remote/purchase_datasource.dart';
 import 'package:pos_meat_shop/data/repositories/purchase_repository.dart';
 import 'package:pos_meat_shop/domain/models/purchase.dart';
 
-final appDatabaseProvider = Provider<AppDatabase>((ref) {
-  return AppDatabase.getInstance();
-});
+import 'database_provider.dart';
 
 final graphQLClientProvider = Provider<GraphQLClient>((ref) {
   final httpLink = HttpLink('http://18.201.166.166/graphql/');
@@ -64,7 +62,6 @@ class PurchaseStateNotifier extends StateNotifier<AsyncValue<List<Purchase>>> {
   }
 
   Future<void> _loadPurchases() async {
-    repo.getAllPurchases();
     _purchaseStream = repo.watchAllPurchases();
 
     _purchaseStream.listen((purchases) {

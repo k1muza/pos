@@ -1,12 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:pos_meat_shop/data/database/app_database.dart';
 import 'package:pos_meat_shop/data/database/sale_line_item_dao.dart';
 import 'package:pos_meat_shop/data/repositories/sale_line_item_repository.dart';
 import 'package:pos_meat_shop/domain/models/sale_line_item.dart';
 
-final appDatabaseProvider = Provider<AppDatabase>((ref) {
-  return AppDatabase.getInstance();
-});
+import 'database_provider.dart';
 
 final saleLineItemDaoProvider = Provider<SaleLineItemDao>((ref) {
   return SaleLineItemDao(ref.watch(appDatabaseProvider));

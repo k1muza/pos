@@ -1,5 +1,4 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:pos_meat_shop/data/database/app_database.dart';
 import 'package:pos_meat_shop/data/database/stock_conversion_dao.dart';
 import 'package:pos_meat_shop/data/datasources/local/stock_conversion_datasource.dart';
@@ -7,18 +6,8 @@ import 'package:pos_meat_shop/data/datasources/remote/stock_conversion_datasourc
 import 'package:pos_meat_shop/data/repositories/stock_conversion_repo.dart';
 import 'package:pos_meat_shop/domain/models/stock_conversion.dart';
 
-final appDatabaseProvider = Provider<AppDatabase>((ref) {
-  return AppDatabase.getInstance();
-});
-
-final graphQLClientProvider = Provider<GraphQLClient>((ref) {
-  final httpLink = HttpLink('http://18.201.166.166/graphql/');
-
-  return GraphQLClient(
-    cache: GraphQLCache(), // Basic in-memory cache or custom
-    link: httpLink, // or link if you have combined links
-  );
-});
+import 'database_provider.dart';
+import 'graphql_client_provider.dart';
 
 final stockConversionDaoProvider = Provider<StockConversionDao>((ref) {
   return StockConversionDao(ref.watch(appDatabaseProvider));
@@ -59,7 +48,6 @@ class StockConversionStateNotifier extends StateNotifier<AsyncValue<List<StockCo
   late final Stream<List<StockConversion>> _stockConversionStream;
 
   StockConversionStateNotifier(this._repository) : super(const AsyncValue.loading()) {
-    _repository.getAllStockConversions();
     _stockConversionStream = _repository.watchAllStockConversions();
     _stockConversionStream.listen((stockConversions) {
       state = AsyncValue.data(stockConversions);

@@ -33,8 +33,21 @@ class StockConversionRepository implements IStockConversionRepository {
       stockConversionLocalDataSource.getStockConversionById(stockConversionId);
 
   @override
-  Stream<List<StockConversion>> watchAllStockConversions() =>
-      stockConversionLocalDataSource.watchAllStockConversions();
+  Stream<List<StockConversion>> watchAllStockConversions() {
+
+    // Trigger a remote fetch in parallel (fire-and-forget)
+    stockConversionRemoteDataSource.fetchAllStockConversions().then((remoteConversions) async {
+      // Optionally, check for duplicates or merge changes.
+      for (final conversion in remoteConversions) {
+        await stockConversionLocalDataSource.insertStockConversion(conversion.toCompanion(true));
+      }
+    }).catchError((error) {
+      // Handle errors if needed.
+      print("Remote fetch error: $error");
+    });
+
+    return stockConversionLocalDataSource.watchAllStockConversions();
+  }
 
   @override
   Future<int> deleteStockConversion(String id) => stockConversionLocalDataSource.deleteStockConversion(id);

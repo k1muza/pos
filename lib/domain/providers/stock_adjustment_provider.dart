@@ -1,5 +1,4 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:pos_meat_shop/data/database/app_database.dart';
 import 'package:pos_meat_shop/data/database/stock_adjustment_dao.dart';
 import 'package:pos_meat_shop/data/datasources/local/stock_adjustment_datasource.dart';
@@ -7,18 +6,8 @@ import 'package:pos_meat_shop/data/datasources/remote/stock_adjustment_datasourc
 import 'package:pos_meat_shop/data/repositories/stock_adjustment_repo.dart';
 import 'package:pos_meat_shop/domain/models/stock_adjustment.dart';
 
-final appDatabaseProvider = Provider<AppDatabase>((ref) {
-  return AppDatabase.getInstance();
-});
-
-final graphQLClientProvider = Provider<GraphQLClient>((ref) {
-  final httpLink = HttpLink('http://18.201.166.166/graphql/');
-
-  return GraphQLClient(
-    cache: GraphQLCache(), // Basic in-memory cache or custom
-    link: httpLink, // or link if you have combined links
-  );
-});
+import 'database_provider.dart';
+import 'graphql_client_provider.dart';
 
 final stockAdjustmentDaoProvider = Provider<StockAdjustmentDao>((ref) {
   return StockAdjustmentDao(ref.watch(appDatabaseProvider));
@@ -59,7 +48,6 @@ class StockAdjustmentStateNotifier extends StateNotifier<AsyncValue<List<StockAd
   late final Stream<List<StockAdjustment>> _stockAdjustmentStream;
 
   StockAdjustmentStateNotifier(this._repository) : super(const AsyncValue.loading()) {
-    _repository.getAllStockAdjustments();
     _stockAdjustmentStream = _repository.watchAllStockAdjustments();
     _stockAdjustmentStream.listen((stockAdjustments) {
       state = AsyncValue.data(stockAdjustments);

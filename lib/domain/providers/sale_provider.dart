@@ -1,6 +1,4 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:graphql_flutter/graphql_flutter.dart';
-import 'package:pos_meat_shop/data/database/app_database.dart';
 import 'package:pos_meat_shop/data/database/sale_dao.dart';
 import 'package:pos_meat_shop/data/database/sale_line_item_dao.dart';
 import 'package:pos_meat_shop/data/datasources/local/sale_datasource.dart';
@@ -8,18 +6,8 @@ import 'package:pos_meat_shop/data/datasources/remote/sale_datasource.dart';
 import 'package:pos_meat_shop/data/repositories/sale_repository.dart';
 import 'package:pos_meat_shop/domain/models/sale.dart';
 
-final appDatabaseProvider = Provider<AppDatabase>((ref) {
-  return AppDatabase.getInstance();
-});
-
-final graphQLClientProvider = Provider<GraphQLClient>((ref) {
-  final httpLink = HttpLink('http://18.201.166.166/graphql/');
-
-  return GraphQLClient(
-    cache: GraphQLCache(), // Basic in-memory cache or custom
-    link: httpLink, // or link if you have combined links
-  );
-});
+import 'database_provider.dart';
+import 'graphql_client_provider.dart';
 
 final saleDaoProvider = Provider<SaleDao>((ref) {
   return SaleDao(ref.watch(appDatabaseProvider));

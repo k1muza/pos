@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pos_meat_shop/data/database/app_database.dart';
-import 'package:pos_meat_shop/domain/providers/product_provider.dart';
+import 'domain/providers/database_provider.dart';
 import 'presentation/pages/home_page.dart';
 
 void main() {

@@ -33,8 +33,19 @@ class StockAdjustmentRepository implements IStockAdjustmentRepository {
       stockAdjustmentLocalDataSource.getStockAdjustmentById(stockAdjustmentId);
 
   @override
-  Stream<List<StockAdjustment>> watchAllStockAdjustments() =>
-      stockAdjustmentLocalDataSource.watchAllStockAdjustments();
+  Stream<List<StockAdjustment>> watchAllStockAdjustments() {
+    // Trigger a remote fetch in parallel (fire-and-forget)
+    stockAdjustmentRemoteDataSource.fetchAllStockAdjustments().then((remoteStockAdjustments) async {
+      // Optionally, check for duplicates or merge changes.
+      for (final stockAdjustment in remoteStockAdjustments) {
+        await stockAdjustmentLocalDataSource.insertStockAdjustment(stockAdjustment.toCompanion(true));
+      }
+    }).catchError((error) {
+      // Handle errors if needed.
+      print("Remote fetch error: $error");
+    });
+    return stockAdjustmentLocalDataSource.watchAllStockAdjustments();
+  }
 
   @override
   Future<int> deleteStockAdjustment(String id) => stockAdjustmentLocalDataSource.deleteStockAdjustment(id);
