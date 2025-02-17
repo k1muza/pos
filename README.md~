@@ -68,16 +68,6 @@ flutter-pos/
 └── README.md
 ```
 
-## Usage
-
-### Running the App
-
-1. Open the project in your IDE.
-2. Run the app using the `flutter run` command.
-3. Select a device or emulator to run the app on.
-4. You should see the app running in the background.
-5. You can use the app to manage sales, inventory, and customers.
-6. You can also use the app to generate reports and analytics.
 
 ## Contributing
 
